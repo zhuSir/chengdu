@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.gribe.dao.ShoppingAddressDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.gribe.entity.ShoppingAddressEntity" id="cdShoppingAddressMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="userName"/>
+        <result property="mobile" column="mobile"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="area" column="area"/>
+        <result property="address" column="address"/>
+        <result property="isDefault" column="is_default"/>
+    </resultMap>
+
+
+</mapper>

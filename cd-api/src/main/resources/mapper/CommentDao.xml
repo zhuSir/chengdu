@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.gribe.dao.CommentDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.gribe.entity.CommentEntity" id="commentMap">
+        <result property="id" column="id"/>
+        <result property="score" column="score"/>
+        <result property="content" column="content"/>
+        <result property="userName" column="user_name"/>
+        <result property="imgs" column="imgs"/>
+        <result property="productId" column="product_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userHeadUrl" column="user_head_url"/>
+    </resultMap>
+
+    <select id="selectPage" parameterType="map"  resultMap="commentMap">
+        SELECT c.*,u.user_name,u.head_img as user_head_url
+        FROM cd_comment c,cd_user u
+        WHERE c.user_id = u.id
+        <if test="postId != null and postId != '' ">
+            and c.post_id = #{postId}
+        </if>
+        <if test="storeId != null and storeId != '' ">
+            and c.store_id = #{storeId}
+        </if>
+        <if test="name != null and name != '' ">
+            and c.user_name like concat('%',#{name},'%')
+        </if>
+        <if test="userId != null and userId != '' ">
+            and c.user_id = #{userId}
+        </if>
+    </select>
+
+    <select id="selectPageByUserId" parameterType="map"  resultMap="commentMap">
+        select com.*
+        from cd_collect col
+        LEFT JOIN cd_comment com ON col.comment_id = com.id
+        WHERE col.user_id = #{userId}
+    </select>
+
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.gribe.modules.business.dao.CdStoreDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.gribe.modules.business.entity.CdStoreEntity" id="cdStoreMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+        <result property="remark" column="remark"/>
+        <result property="about" column="about"/>
+        <result property="type" column="type"/>
+        <result property="imgs" column="imgs"/>
+        <result property="phone" column="phone"/>
+        <result property="backupPhone" column="backup_phone"/>
+        <result property="lat" column="lat"/>
+        <result property="lon" column="lon"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="score" column="score"/>
+        <result property="sales" column="sales"/>
+        <result property="price" column="price"/>
+    </resultMap>
+
+
+</mapper>

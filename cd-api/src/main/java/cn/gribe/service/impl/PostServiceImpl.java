@@ -1,0 +1,40 @@
+package cn.gribe.service.impl;
+
+import org.springframework.stereotype.Service;
+import java.util.Map;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import cn.gribe.common.utils.PageUtils;
+import cn.gribe.common.utils.Query;
+
+import cn.gribe.dao.PostDao;
+import cn.gribe.entity.PostEntity;
+import cn.gribe.service.PostService;
+
+
+@Service("cdPostService")
+public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements PostService {
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        EntityWrapper wrapper = new EntityWrapper<PostEntity>();
+        Object groupId = params.get("groupId");
+        if(groupId != null){
+            wrapper.eq("group_id",groupId);
+        }
+        Page<PostEntity> page = this.selectPage(
+                new Query<PostEntity>(params).getPage(),
+                wrapper
+        );
+        return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils queryPageByUserId(Integer userId) {
+        Page<PostEntity> page = new Page<>();// 当前页，总条数 构造 page 对象
+        page.setRecords(this.baseMapper.selectPageByUserId(userId));
+        return new PageUtils(page);
+    }
+
+}

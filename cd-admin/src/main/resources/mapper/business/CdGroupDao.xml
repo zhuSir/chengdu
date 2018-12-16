@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.gribe.modules.business.dao.CdGroupDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.gribe.modules.business.entity.CdGroupEntity" id="cdGroupMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="publicityImgs" column="publicity_imgs"/>
+        <result property="backstageImgs" column="backstage_imgs"/>
+        <result property="headImg" column="head_img"/>
+        <result property="description" column="description"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="collectNum" column="collect_num"/>
+    </resultMap>
+
+
+</mapper>

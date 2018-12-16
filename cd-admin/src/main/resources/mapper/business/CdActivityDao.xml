@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.gribe.modules.business.dao.CdActivityDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.gribe.modules.business.entity.CdActivityEntity" id="cdActivityMap">
+        <result property="id" column="id"/>
+        <result property="type" column="type"/>
+        <result property="locationType" column="location_type"/>
+        <result property="title" column="title"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="state" column="state"/>
+        <result property="storeId" column="store_id"/>
+        <result property="storeName" column="store_name"/>
+        <result property="link" column="link"/>
+        <result property="imgs" column="imgs"/>
+    </resultMap>
+
+    <select id="selectPage" parameterType="map"  resultMap="cdActivityMap">
+        select a.*,s.`name` as store_name from cd_activity a,cd_store s WHERE a.store_id = s.id
+    </select>
+
+
+</mapper>

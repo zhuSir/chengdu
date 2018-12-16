@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <#include "/header.html">
+    <script src="${request.contextPath}/statics/libs/jquery.form.js"></script>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <#if shiro.hasPermission("business:cdactivity:save")>
+                <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            </#if>
+            <#if shiro.hasPermission("business:cdactivity:update")>
+                <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+            </#if>
+            <#if shiro.hasPermission("business:cdactivity:delete")>
+                <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            </#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal" id="activityForm" method="post" enctype="multipart/form-data" role="form" >
+            <input type="hidden" v-model="cdActivity.id" name="id" id="id" />
+            <div class="form-group">
+                <div class="col-sm-2 control-label">标题</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="title" v-model="cdActivity.title" placeholder="标题"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">活动类型</div>
+                <div class="col-sm-10">
+                    <select v-model="cdActivity.type" name="type" class="form-control">
+                        <option v-for="t in type" v-bind:value="t.code" style="padding: 10px 0px;">{{ t.name }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">显示位置</div>
+                <div class="col-sm-10">
+                    <!--<input type="text" class="form-control" v-model="cdActivity.locationType" placeholder="显示位置"/>-->
+                    <select v-model="cdActivity.locationType" name="locationType" class="form-control">
+                        <option v-bind:value="t.code" v-for="t in locationType" style="padding: 10px 0px;">{{ t.name }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">状态</div>
+                <div class="col-sm-10">
+                    <select v-model="cdActivity.state" name="state" class="form-control" >
+                        <option disabled selected>请选择状态</option>
+                        <option v-bind:value="t.code" v-for="t in states" style="padding: 10px 0px;">{{ t.name }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">商铺名称</div>
+                <div class="col-sm-10">
+                    <select v-model="cdActivity.storeId" name="state" class="form-control" >
+                        <option disabled selected>请选择店铺</option>
+                        <option v-bind:value="t.id" v-for="t in storesList" style="padding: 10px 0px;">{{ t.name }}</option>
+                    </select>
+                    <!--<input type="text" class="form-control" name="storeId" v-model="cdActivity.storeId" placeholder="商铺名称"/>-->
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">链接</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="link" v-model="cdActivity.link" placeholder="链接"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">图片简介</div>
+                <div class="col-sm-10">
+                    <input type="file" name="file" accept="image/*" id="updateFile" value="请选择图片" />
+                    <img v-model="cdActivity.imgs" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/business/cdactivity.js?_${.now?long}"></script>
+</body>
+</html>

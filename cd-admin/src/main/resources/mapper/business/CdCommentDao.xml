@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.gribe.modules.business.dao.CdCommentDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.gribe.modules.business.entity.CdCommentEntity" id="cdCommentMap">
+        <result property="id" column="id"/>
+        <result property="score" column="score"/>
+        <result property="content" column="content"/>
+        <result property="imgs" column="imgs"/>
+        <result property="productId" column="product_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="storeId" column="store_id"/>
+        <result property="postId" column="post_id"/>
+        <result property="commentId" column="comment_id"/>
+    </resultMap>
+
+
+</mapper>

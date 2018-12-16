@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.gribe.dao.ProductDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.gribe.entity.ProductEntity" id="cdProductMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="about" column="about"/>
+        <result property="imgs" column="imgs"/>
+        <result property="freight" column="freight"/>
+        <result property="shortImg" column="short_img"/>
+        <result property="tag" column="tag"/>
+        <result property="todayInventory" column="today_inventory"/>
+        <result property="sumInventory" column="sum_inventory"/>
+        <result property="price" column="price"/>
+        <result property="storeId" column="store_id"/>
+        <result property="state" column="state"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

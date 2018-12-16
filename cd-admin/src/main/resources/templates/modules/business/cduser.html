@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <#include "/header.html">
+        </head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <!--<#if shiro.hasPermission("business:cduser:save")>-->
+                <!--<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>-->
+            <!--</#if>-->
+            <#if shiro.hasPermission("business:cduser:update")>
+                <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+            </#if>
+            <#if shiro.hasPermission("business:cduser:delete")>
+                <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            </#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">用户名</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="cdUser.userName" placeholder="用户名"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">手机号</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="cdUser.phone" placeholder="手机号"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">状态</div>
+                <div class="col-sm-10">
+                    <!--<input type="text" class="form-control" v-model="cdUser.state" placeholder="状态（0：正常；1：禁用）"/>-->
+                    <select v-model="cdUser.state" name="state" class="form-control">
+                        <option v-bind:value="t.code" v-for="t in state" style="padding: 10px 0px;">{{ t.value }}</option>
+                    </select>
+                </div>
+            </div>
+            <!--<div class="form-group">-->
+                <!--<div class="col-sm-2 control-label">年龄</div>-->
+                <!--<div class="col-sm-10">-->
+                    <!--<input type="text" class="form-control" v-model="cdUser.age" placeholder="年龄"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<div class="col-sm-2 control-label">维度</div>-->
+                <!--<div class="col-sm-10">-->
+                    <!--<input type="text" class="form-control" v-model="cdUser.lat" placeholder="维度"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<div class="col-sm-2 control-label">经度</div>-->
+                <!--<div class="col-sm-10">-->
+                    <!--<input type="text" class="form-control" v-model="cdUser.lon" placeholder="经度"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<div class="col-sm-2 control-label">创建时间</div>-->
+                <!--<div class="col-sm-10">-->
+                    <!--<input type="text" class="form-control" v-model="cdUser.createTime" placeholder="创建时间"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<div class="col-sm-2 control-label">最后一次登录ip</div>-->
+                <!--<div class="col-sm-10">-->
+                    <!--<input type="text" class="form-control" v-model="cdUser.lastLoginIp" placeholder="最后一次登录ip"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<div class="col-sm-2 control-label">最后一次登录时间</div>-->
+                <!--<div class="col-sm-10">-->
+                    <!--<input type="text" class="form-control" v-model="cdUser.lastLoginTime" placeholder="最后一次登录时间"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<div class="col-sm-2 control-label">用户头像</div>-->
+                <!--<div class="col-sm-10">-->
+                    <!--<input type="text" class="form-control" v-model="cdUser.headImg" placeholder="用户头像"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<div class="col-sm-2 control-label">密码(密文）</div>-->
+                <!--<div class="col-sm-10">-->
+                    <!--<input type="text" class="form-control" v-model="cdUser.password" placeholder="密码(密文）"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="form-group">
+                <div class="col-sm-2 control-label">真实密码（未加密）</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="cdUser.realPassword" placeholder="真实密码（未加密）"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/business/cduser.js?_${.now?long}"></script>
+</body>
+</html>

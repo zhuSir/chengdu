@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.gribe.modules.business.dao.CdOrderDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.gribe.modules.business.entity.CdOrderEntity" id="orderMap">
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="phone" column="phone"/>
+        <result property="userName" column="user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="state" column="state"/>
+        <result property="address" column="address"/>
+        <result property="productId" column="product_id"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="count" column="count"/>
+        <result property="sum" column="sum"/>
+        <result property="freight" column="freight"/>
+        <result property="payType" column="pay_type"/>
+        <result property="storeId" column="store_id"/>
+        <result property="storeName" column="store_name"/>
+        <result property="productName" column="product_name"/>
+    </resultMap>
+
+    <select id="selectPage" parameterType="map"  resultMap="orderMap">
+        select  o.*,s.`name` store_name,p.`name` product_name
+        FROM cd_order o,cd_store s,cd_product p
+        WHERE o.store_id = s.id AND o.product_id = p.id
+        <if test="phone != null and phone != '' ">
+            AND o.phone LIKE CONCAT('%',#{phone},'%')
+        </if>
+        <if test="storeName != null and storeName != '' ">
+            AND s.`name` LIKE CONCAT('%',#{storeName},'%')
+        </if>
+        <if test="startTime != null and startTime != '' ">
+            AND o.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != '' ">
+            AND o.create_time &lt;= #{endTime}
+        </if>
+    </select>
+
+</mapper>
