@@ -1,7 +1,7 @@
 package cn.gribe.modules.business.service;
 
 import cn.gribe.common.utils.PageUtils;
-import cn.gribe.modules.business.entity.CdShoppingAddressEntity;
+import cn.gribe.entity.ShoppingAddressEntity;
 import com.baomidou.mybatisplus.service.IService;
 
 import java.util.Map;
@@ -13,7 +13,7 @@ import java.util.Map;
  * @email sunlightcs@gmail.com
  * @date 2018-11-24 15:34:15
  */
-public interface CdShoppingAddressService extends IService<CdShoppingAddressEntity> {
+public interface CdShoppingAddressService extends IService<ShoppingAddressEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 }

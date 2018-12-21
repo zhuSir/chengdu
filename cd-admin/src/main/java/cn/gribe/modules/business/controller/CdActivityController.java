@@ -9,11 +9,11 @@ import java.util.Map;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.modules.oss.cloud.OSSFactory;
-import com.alibaba.fastjson.JSONArray;
+import cn.gribe.modules.sys.entity.SysDictEntity;
+import cn.gribe.modules.sys.service.SysDictService;
 import cn.gribe.common.validator.ValidatorUtils;
-import cn.gribe.modules.business.entity.CdStoreEntity;
+import cn.gribe.entity.StoreEntity;
 import cn.gribe.modules.business.service.CdStoreService;
-import cn.gribe.modules.sys.service.SysConfigService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.gribe.modules.business.entity.CdActivityEntity;
+import cn.gribe.entity.ActivityEntity;
 import cn.gribe.modules.business.service.CdActivityService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,11 +36,10 @@ public class CdActivityController {
     private CdActivityService cdActivityService;
 
     @Autowired
-    private SysConfigService sysConfigService;
+    private SysDictService dictService;
 
     @Autowired
     private CdStoreService storeService;
-
 
     /**
      * 信息
@@ -48,19 +47,19 @@ public class CdActivityController {
     @RequestMapping("/init")
     public R init(){
         R r = R.ok();
-        String type = sysConfigService.getValue("activity_type");
+        List<SysDictEntity> type = dictService.getDict("activity_type");
         if(type != null){
-            r.put("type", JSONArray.parseArray(type));
+            r.put("type", type);
         }
-        String locations = sysConfigService.getValue("activity_locations");
+        List<SysDictEntity>  locations = dictService.getDict("activity_locations");
         if(locations != null){
-            r.put("locationType",JSONArray.parseArray(locations));
+            r.put("locationType",locations);
         }
-        String states = sysConfigService.getValue("activity_state");
+        List<SysDictEntity>  states = dictService.getDict("activity_state");
         if(states != null){
-            r.put("states",JSONArray.parseArray(states));
+            r.put("states",states);
         }
-        List<CdStoreEntity> storesList = storeService.queryAllStore();
+        List<StoreEntity> storesList = storeService.queryAllStore();
         if(storesList != null){
             r.put("storesList",storesList);
         }
@@ -84,7 +83,7 @@ public class CdActivityController {
     @RequestMapping("/info/{id}")
     @RequiresPermissions("business:cdactivity:info")
     public R info(@PathVariable("id") Integer id){
-        CdActivityEntity cdActivity = cdActivityService.selectById(id);
+        ActivityEntity cdActivity = cdActivityService.selectById(id);
 
         return R.ok().put("cdActivity", cdActivity);
     }
@@ -94,18 +93,20 @@ public class CdActivityController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("business:cdactivity:save")
-    public R save(@RequestParam(value = "file", required = false) MultipartFile file,CdActivityEntity cdActivity) throws IOException {
+    public R save(@RequestParam(value = "file", required = false) MultipartFile file,ActivityEntity cdActivity) throws IOException {
         //TODO 验证参数；保存图片到阿里云；内容需通过审核接口审核
         //TODO 图片检测（是否涉黄）
-        if (file != null && file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
             //上传文件
             String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
             String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
             cdActivity.setImgs(url);
         }
-        cdActivity.setCreateTime(new Date());
+        if(cdActivity.getId() != null){
+            cdActivity.setCreateTime(new Date());
+        }
         cdActivity.setUpdateTime(new Date());
-        cdActivityService.insert(cdActivity);
+        cdActivityService.insertOrUpdate(cdActivity);
         return R.ok();
     }
 
@@ -114,13 +115,13 @@ public class CdActivityController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("business:cdactivity:update")
-    public R update(@RequestParam(value = "file", required = false) MultipartFile file,CdActivityEntity cdActivity) throws IOException {
+    public R update(@RequestParam(value = "file", required = false) MultipartFile file,ActivityEntity cdActivity) throws IOException {
         ValidatorUtils.validateEntity(cdActivity);
         //TODO 验证参数；保存图片到阿里云；内容需通过审核接口审核
         //TODO 图片检测（是否涉黄）
         //上传文件
         System.out.println("=== cdActivity: "+cdActivity.toString());
-        if (file != null && file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
             String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
             String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
             cdActivity.setImgs(url);

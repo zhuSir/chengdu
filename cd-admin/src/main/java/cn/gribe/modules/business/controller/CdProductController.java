@@ -1,13 +1,20 @@
 package cn.gribe.modules.business.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
-import cn.gribe.modules.business.entity.CdProductEntity;
+import cn.gribe.common.validator.Assert;
+import cn.gribe.entity.ProductEntity;
+import cn.gribe.entity.ProductEntity;
+import cn.gribe.entity.ProductTagEntity;
+import cn.gribe.entity.StoreEntity;
 import cn.gribe.modules.business.service.CdProductService;
+import cn.gribe.modules.business.service.CdStoreService;
+import cn.gribe.modules.business.service.ProductTagService;
 import cn.gribe.modules.sys.entity.SysDictEntity;
 import cn.gribe.modules.sys.service.SysDictService;
 import cn.gribe.common.validator.ValidatorUtils;
@@ -18,15 +25,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-
-/**
- * 
- *
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2018-11-24 15:34:15
- */
 @RestController
 @RequestMapping("business/cdproduct")
 public class CdProductController {
@@ -34,7 +34,14 @@ public class CdProductController {
     private CdProductService cdProductService;
 
     @Autowired
+    private ProductTagService productTagService;
+
+    @Autowired
     private SysDictService sysDictService;
+
+
+    @Autowired
+    private CdStoreService storeService;
 
     /**
      * 信息
@@ -46,6 +53,10 @@ public class CdProductController {
         if(state != null){
             r.put("state",state);
         }
+        List<StoreEntity> storesList = storeService.queryAllStore();
+        if(storesList != null){
+            r.put("storesList",storesList);
+        }
         return r;
     }
 
@@ -56,7 +67,6 @@ public class CdProductController {
     @RequiresPermissions("business:cdproduct:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = cdProductService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 
@@ -67,9 +77,12 @@ public class CdProductController {
     @RequestMapping("/info/{id}")
     @RequiresPermissions("business:cdproduct:info")
     public R info(@PathVariable("id") Integer id){
-        CdProductEntity cdProduct = cdProductService.selectById(id);
-
-        return R.ok().put("cdProduct", cdProduct);
+        Assert.isNull(id,"数据错误，请刷新重试！");
+        ProductEntity cdProduct = cdProductService.selectById(id);
+        List<ProductTagEntity> tags = cdProductService.queryTags(id);
+        R r = R.ok().put("cdProduct", cdProduct);
+        r.put("tags",tags);
+        return r;
     }
 
     /**
@@ -77,9 +90,18 @@ public class CdProductController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("business:cdproduct:save")
-    public R save(@RequestBody CdProductEntity cdProduct){
-        cdProductService.insert(cdProduct);
-
+    public R save(@RequestParam(value = "file", required = false) MultipartFile[] files,
+                  ProductEntity product){
+        ValidatorUtils.validateEntity(product);
+        List<ProductTagEntity> tags = product.getTags();
+        if(tags != null && tags.size() > 0){
+            productTagService.insertOrUpdateBatch(tags);
+        }
+        if(product.getId() == null){
+            product.setCreateTime(new Date());
+        }
+        product.setUpdateTime(new Date());
+        cdProductService.insertOrUpdate(product);
         return R.ok();
     }
 
@@ -88,7 +110,7 @@ public class CdProductController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("business:cdproduct:update")
-    public R update(@RequestBody CdProductEntity cdProduct){
+    public R update(@RequestBody ProductEntity cdProduct){
         ValidatorUtils.validateEntity(cdProduct);
         cdProductService.updateAllColumnById(cdProduct);//全部更新
         

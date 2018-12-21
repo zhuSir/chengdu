@@ -14,5 +14,7 @@ import cn.gribe.entity.CollectEntity;
 public interface CollectService extends IService<CollectEntity> {
 
     PageUtils queryPage(Integer userId, Integer type);
+
+    CollectEntity selectByParams(CollectEntity collect);
 }
 

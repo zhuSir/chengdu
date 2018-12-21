@@ -1,22 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-		<#include "/header.html">
+    <#include "/header.html">
+    <script src="${request.contextPath}/statics/libs/jquery.form.js"></script>
 </head>
 <body>
 <div id="rrapp" v-cloak>
     <div v-show="showList">
         <div class="grid-btn">
-			<#if shiro.hasPermission("business:cdproduct:save")>
-            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
-			</#if>
-			<#if shiro.hasPermission("business:cdproduct:update")>
-            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-			</#if>
-			<#if shiro.hasPermission("business:cdproduct:delete")>
-            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
-			</#if>
+            <#if shiro.hasPermission("business:cdproduct:save")>
+                <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            </#if>
+            <#if shiro.hasPermission("business:cdproduct:update")>
+                <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+            </#if>
+            <#if shiro.hasPermission("business:cdproduct:delete")>
+                <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            </#if>
         </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
@@ -24,92 +25,106 @@
 
     <div v-show="!showList" class="panel panel-default">
         <div class="panel-heading">{{title}}</div>
-        <form class="form-horizontal">
-														                    <div class="form-group">
-                        <div class="col-sm-2 control-label">店铺名称</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdProduct.name" placeholder="店铺名称"/>
+        <form class="form-horizontal" id="productForm" method="post" enctype="multipart/form-data" role="form">
+            <input name="id" id="id" hidden >
+            <div class="form-group">
+                <div class="col-sm-2 control-label">商品名称</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="cdProduct.name" name="name" placeholder="店铺名称"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">商品类别</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="cdProduct.type" name="type" placeholder="商铺类别"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">商品简介</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="cdProduct.about" name="about" placeholder="简介"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">简介图片</div>
+                <div class="col-sm-10">
+                    <!--<input type="text" class="form-control" v-model="cdProduct.imgs" placeholder="简介图片"/>-->
+                    <input type="file" name="file" accept="image/*" multiple value="请选择图片" />
+                    <img v-model="cdProduct.imgs" placeholder="轮播图"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">运费</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="cdProduct.freight" name="freight" placeholder="运费"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">缩略图</div>
+                <div class="col-sm-10">
+                    <!--<input type="text" class="form-control" v-model="cdProduct.shortImg" placeholder="缩略图"/>-->
+                    <input type="file" name="file" accept="image/*" multiple value="请选择图片" />
+                    <img v-model="cdProduct.shortImg" placeholder="缩略图"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">属性tag</div>
+                <div class="col-sm-10">
+
+                    <!--<option v-for="t in type" v-bind:value="t.code" style="padding: 10px 0px;">{{ t.value }}</option>-->
+                    <div class="input-group" style="margin-top:10px;" v-for="t in tags" >
+                        <!--<input type="text" class="form-control" aria-describedby="basic-addon3" v-bind:name="t.idName" v-model="t.id" >-->
+                        <input type="text" class="form-control" aria-describedby="basic-addon3" v-bind:name="t.nameName" v-model="t.name" v-bind:placeholder="t.nameTitle">
+                        <span class="input-group-addon" style="border: 0px;background-color: white;">--</span>
+                        <input type="text" class="form-control" aria-describedby="basic-addon3" v-bind:name="t.valueName" v-model="t.value" v-bind:placeholder="t.valueTitle">
+                        <span class="input-group-addon" style="border: 0px;background-color: white;">--</span>
+                        <input type="text" class="form-control" aria-describedby="basic-addon3" v-bind:name="t.sortName" v-model="t.sort">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" @click="addTag" type="button">添加</button>
                         </div>
                     </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">商铺类别</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdProduct.type" placeholder="商铺类别"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">简介</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdProduct.about" placeholder="简介"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">简介图片</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdProduct.imgs" placeholder="简介图片"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">运费</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdProduct.freight" placeholder="运费"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">缩略图</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdProduct.shortImg" placeholder="缩略图"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">属性tag</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdProduct.tag" placeholder="属性tag"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label"> 今日库存</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdProduct.todayInventory" placeholder=" 今日库存"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">总库存</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdProduct.sumInventory" placeholder="总库存"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">价格</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdProduct.price" placeholder="价格"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">商铺id</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdProduct.storeId" placeholder="商铺id"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">状态</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdProduct.state" placeholder="状态"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">创建时间</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdProduct.createTime" placeholder="创建时间"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">更新时间</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdProduct.updateTime" placeholder="更新时间"/>
-                        </div>
-                    </div>
-							            <div class="form-group">
+
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label"> 今日库存</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="cdProduct.todayInventory" name="todayInventory" placeholder=" 今日库存"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">总库存</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="cdProduct.sumInventory" name="sumInventory" placeholder="总库存"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">价格</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="cdProduct.price" name="price" placeholder="价格"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">商铺</div>
+                <div class="col-sm-10">
+                    <select v-model="cdProduct.storeId" name="storeId" class="form-control" >
+                        <option disabled selected>请选择店铺</option>
+                        <option v-bind:value="t.id" v-for="t in storesList" style="padding: 10px 0px;">{{ t.name }}</option>
+                    </select>
+                    <!--<input type="text" class="form-control" name="storeId" v-model="cdActivity.storeId" placeholder="商铺名称"/>-->
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">状态</div>
+                <div class="col-sm-10">
+                    <select v-model="cdProduct.state" name="state" class="form-control" >
+                        <option disabled selected>请选择状态</option>
+                        <option v-bind:value="t.code" v-for="t in states" style="padding: 10px 0px;">{{ t.value }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
                 <div class="col-sm-2 control-label"></div>
                 <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
                 &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>

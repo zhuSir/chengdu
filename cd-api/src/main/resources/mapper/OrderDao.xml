@@ -4,7 +4,7 @@
 <mapper namespace="cn.gribe.dao.OrderDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="cn.gribe.entity.OrderEntity" id="cdOrderMap">
+    <resultMap type="cn.gribe.entity.OrderEntity" id="orderMap">
         <result property="id" column="id"/>
         <result property="code" column="code"/>
         <result property="phone" column="phone"/>
@@ -17,7 +17,18 @@
         <result property="count" column="count"/>
         <result property="sum" column="sum"/>
         <result property="freight" column="freight"/>
+        <result property="product_name" column="productName"/>
+        <result property="product_short_img" column="productShortImg"/>
+        <result property="product_about" column="productAbout"/>
     </resultMap>
+
+    <select id="selectPageByState" parameterType="map"  resultMap="orderMap">
+        select co.*,cp.`name` as product_name,cp.about AS product_about,cp.short_img AS product_short_img
+        from cd_order co INNER JOIN cd_product cp on co.product_id = cp.id
+        <if test="state != null and state != '' ">
+            WHERE co.state = #{state}
+        </if>
+    </select>
 
 
 </mapper>

@@ -4,7 +4,7 @@
 <mapper namespace="cn.gribe.modules.business.dao.CdGroupDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="cn.gribe.modules.business.entity.CdGroupEntity" id="cdGroupMap">
+    <resultMap type="cn.gribe.entity.GroupEntity" id="cdGroupMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="publicityImgs" column="publicity_imgs"/>

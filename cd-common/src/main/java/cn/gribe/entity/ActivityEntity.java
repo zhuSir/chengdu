@@ -1,5 +1,6 @@
 package cn.gribe.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -27,6 +28,9 @@ public class ActivityEntity {
     //创建时间
     private Date createTime;
 
+    //更新时间
+    private Date updateTime;
+
     //状态（0：使用；1：禁用）
     private String state;
 
@@ -38,6 +42,10 @@ public class ActivityEntity {
 
     //链接图片
     private String imgs;
+
+    //店铺名称
+    @TableField(exist = false)
+    private String storeName;
 
     public Integer getId() {
         return id;
@@ -109,5 +117,38 @@ public class ActivityEntity {
 
     public void setImgs(String imgs) {
         this.imgs = imgs;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    @Override
+    public String toString() {
+        return "CdActivityEntity{" +
+                "id=" + id +
+                ", type='" + type + '\'' +
+                ", locationType='" + locationType + '\'' +
+                ", title='" + title + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", state='" + state + '\'' +
+                ", storeId=" + storeId +
+                ", link='" + link + '\'' +
+                ", imgs='" + imgs + '\'' +
+                ", storeName='" + storeName + '\'' +
+                '}';
     }
 }

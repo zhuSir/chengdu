@@ -1,5 +1,6 @@
 package cn.gribe.modules.business.controller;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -7,10 +8,11 @@ import java.util.Map;
 
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
+import cn.gribe.modules.oss.cloud.OSSFactory;
 import cn.gribe.modules.sys.entity.SysDictEntity;
 import cn.gribe.common.validator.ValidatorUtils;
-import cn.gribe.modules.sys.service.SysConfigService;
 import cn.gribe.modules.sys.service.SysDictService;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.gribe.modules.business.entity.CdStoreEntity;
+import cn.gribe.entity.StoreEntity;
 import cn.gribe.modules.business.service.CdStoreService;
+import org.springframework.web.multipart.MultipartFile;
 
 
 /**
@@ -31,9 +34,6 @@ import cn.gribe.modules.business.service.CdStoreService;
 public class CdStoreController {
     @Autowired
     private CdStoreService cdStoreService;
-
-    @Autowired
-    private SysConfigService sysConfigService;
 
     @Autowired
     private SysDictService sysDictService;
@@ -69,7 +69,7 @@ public class CdStoreController {
     @RequestMapping("/info/{id}")
     @RequiresPermissions("business:cdstore:info")
     public R info(@PathVariable("id") Integer id){
-        CdStoreEntity cdStore = cdStoreService.selectById(id);
+        StoreEntity cdStore = cdStoreService.selectById(id);
 
         return R.ok().put("cdStore", cdStore);
     }
@@ -79,10 +79,24 @@ public class CdStoreController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("business:cdstore:save")
-    public R save(@RequestBody CdStoreEntity store){
-        store.setCreateTime(new Date());
+    public R save(@RequestParam(value = "file", required = false) MultipartFile[] files,StoreEntity store) throws IOException {
+        ValidatorUtils.validateEntity(store);
+        if (files != null && files.length > 0) {
+            String urls = "";
+            for(MultipartFile file : files){
+                String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+                String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
+                urls+=url+",";
+            }
+            if(StringUtils.isNotEmpty(urls)){
+                store.setImgs(urls);
+            }
+        }
+        if(store.getId() == null){
+            store.setCreateTime(new Date());
+        }
         store.setUpdateTime(new Date());
-        cdStoreService.insert(store);
+        cdStoreService.insertOrUpdate(store);
         return R.ok();
     }
 
@@ -91,7 +105,7 @@ public class CdStoreController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("business:cdstore:update")
-    public R update(@RequestBody CdStoreEntity store){
+    public R update(@RequestBody StoreEntity store){
         ValidatorUtils.validateEntity(store);
         store.setUpdateTime(new Date());
         cdStoreService.updateAllColumnById(store);//全部更新

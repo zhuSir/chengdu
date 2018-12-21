@@ -3,7 +3,7 @@ $(function () {
         url: baseURL + 'business/cdstore/list',
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
+			{ label: 'id', name: 'id', index: 'id', width: 50, key: true,hidden:true },
 			{ label: '店铺名称', name: 'name', index: 'name', width: 80 }, 			
 			{ label: '店铺地址', name: 'address', index: 'address', width: 80 }, 			
 			{ label: '备注', name: 'remark', index: 'remark', width: 80 }, 			
@@ -11,7 +11,16 @@ $(function () {
 			{ label: '店铺类型', name: 'type', index: 'type', width: 80 ,formatter:function(cellvalue, options, rowObject){
                 return showValue(cellvalue, options, rowObject,vm.storeType);
             } },
-			{ label: '轮播图', name: 'imgs', index: 'imgs', width: 80 }, 			
+			{ label: '轮播图', name: 'imgs', index: 'imgs',formatter:function(cellvalue, options, rowObject){
+        		var resStr = "";
+        		if(cellvalue != "" && cellvalue != null){
+                    var urls = cellvalue.split(",");
+                    for(var i =0;i<urls.length;i++){
+                        resStr += "<img style='width:35px;margin: 2px;' src='"+urls[i]+"' />"
+                    }
+                }
+                return resStr;
+            } },
 			{ label: '店铺联系电话', name: 'phone', index: 'phone', width: 80 }, 			
 			{ label: '备用电话', name: 'backupPhone', index: 'backup_phone', width: 80 }, 			
 			{ label: '维度', name: 'lat', index: 'lat', width: 80 }, 			
@@ -86,22 +95,24 @@ var vm = new Vue({
             vm.getInfo(id)
 		},
 		saveOrUpdate: function (event) {
-			var url = vm.cdStore.id == null ? "business/cdstore/save" : "business/cdstore/update";
-			$.ajax({
-				type: "POST",
-			    url: baseURL + url,
-                contentType: "application/json",
-			    data: JSON.stringify(vm.cdStore),
-			    success: function(r){
-			    	if(r.code === 0){
-						alert('操作成功', function(index){
-							vm.reload();
-						});
-					}else{
-						alert(r.msg);
-					}
-				}
-			});
+			//var url = vm.cdStore.id == null ? "business/cdstore/save" : "business/cdstore/update";
+            var url = baseURL + "business/cdstore/save";
+            var index = layer.load(1, {
+                shade: [0.1,'#fff'] //0.1透明度的白色背景
+            });
+            $("#storeForm").attr("action",url);
+            $("#id").val(vm.cdStore.id);
+            $("#storeForm").ajaxSubmit(function(r) {
+                layer.close(index);
+                if(r.code == 0){
+                    alert('操作成功', function(index){
+                        vm.reload();
+                    });
+                }else{
+                    alert(r.msg);
+                }
+            })
+
 		},
 		del: function (event) {
 			var ids = getSelectedRows();

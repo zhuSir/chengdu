@@ -3,6 +3,7 @@ package cn.gribe.entity;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -16,27 +17,33 @@ public class StoreEntity {
     private Integer id;
 
     //商铺名称
+    @NotBlank(message="店铺名不能为空")
     private String name;
 
     //商铺地址
+    @NotBlank(message="店铺地址不能为空")
     private String address;
 
     //备注
     private String remark;
 
     //商铺简介
+    @NotBlank(message="店铺简介不能为空")
     private String about;
 
     //商铺类型
+    @NotBlank(message="店铺类型不能为空")
     private String type;
 
     //商铺简介图片
     private String imgs;
 
     //手机号
+    @NotBlank(message="店铺联系方式不能为空")
     private String phone;
 
     //备用手机号
+    @NotBlank(message="店铺备用联系方式不能为空")
     private String backupPhone;
 
     //维度
@@ -55,9 +62,11 @@ public class StoreEntity {
     private Integer score;
 
     //销量 --new
+    @NotBlank(message="店铺销量不能为空")
     private Integer sales;
 
     //价格 --new
+    @NotBlank(message="店铺价格不能为空")
     private Double price;
 
     public Integer getId() {

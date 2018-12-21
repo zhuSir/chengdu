@@ -5,7 +5,7 @@ import java.util.Map;
 
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
-import cn.gribe.modules.business.entity.CdShoppingAddressEntity;
+import cn.gribe.entity.ShoppingAddressEntity;
 import cn.gribe.common.validator.ValidatorUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class CdShoppingAddressController {
     @RequestMapping("/info/{id}")
     @RequiresPermissions("business:cdshoppingaddress:info")
     public R info(@PathVariable("id") Integer id){
-        CdShoppingAddressEntity cdShoppingAddress = cdShoppingAddressService.selectById(id);
+        ShoppingAddressEntity cdShoppingAddress = cdShoppingAddressService.selectById(id);
 
         return R.ok().put("cdShoppingAddress", cdShoppingAddress);
     }
@@ -59,7 +59,7 @@ public class CdShoppingAddressController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("business:cdshoppingaddress:save")
-    public R save(@RequestBody CdShoppingAddressEntity cdShoppingAddress){
+    public R save(@RequestBody ShoppingAddressEntity cdShoppingAddress){
         cdShoppingAddressService.insert(cdShoppingAddress);
 
         return R.ok();
@@ -70,7 +70,7 @@ public class CdShoppingAddressController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("business:cdshoppingaddress:update")
-    public R update(@RequestBody CdShoppingAddressEntity cdShoppingAddress){
+    public R update(@RequestBody ShoppingAddressEntity cdShoppingAddress){
         ValidatorUtils.validateEntity(cdShoppingAddress);
         cdShoppingAddressService.updateAllColumnById(cdShoppingAddress);//全部更新
         

@@ -9,18 +9,18 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 
-import cn.gribe.modules.business.entity.CdCollectEntity;
+import cn.gribe.entity.CollectEntity;
 import cn.gribe.modules.business.service.CdCollectService;
 
 
 @Service("cdCollectService")
-public class CdCollectServiceImpl extends ServiceImpl<CdCollectDao, CdCollectEntity> implements CdCollectService {
+public class CdCollectServiceImpl extends ServiceImpl<CdCollectDao, CollectEntity> implements CdCollectService {
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<CdCollectEntity> page = this.selectPage(
-                new Query<CdCollectEntity>(params).getPage(),
-                new EntityWrapper<CdCollectEntity>()
+        Page<CollectEntity> page = this.selectPage(
+                new Query<CollectEntity>(params).getPage(),
+                new EntityWrapper<CollectEntity>()
         );
 
         return new PageUtils(page);

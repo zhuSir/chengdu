@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.gribe.modules.business.entity.CdCommentEntity;
+import cn.gribe.entity.CommentEntity;
 import cn.gribe.modules.business.service.CdCommentService;
 import cn.gribe.common.utils.R;
 
@@ -50,7 +50,7 @@ public class CdCommentController {
     @RequestMapping("/info/{id}")
     @RequiresPermissions("business:cdcomment:info")
     public R info(@PathVariable("id") Integer id){
-        CdCommentEntity cdComment = cdCommentService.selectById(id);
+        CommentEntity cdComment = cdCommentService.selectById(id);
 
         return R.ok().put("cdComment", cdComment);
     }
@@ -60,7 +60,7 @@ public class CdCommentController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("business:cdcomment:save")
-    public R save(@RequestBody CdCommentEntity cdComment){
+    public R save(@RequestBody CommentEntity cdComment){
         cdCommentService.insert(cdComment);
 
         return R.ok();
@@ -71,7 +71,7 @@ public class CdCommentController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("business:cdcomment:update")
-    public R update(@RequestBody CdCommentEntity cdComment){
+    public R update(@RequestBody CommentEntity cdComment){
         ValidatorUtils.validateEntity(cdComment);
         cdCommentService.updateAllColumnById(cdComment);//全部更新
         

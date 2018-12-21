@@ -3,7 +3,8 @@
 <head>
     <title></title>
     <#include "/header.html">
-        </head>
+    <script src="${request.contextPath}/statics/libs/jquery.form.js"></script>
+</head>
 <body>
 <div id="rrapp" v-cloak>
     <div v-show="showList">
@@ -24,17 +25,18 @@
 
     <div v-show="!showList" class="panel panel-default">
         <div class="panel-heading">{{title}}</div>
-        <form class="form-horizontal">
+        <form class="form-horizontal" id="storeForm" method="post" enctype="multipart/form-data" role="form">
+            <input name="id" id="id" hidden >
             <div class="form-group">
                 <div class="col-sm-2 control-label">店铺名称</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="cdStore.name" placeholder="店铺名称"/>
+                    <input type="text" class="form-control" name="name" v-model="cdStore.name" placeholder="店铺名称"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">简介</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="cdStore.about" placeholder="简介"/>
+                    <input type="text" class="form-control" name="about" v-model="cdStore.about" placeholder="简介"/>
                 </div>
             </div>
             <div class="form-group">
@@ -42,7 +44,7 @@
                 <div class="col-sm-10">
 
                     <select v-model="cdStore.type" name="type" class="form-control">
-                        <option v-bind:value="t.code" v-for="t in storeType" style="padding: 10px 0px;">{{ t.name }}</option>
+                        <option v-bind:value="t.code" v-for="t in storeType" style="padding: 10px 0px;">{{ t.value }}</option>
                     </select>
                     <!--<input type="text" class="form-control" v-model="" placeholder="店铺类型"/>-->
                 </div>
@@ -50,31 +52,33 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">轮播图</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="cdStore.imgs" placeholder="轮播图"/>
+                    <!--<input type="text" class="form-control" v-model="cdStore.imgs" placeholder="轮播图"/>-->
+                    <input type="file" name="file" accept="image/*" multiple id="updateFile" value="请选择图片" />
+                    <img v-model="cdStore.imgs" placeholder="轮播图"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">店铺联系电话</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="cdStore.phone" placeholder="店铺联系电话"/>
+                    <input type="text" class="form-control" name="phone" v-model="cdStore.phone" placeholder="店铺联系电话"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">备用电话</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="cdStore.backupPhone" placeholder="备用电话"/>
+                    <input type="text" class="form-control" name="backupPhone" v-model="cdStore.backupPhone" placeholder="备用电话"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">维度</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="cdStore.lat" placeholder="维度"/>
+                    <input type="text" class="form-control" name="lat" v-model="cdStore.lat" placeholder="维度"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">经度</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="cdStore.lon" placeholder="经度"/>
+                    <input type="text" class="form-control" name="lon" v-model="cdStore.lon" placeholder="经度"/>
                 </div>
             </div>
             <!--<div class="form-group">-->
@@ -92,31 +96,31 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">评分</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="cdStore.score" placeholder="评分"/>
+                    <input type="text" class="form-control" name="score" v-model="cdStore.score" placeholder="评分"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">销量</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="cdStore.sales" placeholder="销量"/>
+                    <input type="text" class="form-control" name="sales" v-model="cdStore.sales" placeholder="销量"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">价格</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="cdStore.price" placeholder="价格"/>
+                    <input type="text" class="form-control" name="price" v-model="cdStore.price" placeholder="价格"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">店铺地址</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="cdStore.address" placeholder="店铺地址"/>
+                    <input type="text" class="form-control" name="address" v-model="cdStore.address" placeholder="店铺地址"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">备注</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="cdStore.remark" placeholder="备注"/>
+                    <input type="text" class="form-control" name="remark" v-model="cdStore.remark" placeholder="备注"/>
                 </div>
             </div>
             <div class="form-group">

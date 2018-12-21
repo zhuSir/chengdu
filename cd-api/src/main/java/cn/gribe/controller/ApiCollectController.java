@@ -6,12 +6,15 @@ import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.common.validator.Assert;
 import cn.gribe.entity.CollectEntity;
+import cn.gribe.entity.ProductEntity;
 import cn.gribe.entity.UserEntity;
 import cn.gribe.service.CollectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 
 /**
@@ -39,7 +42,7 @@ public class ApiCollectController {
      */
     @Login
     @RequestMapping("/save")
-    public R save(@RequestBody CollectEntity collect,@LoginUser UserEntity user){
+    public R save(CollectEntity collect,@LoginUser UserEntity user){
         collect.setUserId(user.getId());
         collectService.insert(collect);
         return R.ok();
@@ -52,7 +55,9 @@ public class ApiCollectController {
     @RequestMapping("/delete")
     public R delete(@RequestBody CollectEntity collect,@LoginUser UserEntity user){
         collect.setUserId(user.getId());
-        collectService.updateById(collect);
+        CollectEntity resCollect = collectService.selectByParams(collect);
+        Assert.state(resCollect == null,"删除收藏错误，请刷新重试");
+        collectService.deleteById(resCollect);
         return R.ok();
     }
 

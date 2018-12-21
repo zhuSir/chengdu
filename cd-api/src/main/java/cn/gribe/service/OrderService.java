@@ -2,6 +2,8 @@ package cn.gribe.service;
 
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.entity.OrderEntity;
+import cn.gribe.entity.ProductEntity;
+import cn.gribe.entity.UserEntity;
 import com.baomidou.mybatisplus.service.IService;
 
 import java.util.Map;
@@ -16,5 +18,9 @@ import java.util.Map;
 public interface OrderService extends IService<OrderEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    String saveAndPay(OrderEntity order, ProductEntity productEntity,UserEntity user);
+
+    OrderEntity queryByCode(String orderCode);
 }
 

@@ -4,7 +4,7 @@
 <mapper namespace="cn.gribe.modules.business.dao.CdPostDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="cn.gribe.modules.business.entity.CdPostEntity" id="cdPostMap">
+    <resultMap type="cn.gribe.entity.PostEntity" id="cdPostMap">
         <result property="id" column="id"/>
         <result property="conetnt" column="conetnt"/>
         <result property="imgs" column="imgs"/>

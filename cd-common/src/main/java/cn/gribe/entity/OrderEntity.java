@@ -1,8 +1,11 @@
 package cn.gribe.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -12,6 +15,27 @@ import java.util.Date;
 @TableName("cd_order")
 public class OrderEntity {
 
+    //支付成功状态
+    public static Integer PAY_STATUS_SUCCESS = 1;
+
+    //待支付
+    public static Integer STATE_AWAIT_PAY = 1;
+
+    //待使用
+    public static Integer STATE_AWAIT_USE = 2;
+
+    //待评论
+    public static Integer STATE_AWAIT_EVALUATE = 3;
+
+    //退单
+    public static Integer STATE_CHARGE_BACK = 4;
+
+    //支付宝支付
+    public static Integer PAY_TYPE_ALIPAY = 1;
+
+    //微信支付
+    public static Integer PAY_TYPE_WECHATPAY= 2;
+
     @TableId
     private Integer id;
 
@@ -19,43 +43,74 @@ public class OrderEntity {
     private String code;
 
     //收货人手机号
+    @NotBlank(message="收货人手机号不能为空")
     private String phone;
 
     //收货人姓名
+    @NotBlank(message="收货人姓名不能为空")
     private String userName;
 
     //创建时间
     private Date createTime;
 
     //订单状态( 1：待付款；2：待用/待收；3：待评价；4：退单；)
-    private String state;
+    private Integer state;
 
     //收货地址
+    @NotBlank(message="收货人姓名不能为空")
     private String address;
 
     //商品id
+    @NotNull(message="商品不能为空")
     private Integer productId;
 
     //更新时间
     private Date updateTime;
 
     //数量
+    @NotNull(message="数量不能为空")
     private Integer count;
 
     //总价
+    @NotNull(message="总价不能为空")
     private Double sum;
 
     //运费
+    @NotBlank(message="运费不能为空")
     private String freight;
 
     //支付类型 --new
-    private String payType;
+    @NotBlank(message="支付类型不能为空")
+    private Integer payType;
 
     //商家id --new
+    @NotBlank(message="商家不能为空")
     private Integer storeId;
 
     //用户id
     private Integer userId;
+
+    //支付状态
+    private Integer payStatus;
+
+    //支付描述
+    private String payDescription;
+
+    //商店名称
+    @TableField(exist = false)
+    private String storeName;
+
+    //产品缩略图
+    @TableField(exist = false)
+    private String productShortImg;
+
+    //产品名称
+    @TableField(exist = false)
+    private String productName;
+
+    //产品简介
+    @TableField(exist = false)
+    private String productAbout;
 
     public Integer getId() {
         return id;
@@ -97,11 +152,11 @@ public class OrderEntity {
         this.createTime = createTime;
     }
 
-    public String getState() {
+    public Integer getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(Integer state) {
         this.state = state;
     }
 
@@ -153,11 +208,11 @@ public class OrderEntity {
         this.freight = freight;
     }
 
-    public String getPayType() {
+    public Integer getPayType() {
         return payType;
     }
 
-    public void setPayType(String payType) {
+    public void setPayType(Integer payType) {
         this.payType = payType;
     }
 
@@ -175,5 +230,80 @@ public class OrderEntity {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String getProductShortImg() {
+        return productShortImg;
+    }
+
+    public void setProductShortImg(String productShortImg) {
+        this.productShortImg = productShortImg;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getProductAbout() {
+        return productAbout;
+    }
+
+    public void setProductAbout(String productAbout) {
+        this.productAbout = productAbout;
+    }
+
+    public Integer getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(Integer payStatus) {
+        this.payStatus = payStatus;
+    }
+
+    public String getPayDescription() {
+        return payDescription;
+    }
+
+    public void setPayDescription(String payDescription) {
+        this.payDescription = payDescription;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderEntity{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", phone='" + phone + '\'' +
+                ", userName='" + userName + '\'' +
+                ", createTime=" + createTime +
+                ", state=" + state +
+                ", address='" + address + '\'' +
+                ", productId=" + productId +
+                ", updateTime=" + updateTime +
+                ", count=" + count +
+                ", sum=" + sum +
+                ", freight='" + freight + '\'' +
+                ", payType=" + payType +
+                ", storeId=" + storeId +
+                ", userId=" + userId +
+                ", payStatus=" + payStatus +
+                ", payDescription='" + payDescription + '\'' +
+                ", storeName='" + storeName + '\'' +
+                ", productShortImg='" + productShortImg + '\'' +
+                ", productName='" + productName + '\'' +
+                ", productAbout='" + productAbout + '\'' +
+                '}';
     }
 }

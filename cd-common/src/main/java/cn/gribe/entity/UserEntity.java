@@ -171,4 +171,23 @@ public class UserEntity {
     public void setRealPassword(String realPassword) {
         this.realPassword = realPassword;
     }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", state=" + state +
+                ", age=" + age +
+                ", lat='" + lat + '\'' +
+                ", lon='" + lon + '\'' +
+                ", createTime=" + createTime +
+                ", lastLoginIp='" + lastLoginIp + '\'' +
+                ", lastLoginTime=" + lastLoginTime +
+                ", headImg='" + headImg + '\'' +
+                ", password='" + password + '\'' +
+                ", realPassword='" + realPassword + '\'' +
+                '}';
+    }
 }

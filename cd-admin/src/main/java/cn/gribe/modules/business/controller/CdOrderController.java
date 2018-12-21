@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.gribe.modules.business.entity.CdOrderEntity;
+import cn.gribe.entity.OrderEntity;
 import cn.gribe.modules.business.service.CdOrderService;
 import cn.gribe.common.utils.R;
 
@@ -47,7 +47,7 @@ public class CdOrderController {
     @RequestMapping("/info/{id}")
     @RequiresPermissions("business:cdorder:info")
     public R info(@PathVariable("id") Integer id){
-        CdOrderEntity cdOrder = cdOrderService.selectById(id);
+        OrderEntity cdOrder = cdOrderService.selectById(id);
 
         return R.ok().put("cdOrder", cdOrder);
     }
@@ -57,7 +57,7 @@ public class CdOrderController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("business:cdorder:save")
-    public R save(@RequestBody CdOrderEntity cdOrder){
+    public R save(@RequestBody OrderEntity cdOrder){
         cdOrderService.insert(cdOrder);
 
         return R.ok();
@@ -68,7 +68,7 @@ public class CdOrderController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("business:cdorder:update")
-    public R update(@RequestBody CdOrderEntity cdOrder){
+    public R update(@RequestBody OrderEntity cdOrder){
         ValidatorUtils.validateEntity(cdOrder);
         cdOrderService.updateAllColumnById(cdOrder);//全部更新
         

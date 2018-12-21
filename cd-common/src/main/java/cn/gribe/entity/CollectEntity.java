@@ -101,4 +101,16 @@ public class CollectEntity implements Serializable {
 	public void setPostId(Integer postId) {
 		this.postId = postId;
 	}
+
+	@Override
+	public String toString() {
+		return "CollectEntity{" +
+				"id=" + id +
+				", storeId=" + storeId +
+				", commentId=" + commentId +
+				", userId=" + userId +
+				", groupId=" + groupId +
+				", postId=" + postId +
+				'}';
+	}
 }

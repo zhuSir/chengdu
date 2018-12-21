@@ -9,18 +9,18 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 
-import cn.gribe.modules.business.entity.CdPostEntity;
+import cn.gribe.entity.PostEntity;
 import cn.gribe.modules.business.service.CdPostService;
 
 
 @Service("cdPostService")
-public class CdPostServiceImpl extends ServiceImpl<CdPostDao, CdPostEntity> implements CdPostService {
+public class CdPostServiceImpl extends ServiceImpl<CdPostDao, PostEntity> implements CdPostService {
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<CdPostEntity> page = this.selectPage(
-                new Query<CdPostEntity>(params).getPage(),
-                new EntityWrapper<CdPostEntity>()
+        Page<PostEntity> page = this.selectPage(
+                new Query<PostEntity>(params).getPage(),
+                new EntityWrapper<PostEntity>()
         );
 
         return new PageUtils(page);

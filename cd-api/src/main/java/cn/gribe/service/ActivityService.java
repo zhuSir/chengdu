@@ -15,5 +15,7 @@ public interface ActivityService extends IService<ActivityEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     List<ActivityEntity> queryAllActivity();
+
+    List<ActivityEntity> queryActivityByLocationType(String[] locationType);
 }
 

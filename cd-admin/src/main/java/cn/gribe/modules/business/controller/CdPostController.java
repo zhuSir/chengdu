@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.gribe.modules.business.entity.CdPostEntity;
+import cn.gribe.entity.PostEntity;
 import cn.gribe.modules.business.service.CdPostService;
 import cn.gribe.common.utils.R;
 
@@ -50,7 +50,7 @@ public class CdPostController {
     @RequestMapping("/info/{id}")
     @RequiresPermissions("business:cdpost:info")
     public R info(@PathVariable("id") Integer id){
-        CdPostEntity cdPost = cdPostService.selectById(id);
+        PostEntity cdPost = cdPostService.selectById(id);
 
         return R.ok().put("cdPost", cdPost);
     }
@@ -60,7 +60,7 @@ public class CdPostController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("business:cdpost:save")
-    public R save(@RequestBody CdPostEntity cdPost){
+    public R save(@RequestBody PostEntity cdPost){
         cdPostService.insert(cdPost);
 
         return R.ok();
@@ -71,7 +71,7 @@ public class CdPostController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("business:cdpost:update")
-    public R update(@RequestBody CdPostEntity cdPost){
+    public R update(@RequestBody PostEntity cdPost){
         ValidatorUtils.validateEntity(cdPost);
         cdPostService.updateAllColumnById(cdPost);//全部更新
         

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.gribe.modules.business.entity.CdCollectEntity;
+import cn.gribe.entity.CollectEntity;
 import cn.gribe.modules.business.service.CdCollectService;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
@@ -50,7 +50,7 @@ public class CdCollectController {
     @RequestMapping("/info/{id}")
     @RequiresPermissions("business:cdcollect:info")
     public R info(@PathVariable("id") Integer id){
-        CdCollectEntity cdCollect = cdCollectService.selectById(id);
+        CollectEntity cdCollect = cdCollectService.selectById(id);
 
         return R.ok().put("cdCollect", cdCollect);
     }
@@ -60,7 +60,7 @@ public class CdCollectController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("business:cdcollect:save")
-    public R save(@RequestBody CdCollectEntity cdCollect){
+    public R save(@RequestBody CollectEntity cdCollect){
         cdCollectService.insert(cdCollect);
 
         return R.ok();
@@ -71,7 +71,7 @@ public class CdCollectController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("business:cdcollect:update")
-    public R update(@RequestBody CdCollectEntity cdCollect){
+    public R update(@RequestBody CollectEntity cdCollect){
         ValidatorUtils.validateEntity(cdCollect);
         cdCollectService.updateAllColumnById(cdCollect);//全部更新
         

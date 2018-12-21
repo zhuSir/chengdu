@@ -6,7 +6,7 @@ import java.util.Map;
 
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
-import cn.gribe.modules.business.entity.CdUserEntity;
+import cn.gribe.entity.UserEntity;
 import cn.gribe.modules.business.service.CdUserService;
 import cn.gribe.modules.sys.entity.SysDictEntity;
 import cn.gribe.modules.sys.service.SysDictService;
@@ -68,7 +68,7 @@ public class CdUserController {
     @RequestMapping("/info/{id}")
     @RequiresPermissions("business:cduser:info")
     public R info(@PathVariable("id") Integer id){
-        CdUserEntity cdUser = cdUserService.selectById(id);
+        UserEntity cdUser = cdUserService.selectById(id);
 
         return R.ok().put("cdUser", cdUser);
     }
@@ -78,9 +78,9 @@ public class CdUserController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("business:cduser:save")
-    public R save(@RequestBody CdUserEntity cdUser){
+    public R save(@RequestBody UserEntity cdUser){
+        ValidatorUtils.validateEntity(cdUser);
         cdUserService.insert(cdUser);
-
         return R.ok();
     }
 
@@ -89,10 +89,9 @@ public class CdUserController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("business:cduser:update")
-    public R update(@RequestBody CdUserEntity cdUser){
+    public R update(@RequestBody UserEntity cdUser){
         ValidatorUtils.validateEntity(cdUser);
         cdUserService.updateAllColumnById(cdUser);//全部更新
-        
         return R.ok();
     }
 

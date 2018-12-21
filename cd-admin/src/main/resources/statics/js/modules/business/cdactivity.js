@@ -49,7 +49,7 @@ $(function () {
     function showValue(cellvalue, options, rowObject,e){
         for(var i in e){
             if(e[i].code == cellvalue ){
-                return e[i].name;
+                return e[i].value;
             }
         }
     }
@@ -86,12 +86,16 @@ var vm = new Vue({
             vm.getInfo(id)
 		},
 		saveOrUpdate: function (event) {
-			debugger;
-			var url = vm.cdActivity.id == null ? baseURL + "business/cdactivity/save" : baseURL + "business/cdactivity/update";
+            var index = layer.load(1, {
+                shade: [0.1,'#fff'] //0.1透明度的白色背景
+            });
+			var url = baseURL + "business/cdactivity/save";
+			//vm.cdActivity.id == null ? baseURL + "business/cdactivity/save" : baseURL + "business/cdactivity/update";
             $("#activityForm").attr("action",url);
 			$("#id").val(vm.cdActivity.id);
             $("#activityForm").ajaxSubmit(function(r) {
-                if(r.code == 0){
+                layer.close(index);
+            	if(r.code == 0){
                     alert('操作成功', function(index){
                         vm.reload();
                     });
@@ -99,13 +103,13 @@ var vm = new Vue({
                     alert(r.msg);
                 }
             })
+
 		},
 		del: function (event) {
 			var ids = getSelectedRows();
 			if(ids == null){
 				return ;
 			}
-			
 			confirm('确定要删除选中的记录？', function(){
 				$.ajax({
 					type: "POST",

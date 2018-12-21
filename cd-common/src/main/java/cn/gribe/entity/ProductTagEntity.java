@@ -3,6 +3,8 @@ package cn.gribe.entity;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * Created by Zhugw on 2018/12/12 0012.
  */
@@ -23,6 +25,13 @@ public class ProductTagEntity {
 
     //tag code
     private String code;
+
+    //排序位置
+    private int sort;
+
+    public String getTag(){
+        return this.name+"/"+this.value;
+    }
 
     public Integer getId() {
         return id;
@@ -62,5 +71,13 @@ public class ProductTagEntity {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public int getSort() {
+        return sort;
+    }
+
+    public void setSort(int sort) {
+        this.sort = sort;
     }
 }

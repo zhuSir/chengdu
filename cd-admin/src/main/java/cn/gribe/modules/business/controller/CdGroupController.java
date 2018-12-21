@@ -5,7 +5,7 @@ import java.util.Map;
 
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
-import cn.gribe.modules.business.entity.CdGroupEntity;
+import cn.gribe.entity.GroupEntity;
 import cn.gribe.common.validator.ValidatorUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class CdGroupController {
     @RequestMapping("/info/{id}")
     @RequiresPermissions("business:cdgroup:info")
     public R info(@PathVariable("id") Integer id){
-        CdGroupEntity cdGroup = cdGroupService.selectById(id);
+        GroupEntity cdGroup = cdGroupService.selectById(id);
 
         return R.ok().put("cdGroup", cdGroup);
     }
@@ -59,7 +59,7 @@ public class CdGroupController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("business:cdgroup:save")
-    public R save(@RequestBody CdGroupEntity cdGroup){
+    public R save(@RequestBody GroupEntity cdGroup){
         cdGroupService.insert(cdGroup);
 
         return R.ok();
@@ -70,7 +70,7 @@ public class CdGroupController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("business:cdgroup:update")
-    public R update(@RequestBody CdGroupEntity cdGroup){
+    public R update(@RequestBody GroupEntity cdGroup){
         ValidatorUtils.validateEntity(cdGroup);
         cdGroupService.updateAllColumnById(cdGroup);//全部更新
         

@@ -1,17 +1,17 @@
-package cn.gribe.common.utils.alipay;
+package cn.gribe.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+
+import java.util.Date;
 
 /**
  * 支付订单对象
  * Created by Zhugw on 2018/9/4 0004.
  */
-@TableName("alipay_order")
 public class AliPayOrder {
 
     //订单id
-    @TableId
     private Integer id;
 
     //订单金额
@@ -46,6 +46,15 @@ public class AliPayOrder {
 
     //状态描述
     private String statusDescription;
+
+    public AliPayOrder(){}
+
+    public AliPayOrder(String amount,String remark,String subject,String orderNo){
+        this.amount = amount;
+        this.remark = remark;
+        this.subject = subject;
+        this.orderNo = orderNo;
+    }
 
     public String getAccountRealName() {
         return AccountRealName;

@@ -18,6 +18,8 @@ package cn.gribe.common.validator;
 
 import cn.gribe.common.exception.RRException;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 数据校验
@@ -26,6 +28,8 @@ import org.apache.commons.lang.StringUtils;
  * @date 2017-03-23 15:50
  */
 public abstract class Assert {
+
+    static Logger logger = LoggerFactory.getLogger(Assert.class);
 
     public static void isBlank(String str, String message) {
         if (StringUtils.isBlank(str)) {
@@ -47,6 +51,13 @@ public abstract class Assert {
 
     public static void state(boolean state, String message) {
         if (state) {
+            throw new RRException(message);
+        }
+    }
+
+    public static void state(boolean state, String message,String printMessage) {
+        if (state) {
+            logger.error(printMessage);
             throw new RRException(message);
         }
     }

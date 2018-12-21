@@ -4,7 +4,7 @@
 <mapper namespace="cn.gribe.modules.business.dao.CdCollectDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="cn.gribe.modules.business.entity.CdCollectEntity" id="cdCollectMap">
+    <resultMap type="cn.gribe.entity.CollectEntity" id="cdCollectMap">
         <result property="id" column="id"/>
         <result property="storeId" column="store_id"/>
         <result property="commentId" column="comment_id"/>

@@ -8,22 +8,22 @@ import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 
-import cn.gribe.modules.business.entity.CdActivityEntity;
+import cn.gribe.entity.ActivityEntity;
 import cn.gribe.modules.business.service.CdActivityService;
 
 
 @Service("cdActivityService")
-public class CdActivityServiceImpl extends ServiceImpl<CdActivityDao, CdActivityEntity> implements CdActivityService {
+public class CdActivityServiceImpl extends ServiceImpl<CdActivityDao, ActivityEntity> implements CdActivityService {
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-//        Page<CdActivityEntity> page = this.selectPage(
-//                new Query<CdActivityEntity>(params).getPage(),
-//                new EntityWrapper<CdActivityEntity>()
+//        Page<ActivityEntity> page = this.selectPage(
+//                new Query<ActivityEntity>(params).getPage(),
+//                new EntityWrapper<ActivityEntity>()
 //        );
 //
 //        return new PageUtils(page);
-        Page<CdActivityEntity> page = new Page<>();// 当前页，总条数 构造 page 对象
+        Page<ActivityEntity> page = new Page<>();// 当前页，总条数 构造 page 对象
         page.setRecords(this.baseMapper.selectPage());
         return new PageUtils(page);
     }

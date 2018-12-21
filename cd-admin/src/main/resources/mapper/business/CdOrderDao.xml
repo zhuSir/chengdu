@@ -4,7 +4,7 @@
 <mapper namespace="cn.gribe.modules.business.dao.CdOrderDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="cn.gribe.modules.business.entity.CdOrderEntity" id="orderMap">
+    <resultMap type="cn.gribe.entity.OrderEntity" id="orderMap">
         <result property="id" column="id"/>
         <result property="code" column="code"/>
         <result property="phone" column="phone"/>

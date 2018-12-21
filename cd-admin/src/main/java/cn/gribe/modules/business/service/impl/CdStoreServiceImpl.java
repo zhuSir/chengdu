@@ -12,22 +12,22 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 
 import cn.gribe.modules.business.dao.CdStoreDao;
-import cn.gribe.modules.business.entity.CdStoreEntity;
+import cn.gribe.entity.StoreEntity;
 
 
 @Service("cdStoreService")
-public class CdStoreServiceImpl extends ServiceImpl<CdStoreDao, CdStoreEntity> implements CdStoreService {
+public class CdStoreServiceImpl extends ServiceImpl<CdStoreDao, StoreEntity> implements CdStoreService {
 
     @Override
-    public List<CdStoreEntity> queryAllStore() {
-        return this.selectList(new EntityWrapper<CdStoreEntity>());
+    public List<StoreEntity> queryAllStore() {
+        return this.selectList(new EntityWrapper<StoreEntity>());
     }
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<CdStoreEntity> page = this.selectPage(
-                new Query<CdStoreEntity>(params).getPage(),
-                new EntityWrapper<CdStoreEntity>()
+        Page<StoreEntity> page = this.selectPage(
+                new Query<StoreEntity>(params).getPage(),
+                new EntityWrapper<StoreEntity>()
         );
 
         return new PageUtils(page);

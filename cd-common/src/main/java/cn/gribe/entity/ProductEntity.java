@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -18,18 +20,22 @@ public class ProductEntity {
     private Integer id;
 
     //产品名称
+    @NotBlank(message="产品名称不能为空")
     private String name;
 
     //产品类型
+    @NotBlank(message="产品类型不能为空")
     private String type;
 
     //简介
+    @NotBlank(message="产品简介不能为空")
     private String about;
 
     //简介图片
     private String imgs;
 
     //运费
+    @NotBlank(message="产品运费不能为空")
     private String freight;
 
     //缩略图
@@ -39,18 +45,22 @@ public class ProductEntity {
     private String tag;
 
     //今日库存
+    @NotNull(message="产品今日库存不能为空")
     private Integer todayInventory;
 
     //总库存
+    @NotNull(message="产品总库存不能为空")
     private Integer sumInventory;
 
     //价格
+    @NotNull(message="产品价格不能为空")
     private Double price;
 
     //商铺Id
     private Integer storeId;
 
     //状态
+    @NotBlank(message="产品状态不能为空")
     private String state;
 
     private Date createTime;

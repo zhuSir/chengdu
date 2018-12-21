@@ -1,6 +1,6 @@
 package cn.gribe.modules.business.dao;
 
-import cn.gribe.modules.business.entity.CdActivityEntity;
+import cn.gribe.entity.ActivityEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 import java.util.List;
@@ -12,8 +12,8 @@ import java.util.List;
  * @email sunlightcs@gmail.com
  * @date 2018-11-24 15:34:23
  */
-public interface CdActivityDao extends BaseMapper<CdActivityEntity> {
+public interface CdActivityDao extends BaseMapper<ActivityEntity> {
 
-    List<CdActivityEntity> selectPage();
+    List<ActivityEntity> selectPage();
 
 }

@@ -32,4 +32,12 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityDao, ActivityEntity
         return res;
     }
 
+    @Override
+    public List<ActivityEntity> queryActivityByLocationType(String[] locationType){
+        EntityWrapper wrapper = new EntityWrapper<>();
+        wrapper.in("location_type",locationType);
+        List<ActivityEntity> res = this.selectList(wrapper);
+        return res;
+    }
+
 }
