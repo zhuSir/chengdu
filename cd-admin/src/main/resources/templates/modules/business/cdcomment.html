@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
 		<#include "/header.html">
@@ -17,6 +17,25 @@
 			<#if shiro.hasPermission("business:cdcomment:delete")>
             <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
 			</#if>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">查询条件</div>
+            <div class="panel-body">
+                <form>
+                    <div class="form-group">
+                        <div id="formSearch" class="form-inline">
+                            <input type="date" class="form-control" placeholder="开始时间" id="startTime">
+                            <input type="date" class="form-control" placeholder="结束时间" id="endTime">
+                            <input type="text" class="form-control" placeholder="内容" id="phone">
+                            <select v-model="cdComment.type" name="type" class="form-control">
+                                <option v-for="t in type" v-bind:value="t.type" style="padding: 10px 0px;">{{ t.value }}</option>
+                            </select>
+                            <button type="button" class="btn btn-primary" @click="query" >查询</button>
+                            <button type="reset" class="btn btn-default" >重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>

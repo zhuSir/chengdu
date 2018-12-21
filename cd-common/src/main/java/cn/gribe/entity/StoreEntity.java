@@ -1,9 +1,11 @@
 package cn.gribe.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -68,6 +70,10 @@ public class StoreEntity {
     //价格 --new
     @NotBlank(message="店铺价格不能为空")
     private Double price;
+
+    //收藏
+    @TableField(exist = false)
+    private boolean isCollected;
 
     public Integer getId() {
         return id;
@@ -195,5 +201,13 @@ public class StoreEntity {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public boolean isCollected() {
+        return isCollected;
+    }
+
+    public void setCollected(boolean collected) {
+        isCollected = collected;
     }
 }

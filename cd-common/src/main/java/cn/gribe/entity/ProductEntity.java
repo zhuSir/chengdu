@@ -39,7 +39,7 @@ public class ProductEntity {
     private String freight;
 
     //缩略图
-    private String short_img;
+    private String shortImg;
 
     //标签
     private String tag;
@@ -119,12 +119,12 @@ public class ProductEntity {
         this.freight = freight;
     }
 
-    public String getShort_img() {
-        return short_img;
+    public String getShortImg() {
+        return shortImg;
     }
 
-    public void setShort_img(String short_img) {
-        this.short_img = short_img;
+    public void setShortImg(String shortImg) {
+        this.shortImg = shortImg;
     }
 
     public String getTag() {

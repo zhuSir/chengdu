@@ -45,7 +45,8 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
-		cdComment: {}
+		cdComment: {},
+		type: []
 	},
 	methods: {
 		query: function () {
@@ -119,6 +120,14 @@ var vm = new Vue({
 			$("#jqGrid").jqGrid('setGridParam',{ 
                 page:page
             }).trigger("reloadGrid");
-		}
-	}
+		},
+        init: function(){
+            $.get(baseURL + "business/cdcomment/init", function(r){
+                vm.type = r.type;
+            });
+        }
+	},
+    created: function(){
+        this.init();
+    }
 });

@@ -56,6 +56,11 @@ public class CommentEntity implements Serializable {
 	private Integer postId;
 
 	/**
+	 * 类型
+	 */
+	private Integer type;
+
+	/**
 	 * 用户名
 	 */
 	@TableField(exist = false)
@@ -175,5 +180,13 @@ public class CommentEntity implements Serializable {
 
 	public void setUserHeadUrl(String userHeadUrl) {
 		this.userHeadUrl = userHeadUrl;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 }

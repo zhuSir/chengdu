@@ -1,5 +1,6 @@
 package cn.gribe.modules.business.controller;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -15,9 +16,11 @@ import cn.gribe.entity.StoreEntity;
 import cn.gribe.modules.business.service.CdProductService;
 import cn.gribe.modules.business.service.CdStoreService;
 import cn.gribe.modules.business.service.ProductTagService;
+import cn.gribe.modules.oss.cloud.OSSFactory;
 import cn.gribe.modules.sys.entity.SysDictEntity;
 import cn.gribe.modules.sys.service.SysDictService;
 import cn.gribe.common.validator.ValidatorUtils;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -90,9 +93,30 @@ public class CdProductController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("business:cdproduct:save")
-    public R save(@RequestParam(value = "file", required = false) MultipartFile[] files,
-                  ProductEntity product){
+    public R save(@RequestParam(value = "imgs_file", required = false) MultipartFile[] imgs,
+                  @RequestParam(value = "short_img_file", required = false) MultipartFile shortImg,
+                  ProductEntity product) throws IOException {
         ValidatorUtils.validateEntity(product);
+        //TODO 图片检测（是否涉黄）
+        if (shortImg != null && !shortImg.isEmpty()) {
+            //上传文件
+            String suffix = shortImg.getOriginalFilename().substring(shortImg.getOriginalFilename().lastIndexOf("."));
+            String url = OSSFactory.build().uploadSuffix(shortImg.getBytes(), suffix);
+            product.setShortImg(url);
+        }
+        String imgsUrl = "";
+        if(imgs.length > 0){
+            for(MultipartFile img : imgs){
+                if(!img.isEmpty()){
+                    String suffix = img.getOriginalFilename().substring(img.getOriginalFilename().lastIndexOf("."));
+                    String url = OSSFactory.build().uploadSuffix(img.getBytes(), suffix);
+                    imgsUrl += url+",";
+                }
+            }
+        }
+        if(StringUtils.isNotEmpty(imgsUrl)){
+            product.setImgs(imgsUrl);
+        }
         List<ProductTagEntity> tags = product.getTags();
         if(tags != null && tags.size() > 0){
             productTagService.insertOrUpdateBatch(tags);

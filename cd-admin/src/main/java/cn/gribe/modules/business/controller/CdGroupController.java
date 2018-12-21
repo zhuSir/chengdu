@@ -50,7 +50,6 @@ public class CdGroupController {
     @RequiresPermissions("business:cdgroup:info")
     public R info(@PathVariable("id") Integer id){
         GroupEntity cdGroup = cdGroupService.selectById(id);
-
         return R.ok().put("cdGroup", cdGroup);
     }
 

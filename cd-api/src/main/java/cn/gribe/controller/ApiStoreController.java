@@ -1,14 +1,14 @@
 package cn.gribe.controller;
 
 
+import cn.gribe.annotation.LoginUser;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.common.validator.Assert;
+import cn.gribe.entity.CollectEntity;
 import cn.gribe.entity.StoreEntity;
-import cn.gribe.service.CommentService;
-import cn.gribe.service.ProductService;
-import cn.gribe.service.StoreService;
-import cn.gribe.service.bcUserService;
+import cn.gribe.entity.UserEntity;
+import cn.gribe.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,6 @@ import java.util.Map;
 @RequestMapping("/api/store")
 @Api(tags="店铺接口")
 public class ApiStoreController {
-    @Autowired
-    private bcUserService userService;
 
     @Autowired
     private StoreService storeService;
@@ -35,6 +33,9 @@ public class ApiStoreController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private CollectService collectService;
 
     /**
      * 店铺列表
@@ -54,12 +55,21 @@ public class ApiStoreController {
 
     @RequestMapping("/info/{id}")
     @ApiOperation("店铺详情")
-    public R info(@PathVariable("id") Integer id){
+    public R info(@PathVariable("id") Integer id, @LoginUser UserEntity user){
         Assert.isNull(id, "参数错误;获取店铺详情失败");
         //获取店铺详情
         StoreEntity store = storeService.selectById(id);
         Assert.isNull(store,"获取店铺详情错误，请联系管理员");
         R r = R.ok().put("info",store);
+        if(user != null){
+            CollectEntity collectEntity = new CollectEntity();
+            collectEntity.setUserId(user.getId());
+            collectEntity.setStoreId(store.getId());
+            collectEntity = collectService.selectByParams(collectEntity);
+            if(collectEntity != null){
+                store.setCollected(true);
+            }
+        }
         //获取产品列表
         Map params = new HashMap();
         params.put("storeId",store.getId());

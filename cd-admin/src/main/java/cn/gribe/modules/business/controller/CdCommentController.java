@@ -1,10 +1,14 @@
 package cn.gribe.modules.business.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.validator.ValidatorUtils;
+import cn.gribe.entity.StoreEntity;
+import cn.gribe.modules.sys.entity.SysDictEntity;
+import cn.gribe.modules.sys.service.SysDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +35,19 @@ import cn.gribe.common.utils.R;
 public class CdCommentController {
     @Autowired
     private CdCommentService cdCommentService;
+
+    @Autowired
+    private SysDictService sysDictService;
+
+    @RequestMapping("/init")
+    public R init(){
+        R r = R.ok();
+        List<SysDictEntity> type = sysDictService.getDict("comment_type");
+        if(type != null){
+            r.put("type",type);
+        }
+        return r;
+    }
 
     /**
      * 列表

@@ -6,15 +6,12 @@ import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.common.validator.Assert;
 import cn.gribe.entity.CollectEntity;
-import cn.gribe.entity.ProductEntity;
 import cn.gribe.entity.UserEntity;
 import cn.gribe.service.CollectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 
 /**

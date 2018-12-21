@@ -8,7 +8,18 @@ $(function () {
 			{ label: '商铺类别', name: 'type', index: 'type', width: 80 }, 			
 			{ label: '简介', name: 'about', index: 'about', width: 80 }, 			
 			{ label: '简介图片', name: 'imgs', index: 'imgs', width: 80 ,formatter:function(cellvalue, options, rowObject){
-                return "<img style='width:50px;' src='"+cellvalue+"' />"
+                if(cellvalue != null && cellvalue != ""){
+                    var resStr = "";
+                    var urls = cellvalue.split(",");
+                    for(var i =0;i<urls.length;i++){
+                        if(urls[i] != "" && urls[i] != null){
+                            resStr += "<img style='width:50px;' src='"+urls[i]+"' />";
+                        }
+                    }
+                    return resStr;
+                }else{
+                    return "<img style='width:50px;' />";
+                }
             } },
 			{ label: '运费', name: 'freight', index: 'freight', width: 80 }, 			
 			{ label: '缩略图', name: 'shortImg', index: 'short_img', width: 80 ,formatter:function(cellvalue, options, rowObject){
@@ -81,7 +92,7 @@ var vm = new Vue({
             valueTitle:"请输入值",
 			sortTitle:1,
             sort:1,
-            idName: "tags[0].id",
+            idName: "tags[0].productId",
             nameName: "tags[0].name",
             valueName: "tags[0].value",
             sortName: "tags[0].sort"
@@ -106,22 +117,6 @@ var vm = new Vue({
             vm.getInfo(id)
 		},
 		saveOrUpdate: function (event) {
-			// var url = vm.cdProduct.id == null ? "business/cdproduct/save" : "business/cdproduct/update";
-			// $.ajax({
-			// 	type: "POST",
-			//     url: baseURL + url,
-             //    contentType: "application/json",
-			//     data: JSON.stringify(vm.cdProduct),
-			//     success: function(r){
-			//     	if(r.code === 0){
-			// 			alert('操作成功', function(index){
-			// 				vm.reload();
-			// 			});
-			// 		}else{
-			// 			alert(r.msg);
-			// 		}
-			// 	}
-			// });
             var url = baseURL + "business/cdproduct/save";
             var index = layer.load(1, {
                 shade: [0.1,'#fff'] //0.1透明度的白色背景
@@ -166,7 +161,9 @@ var vm = new Vue({
 		getInfo: function(id){
 			$.get(baseURL + "business/cdproduct/info/"+id, function(r){
                 vm.cdProduct = r.cdProduct;
-                vm.tags = r.tags;
+                if(r.tags != null && r.tags != ''){
+                    vm.tags = r.tags;
+                }
             });
 		},
 		reload: function (event) {
@@ -192,7 +189,7 @@ var vm = new Vue({
                 valueTitle:"请输入值",
                 sortTitle: new Number(sortIndex),
                 sort: sortIndex,
-                idName: "tags["+length+"].id",
+                idName: "tags["+length+"].productId",
                 nameName: "tags["+length+"].name",
                 valueName: "tags["+length+"].value",
                 sortName: "tags["+length+"].sort"

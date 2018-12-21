@@ -49,7 +49,7 @@
                 <div class="col-sm-2 control-label">简介图片</div>
                 <div class="col-sm-10">
                     <!--<input type="text" class="form-control" v-model="cdProduct.imgs" placeholder="简介图片"/>-->
-                    <input type="file" name="file" accept="image/*" multiple value="请选择图片" />
+                    <input type="file" name="imgs_file" accept="image/*" multiple value="请选择图片" />
                     <img v-model="cdProduct.imgs" placeholder="轮播图"/>
                 </div>
             </div>
@@ -63,17 +63,15 @@
                 <div class="col-sm-2 control-label">缩略图</div>
                 <div class="col-sm-10">
                     <!--<input type="text" class="form-control" v-model="cdProduct.shortImg" placeholder="缩略图"/>-->
-                    <input type="file" name="file" accept="image/*" multiple value="请选择图片" />
+                    <input type="file" name="short_img_file" accept="image/*" multiple value="请选择图片" />
                     <img v-model="cdProduct.shortImg" placeholder="缩略图"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">属性tag</div>
                 <div class="col-sm-10">
-
-                    <!--<option v-for="t in type" v-bind:value="t.code" style="padding: 10px 0px;">{{ t.value }}</option>-->
                     <div class="input-group" style="margin-top:10px;" v-for="t in tags" >
-                        <!--<input type="text" class="form-control" aria-describedby="basic-addon3" v-bind:name="t.idName" v-model="t.id" >-->
+                        <input type="hidden" class="form-control" aria-describedby="basic-addon3" v-bind:name="t.idName" v-model="cdProduct.id" >
                         <input type="text" class="form-control" aria-describedby="basic-addon3" v-bind:name="t.nameName" v-model="t.name" v-bind:placeholder="t.nameTitle">
                         <span class="input-group-addon" style="border: 0px;background-color: white;">--</span>
                         <input type="text" class="form-control" aria-describedby="basic-addon3" v-bind:name="t.valueName" v-model="t.value" v-bind:placeholder="t.valueTitle">
