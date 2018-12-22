@@ -3,15 +3,17 @@ $(function () {
         url: baseURL + 'business/cdshoppingaddress/list',
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '用户id', name: 'userId', index: 'user_id', width: 80 }, 			
-			{ label: '用户名', name: 'usernme', index: 'userNme', width: 80 }, 			
+			{ label: 'id', name: 'id', index: 'id', width: 50, key: true, hidden: true },
+			{ label: '用户id', name: 'userId', index: 'user_id', width: 80,hidden: true  },
+			{ label: '用户名', name: 'userName', index: 'user_name', width: 80 },
 			{ label: '手机号', name: 'mobile', index: 'mobile', width: 80 }, 			
 			{ label: '省', name: 'province', index: 'province', width: 80 }, 			
 			{ label: '城市', name: 'city', index: 'city', width: 80 }, 			
 			{ label: '地区', name: 'area', index: 'area', width: 80 }, 			
 			{ label: '详细地址', name: 'address', index: 'address', width: 80 }, 			
-			{ label: '是否默认地址', name: 'isDefault', index: 'is_default', width: 80 }			
+			{ label: '是否默认地址', name: 'isDefault', index: 'is_default', width: 80,formatter:function(cellvalue, options, rowObject){
+                return showValue(cellvalue, options, rowObject,vm.isDefault);
+            }}
         ],
 		viewrecords: true,
         height: 385,
@@ -38,6 +40,14 @@ $(function () {
         	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
         }
     });
+
+    function showValue(cellvalue, options, rowObject,e){
+        for(var i in e){
+            if(e[i].code == cellvalue ){
+                return e[i].value;
+            }
+        }
+    }
 });
 
 var vm = new Vue({
@@ -45,7 +55,8 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
-		cdShoppingAddress: {}
+		cdShoppingAddress: {},
+        isDefault:[]
 	},
 	methods: {
 		query: function () {
@@ -119,6 +130,14 @@ var vm = new Vue({
 			$("#jqGrid").jqGrid('setGridParam',{ 
                 page:page
             }).trigger("reloadGrid");
-		}
-	}
+		},
+        init: function(){
+            $.get(baseURL + "business/cdshoppingaddress/init", function(r){
+                vm.isDefault = r.isDefault;
+            });
+        }
+	},
+    created: function(){
+        this.init();
+    }
 });

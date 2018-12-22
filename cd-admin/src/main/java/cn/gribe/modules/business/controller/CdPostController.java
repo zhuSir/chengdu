@@ -39,7 +39,6 @@ public class CdPostController {
     @RequiresPermissions("business:cdpost:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = cdPostService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 
@@ -62,7 +61,6 @@ public class CdPostController {
     @RequiresPermissions("business:cdpost:save")
     public R save(@RequestBody PostEntity cdPost){
         cdPostService.insert(cdPost);
-
         return R.ok();
     }
 

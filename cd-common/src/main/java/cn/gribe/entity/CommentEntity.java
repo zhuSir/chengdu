@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 
@@ -17,6 +18,12 @@ import java.io.Serializable;
 @TableName("cd_comment")
 public class CommentEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	//正常
+	public static Integer STATUS_NORMAL = 0;
+
+	//禁用
+	public static Integer STATUS_DISABLE = 1;
 
 	/**
 	 * id
@@ -59,6 +66,21 @@ public class CommentEntity implements Serializable {
 	 * 类型
 	 */
 	private Integer type;
+
+	/**
+	 * 状态
+	 */
+	private Integer status;
+
+	/**
+	 * 创建时间
+	 */
+	private Date createTime;
+
+	/**
+	 * 更新时间
+	 */
+	private Date updateTime;
 
 	/**
 	 * 用户名
@@ -188,5 +210,29 @@ public class CommentEntity implements Serializable {
 
 	public void setType(Integer type) {
 		this.type = type;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 }

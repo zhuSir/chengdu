@@ -37,6 +37,9 @@ public class ApiOrderController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private AlipayUtils alipayUtils;
+
     /**
      * 列表
      */
@@ -91,7 +94,9 @@ public class ApiOrderController {
         if(results == null){
             return R.error("支付下单失败，请联系管理员");
         }
-        return R.ok().put("results",results);
+        R r = R.ok().put("results",results);
+        r.put("orderCode",order.getCode());
+        return r;
     }
 
     /**
@@ -112,11 +117,11 @@ public class ApiOrderController {
             if(orderEntity != null
                     && !OrderEntity.PAY_STATUS_SUCCESS.equals(orderEntity.getPayStatus())
                     && OrderEntity.STATE_AWAIT_PAY.equals(orderEntity.getState())){
-                boolean result = AlipayUtils.checkParams(request);
+                boolean result = alipayUtils.checkParams(request);
                 //验证支付宝
                 if(result){
                     String tradeStatus = request.getParameter("trade_status");
-                    Map<String,Object> status = AlipayUtils.transferStatus(tradeStatus);
+                    Map<String,Object> status = alipayUtils.transferStatus(tradeStatus);
                     orderEntity.setPayStatus((Integer) status.get("status"));
                     orderEntity.setPayDescription((String) status.get("description"));
                     //支付成功
@@ -143,10 +148,10 @@ public class ApiOrderController {
         Assert.state(orderEntity.getUserId().intValue() != user.getId().intValue(),
                 "query error","回调用户错误；userInfo:"+user.toString());
         //判断支付结果
-        if(OrderEntity.PAY_STATUS_SUCCESS.equals(orderEntity.getState())){
-            return R.ok().put("results","success");
+        if(!OrderEntity.STATE_AWAIT_PAY.equals(orderEntity.getState())){
+            return R.ok("支付成功");
         }
-        Map<String,Object> status = AlipayUtils.queryAliPayOrder(orderCode);
+        Map<String,Object> status = alipayUtils.queryAliPayOrder(orderCode);
         if(status != null){
             orderEntity.setPayStatus((Integer) status.get("status"));
             orderEntity.setPayDescription((String) status.get("description"));
@@ -156,12 +161,12 @@ public class ApiOrderController {
             }
             orderService.updateById(orderEntity);
             if(OrderEntity.PAY_STATUS_SUCCESS.equals(orderEntity.getPayStatus())){
-                return R.ok().put("results","支付成功");
+                return R.ok("支付成功");
             }else{
-                return R.error("支付失败，"+orderEntity.getPayDescription());
+                return R.error(-1,"支付失败，"+orderEntity.getPayDescription());
             }
         }
-        return R.error("查询支付错误，请稍后重试");
+        return R.error(-1,"查询支付错误，请稍后重试");
     }
 
     /**

@@ -2,21 +2,22 @@
 <html>
 <head>
     <title></title>
-		<#include "/header.html">
+    <#include "/header.html">
+    <script src="${request.contextPath}/statics/libs/jquery.form.js"></script>
 </head>
 <body>
 <div id="rrapp" v-cloak>
     <div v-show="showList">
         <div class="grid-btn">
-			<#if shiro.hasPermission("business:cdgroup:save")>
-            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
-			</#if>
-			<#if shiro.hasPermission("business:cdgroup:update")>
-            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-			</#if>
-			<#if shiro.hasPermission("business:cdgroup:delete")>
-            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
-			</#if>
+            <#if shiro.hasPermission("business:cdgroup:save")>
+                <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            </#if>
+            <#if shiro.hasPermission("business:cdgroup:update")>
+                <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+            </#if>
+            <#if shiro.hasPermission("business:cdgroup:delete")>
+                <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            </#if>
         </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
@@ -24,56 +25,45 @@
 
     <div v-show="!showList" class="panel panel-default">
         <div class="panel-heading">{{title}}</div>
-        <form class="form-horizontal">
-														                    <div class="form-group">
-                        <div class="col-sm-2 control-label">名称</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdGroup.name" placeholder="名称"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">宣传图</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdGroup.publicityImgs" placeholder="宣传图"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">背景图</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdGroup.backstageImgs" placeholder="背景图"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">头像</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdGroup.headImg" placeholder="头像"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">描述</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdGroup.description" placeholder="描述"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">创建时间</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdGroup.createTime" placeholder="创建时间"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">更新时间</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdGroup.updateTime" placeholder="更新时间"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">收藏数</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdGroup.collectNum" placeholder="收藏数"/>
-                        </div>
-                    </div>
-							            <div class="form-group">
+        <form class="form-horizontal" id="groupForm" method="post" enctype="multipart/form-data" role="form">
+            <input v-model="cdGroup.id" name="id" type="hidden" id="id" />
+            <div class="form-group">
+                <div class="col-sm-2 control-label">名称</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="cdGroup.name" name="name" placeholder="名称"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">宣传图</div>
+                <div class="col-sm-10">
+                    <input type="file" name="publicity_imgs_file" accept="image/*" multiple class="btn btn-default" value="请选择图片" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">背景图</div>
+                <div class="col-sm-10">
+                    <input type="file" name="backstage_imgs_file" accept="image/*" multiple class="btn btn-default" value="请选择图片" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">头像</div>
+                <div class="col-sm-10">
+                    <input type="file" name="head_img_file" accept="image/*" class="btn btn-default" value="请选择图片" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">描述</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="cdGroup.description" name="description" placeholder="描述"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">收藏数</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="cdGroup.collectNum" name="collectNum" placeholder="收藏数"/>
+                </div>
+            </div>
+            <div class="form-group">
                 <div class="col-sm-2 control-label"></div>
                 <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
                 &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>

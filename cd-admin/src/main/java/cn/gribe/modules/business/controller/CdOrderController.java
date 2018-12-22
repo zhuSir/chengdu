@@ -35,9 +35,9 @@ public class CdOrderController {
      */
     @RequestMapping("/list")
     @RequiresPermissions("business:cdorder:list")
-    public R list(String phone,String storeName,String startTime,String endTime){
-        PageUtils page = cdOrderService.queryPage(phone,storeName,startTime,endTime);
-        return R.ok().put("page", page);
+    public R list(Integer page,Integer limit,String phone,String storeName,String startTime,String endTime){
+        PageUtils res = cdOrderService.queryPage(page,limit,phone,storeName,startTime,endTime);
+        return R.ok().put("page", res);
     }
 
 

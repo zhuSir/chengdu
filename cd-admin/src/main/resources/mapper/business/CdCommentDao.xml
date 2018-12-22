@@ -4,7 +4,7 @@
 <mapper namespace="cn.gribe.modules.business.dao.CdCommentDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="cn.gribe.entity.CommentEntity" id="cdCommentMap">
+    <resultMap type="cn.gribe.entity.CommentEntity" id="commentMap">
         <result property="id" column="id"/>
         <result property="score" column="score"/>
         <result property="content" column="content"/>
@@ -15,6 +15,10 @@
         <result property="postId" column="post_id"/>
         <result property="commentId" column="comment_id"/>
     </resultMap>
+
+    <!--<select id="queryPageByParams" parameterType="map"  resultMap="commentMap">-->
+        <!--select * from-->
+    <!--</select>-->
 
 
 </mapper>

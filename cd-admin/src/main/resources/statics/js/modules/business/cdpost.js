@@ -3,14 +3,16 @@ $(function () {
         url: baseURL + 'business/cdpost/list',
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '内容', name: 'conetnt', index: 'conetnt', width: 80 }, 			
-			{ label: '图片', name: 'imgs', index: 'imgs', width: 80 }, 			
-			{ label: '发帖用户', name: 'userId', index: 'user_id', width: 80 }, 			
+			{ label: 'id', name: 'id', index: 'id', width: 50, key: true ,hidden:true},
+            { label: '圈子名称', name: 'groupName', index: 'group_name', width: 80 },
+            { label: '标题', name: 'title', index: 'title', width: 80 },
+            { label: '内容', name: 'conetnt', index: 'conetnt'},
+			{ label: '图片', name: 'imgs', index: 'imgs', width: 80,formatter:function(cellvalue, options, rowObject){
+                return jointImgUrl(cellvalue);
+            } },
+			{ label: '发帖用户', name: 'userName', index: 'user_name', width: 80 },
 			{ label: '创建时间', name: 'createTime', index: 'create_time', width: 80 }, 			
-			{ label: '更新时间', name: 'updateTime', index: 'update_time', width: 80 }, 			
-			{ label: '标题', name: 'title', index: 'title', width: 80 }, 			
-			{ label: '小组id', name: 'groupId', index: 'group_id', width: 80 }			
+			{ label: '更新时间', name: 'updateTime', index: 'update_time', width: 80 }
         ],
 		viewrecords: true,
         height: 385,
@@ -37,6 +39,20 @@ $(function () {
         	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
         }
     });
+    function jointImgUrl(cellvalue){
+        if(cellvalue != null && cellvalue != ""){
+            var resStr = "";
+            var urls = cellvalue.split(",");
+            for(var i =0;i<urls.length;i++){
+                if(urls[i] != "" && urls[i] != null){
+                    resStr += "<img style='width:50px;' src='"+urls[i]+"' />";
+                }
+            }
+            return resStr;
+        }else{
+            return "<img style='width:50px;' />";
+        }
+    }
 });
 
 var vm = new Vue({

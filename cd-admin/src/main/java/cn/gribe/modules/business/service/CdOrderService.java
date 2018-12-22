@@ -13,6 +13,6 @@ import com.baomidou.mybatisplus.service.IService;
  */
 public interface CdOrderService extends IService<OrderEntity> {
 
-    PageUtils queryPage(String phone, String storeName, String startTime, String endTime);
+    PageUtils queryPage(Integer page,Integer limit,String phone, String storeName, String startTime, String endTime);
 }
 

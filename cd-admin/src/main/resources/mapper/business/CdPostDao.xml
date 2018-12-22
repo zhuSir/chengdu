@@ -13,7 +13,16 @@
         <result property="updateTime" column="update_time"/>
         <result property="title" column="title"/>
         <result property="groupId" column="group_id"/>
+        <result property="groupId" column="group_id"/>
+        <result property="userHeadImg" column="user_head_img" />
+        <result property="userName" column="user_name" />
+        <result property="groupName" column="group_name" />
     </resultMap>
 
+    <select id="selectPage" parameterType="map"  resultMap="cdPostMap">
+        select cp.*,cu.user_name,cu.head_img AS user_head_img,cg.name as group_name
+        from cd_post cp INNER JOIN cd_user cu ON cp.user_id = cu.id
+        INNER JOIN cd_group cg ON cp.group_id = cg.id
+    </select>
 
 </mapper>

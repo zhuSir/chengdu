@@ -12,6 +12,8 @@
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
         <result property="title" column="title"/>
+        <result property="userHeadImg" column="user_head_img" />
+        <result property="userName" column="user_name" />
     </resultMap>
 
     <select id="selectPageByUserId" parameterType="map"  resultMap="postMap">
@@ -19,6 +21,14 @@
         from cd_collect col LEFT JOIN cd_post pos
         WHERE col.user_id = #{userId}
     </select>
+
+    <select id="selectPageByGroupId" parameterType="map" resultMap="postMap">
+        select cp.*,cu.user_name,cu.head_img AS user_head_img from cd_post cp INNER JOIN cd_user cu ON cp.user_id = cu.id
+        <if test="groupId != null and groupId != 0 ">
+            WHERE cp.group_id = #{groupId}
+        </if>
+    </select>
+
 
 
 </mapper>

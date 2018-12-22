@@ -1,10 +1,12 @@
 package cn.gribe.modules.business.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import cn.gribe.common.utils.PageUtils;
+import cn.gribe.common.validator.Assert;
 import cn.gribe.common.validator.ValidatorUtils;
 import cn.gribe.entity.StoreEntity;
 import cn.gribe.modules.sys.entity.SysDictEntity;
@@ -34,7 +36,7 @@ import cn.gribe.common.utils.R;
 @RequestMapping("business/cdcomment")
 public class CdCommentController {
     @Autowired
-    private CdCommentService cdCommentService;
+    private CdCommentService commentService;
 
     @Autowired
     private SysDictService sysDictService;
@@ -46,6 +48,8 @@ public class CdCommentController {
         if(type != null){
             r.put("type",type);
         }
+        List<SysDictEntity> status = sysDictService.getDict("state");
+        r.put("status",status);
         return r;
     }
 
@@ -55,9 +59,8 @@ public class CdCommentController {
     @RequestMapping("/list")
     @RequiresPermissions("business:cdcomment:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = cdCommentService.queryPage(params);
-
-        return R.ok().put("page", page);
+        PageUtils page = commentService.queryPage(params);
+        return R.ok().put("page",page);
     }
 
 
@@ -67,7 +70,7 @@ public class CdCommentController {
     @RequestMapping("/info/{id}")
     @RequiresPermissions("business:cdcomment:info")
     public R info(@PathVariable("id") Integer id){
-        CommentEntity cdComment = cdCommentService.selectById(id);
+        CommentEntity cdComment = commentService.selectById(id);
 
         return R.ok().put("cdComment", cdComment);
     }
@@ -75,13 +78,15 @@ public class CdCommentController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
-    @RequiresPermissions("business:cdcomment:save")
-    public R save(@RequestBody CommentEntity cdComment){
-        cdCommentService.insert(cdComment);
-
-        return R.ok();
-    }
+//    @RequestMapping("/save")
+//    @RequiresPermissions("business:cdcomment:save")
+//    public R save(@RequestBody CommentEntity comment){
+//        ValidatorUtils.validateEntity(comment);
+//        comment.setCreateTime(new Date());
+//        comment.setUpdateTime(new Date());
+//        commentService.insert(comment);
+//        return R.ok();
+//    }
 
     /**
      * 修改
@@ -90,8 +95,7 @@ public class CdCommentController {
     @RequiresPermissions("business:cdcomment:update")
     public R update(@RequestBody CommentEntity cdComment){
         ValidatorUtils.validateEntity(cdComment);
-        cdCommentService.updateAllColumnById(cdComment);//全部更新
-        
+        commentService.updateAllColumnById(cdComment);//全部更新
         return R.ok();
     }
 
@@ -101,7 +105,7 @@ public class CdCommentController {
     @RequestMapping("/delete")
     @RequiresPermissions("business:cdcomment:delete")
     public R delete(@RequestBody Integer[] ids){
-        cdCommentService.deleteBatchIds(Arrays.asList(ids));
+        commentService.deleteBatchIds(Arrays.asList(ids));
 
         return R.ok();
     }

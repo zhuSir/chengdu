@@ -11,10 +11,12 @@ import cn.gribe.common.validator.ValidatorUtils;
 import cn.gribe.entity.CommentEntity;
 import cn.gribe.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 
@@ -72,6 +74,9 @@ public class ApiCommentController {
         comment.setUserHeadUrl(urls.toString());
         comment.setUserId(user.getId());
         comment.setUserName(user.getUserName());
+        comment.setCreateTime(new Date());
+        comment.setUpdateTime(new Date());
+        comment.setStatus(CommentEntity.STATUS_DISABLE);//默认未生效
         commentService.insert(comment);
         return R.ok();
     }

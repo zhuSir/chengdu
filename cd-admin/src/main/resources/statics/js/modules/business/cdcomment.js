@@ -5,13 +5,28 @@ $(function () {
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
 			{ label: '分数', name: 'score', index: 'score', width: 80 }, 			
-			{ label: '内容', name: 'content', index: 'content', width: 80 }, 			
-			{ label: '图片', name: 'imgs', index: 'imgs', width: 80 }, 			
-			{ label: '产品id', name: 'productId', index: 'product_id', width: 80 }, 			
-			{ label: '用户id', name: 'userId', index: 'user_id', width: 80 }, 			
-			{ label: '店铺id', name: 'storeId', index: 'store_id', width: 80 }, 			
-			{ label: '帖id', name: 'postId', index: 'post_id', width: 80 }, 			
-			{ label: '评论id', name: 'commentId', index: 'comment_id', width: 80 }			
+			{ label: '内容', name: 'content', index: 'content'},
+			{ label: '图片', name: 'imgs', index: 'imgs', width: 80 ,formatter:function(cellvalue, options, rowObject){
+                if(cellvalue != null && cellvalue != ""){
+                    var resStr = "";
+                    var urls = cellvalue.split(",");
+                    for(var i =0;i<urls.length;i++){
+                        if(urls[i] != "" && urls[i] != null){
+                            resStr += "<img style='width:50px;' src='"+urls[i]+"' />";
+                        }
+                    }
+                    return resStr;
+                }else{
+                    return "<img style='width:50px;' />";
+                }
+            }},
+			{ label: '评论时间', name: 'createTime', index: 'create_time', width: 80 },
+			{ label: '类型', name: 'type', index: 'type', width: 80,formatter:function(cellvalue, options, rowObject){
+                return showValue(cellvalue, options, rowObject,vm.type);
+            }},
+            { label: '状态', name: 'status', index: 'status', width: 80,formatter:function(cellvalue, options, rowObject){
+                return showValue(cellvalue, options, rowObject,vm.status);
+            }}
         ],
 		viewrecords: true,
         height: 385,
@@ -38,6 +53,13 @@ $(function () {
         	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
         }
     });
+    function showValue(cellvalue, options, rowObject,e){
+        for(var i in e){
+            if(e[i].code == cellvalue ){
+                return e[i].value;
+            }
+        }
+    }
 });
 
 var vm = new Vue({
@@ -46,7 +68,8 @@ var vm = new Vue({
 		showList: true,
 		title: null,
 		cdComment: {},
-		type: []
+		type: [],
+        status:[]
 	},
 	methods: {
 		query: function () {
@@ -90,7 +113,6 @@ var vm = new Vue({
 			if(ids == null){
 				return ;
 			}
-			
 			confirm('确定要删除选中的记录？', function(){
 				$.ajax({
 					type: "POST",
@@ -124,6 +146,7 @@ var vm = new Vue({
         init: function(){
             $.get(baseURL + "business/cdcomment/init", function(r){
                 vm.type = r.type;
+                vm.status = r.status;
             });
         }
 	},

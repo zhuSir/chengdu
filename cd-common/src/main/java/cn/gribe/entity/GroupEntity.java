@@ -54,18 +54,18 @@ public class GroupEntity implements Serializable {
 	/**
 	 * 收藏数
 	 */
-	private int collectNum;
+	private Integer collectNum;
 
 	/**
 	 * 设置：
 	 */
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	/**
 	 * 获取：
 	 */
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 	/**
@@ -153,11 +153,11 @@ public class GroupEntity implements Serializable {
 		return updateTime;
 	}
 
-	public int getCollectNum() {
+	public Integer getCollectNum() {
 		return collectNum;
 	}
 
-	public void setCollectNum(int collectNum) {
+	public void setCollectNum(Integer collectNum) {
 		this.collectNum = collectNum;
 	}
 }

@@ -80,11 +80,11 @@ public class OrderEntity {
     private String freight;
 
     //支付类型 --new
-    @NotBlank(message="支付类型不能为空")
+    @NotNull(message="支付类型不能为空")
     private Integer payType;
 
     //商家id --new
-    @NotBlank(message="商家不能为空")
+    @NotNull(message="商家不能为空")
     private Integer storeId;
 
     //用户id

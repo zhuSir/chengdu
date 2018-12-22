@@ -1,5 +1,6 @@
 package cn.gribe.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -8,11 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 
- * 
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2018-11-15 17:53:36
+ *
  */
 @TableName("cd_post")
 public class PostEntity implements Serializable {
@@ -27,7 +24,7 @@ public class PostEntity implements Serializable {
 	 * 内容
 	 */
 	@NotBlank(message="内容不能为空")
-	private String conetnt;
+	private String content;
 	/**
 	 * 图片
 	 */
@@ -35,7 +32,6 @@ public class PostEntity implements Serializable {
 	/**
 	 * 发帖用户
 	 */
-//	@NotNull(message="用户错误，请刷新重试")
 	private Integer userId;
 	/**
 	 * 创建时间
@@ -56,6 +52,15 @@ public class PostEntity implements Serializable {
 	 */
 	private Integer groupId;
 
+	@TableField(exist = false)
+	private String groupName;
+
+	@TableField(exist = false)
+	private String userHeadImg;
+
+	@TableField(exist = false)
+	private String userName;
+
 	/**
 	 * 设置：
 	 */
@@ -71,14 +76,14 @@ public class PostEntity implements Serializable {
 	/**
 	 * 设置：内容
 	 */
-	public void setConetnt(String conetnt) {
-		this.conetnt = conetnt;
+	public void setContent(String content) {
+		this.content = content;
 	}
 	/**
 	 * 获取：内容
 	 */
-	public String getConetnt() {
-		return conetnt;
+	public String getContent() {
+		return content;
 	}
 	/**
 	 * 设置：图片
@@ -147,5 +152,29 @@ public class PostEntity implements Serializable {
 
 	public void setGroupId(Integer groupId) {
 		this.groupId = groupId;
+	}
+
+	public String getUserHeadImg() {
+		return userHeadImg;
+	}
+
+	public void setUserHeadImg(String userHeadImg) {
+		this.userHeadImg = userHeadImg;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
 	}
 }

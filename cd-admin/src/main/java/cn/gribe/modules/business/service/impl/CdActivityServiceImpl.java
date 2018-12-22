@@ -1,6 +1,8 @@
 package cn.gribe.modules.business.service.impl;
 
 import cn.gribe.common.utils.PageUtils;
+import cn.gribe.common.utils.Query;
+import cn.gribe.entity.PostEntity;
 import cn.gribe.modules.business.dao.CdActivityDao;
 import org.springframework.stereotype.Service;
 import java.util.Map;
@@ -23,7 +25,7 @@ public class CdActivityServiceImpl extends ServiceImpl<CdActivityDao, ActivityEn
 //        );
 //
 //        return new PageUtils(page);
-        Page<ActivityEntity> page = new Page<>();// 当前页，总条数 构造 page 对象
+        Page<ActivityEntity> page = new Query<ActivityEntity>(params).getPage();// 当前页，总条数 构造 page 对象
         page.setRecords(this.baseMapper.selectPage());
         return new PageUtils(page);
     }

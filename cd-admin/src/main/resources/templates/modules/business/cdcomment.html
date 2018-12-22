@@ -2,40 +2,21 @@
 <html xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-		<#include "/header.html">
-</head>
+    <#include "/header.html">
+        </head>
 <body>
 <div id="rrapp" v-cloak>
     <div v-show="showList">
         <div class="grid-btn">
-			<#if shiro.hasPermission("business:cdcomment:save")>
-            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
-			</#if>
-			<#if shiro.hasPermission("business:cdcomment:update")>
-            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-			</#if>
-			<#if shiro.hasPermission("business:cdcomment:delete")>
-            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
-			</#if>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">查询条件</div>
-            <div class="panel-body">
-                <form>
-                    <div class="form-group">
-                        <div id="formSearch" class="form-inline">
-                            <input type="date" class="form-control" placeholder="开始时间" id="startTime">
-                            <input type="date" class="form-control" placeholder="结束时间" id="endTime">
-                            <input type="text" class="form-control" placeholder="内容" id="phone">
-                            <select v-model="cdComment.type" name="type" class="form-control">
-                                <option v-for="t in type" v-bind:value="t.type" style="padding: 10px 0px;">{{ t.value }}</option>
-                            </select>
-                            <button type="button" class="btn btn-primary" @click="query" >查询</button>
-                            <button type="reset" class="btn btn-default" >重置</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+            <!--<#if shiro.hasPermission("business:cdcomment:save")>-->
+            <!--<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>-->
+            <!--</#if>-->
+            <#if shiro.hasPermission("business:cdcomment:update")>
+                <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+            </#if>
+            <!--<#if shiro.hasPermission("business:cdcomment:delete")>-->
+            <!--<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>-->
+            <!--</#if>-->
         </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
@@ -44,55 +25,19 @@
     <div v-show="!showList" class="panel panel-default">
         <div class="panel-heading">{{title}}</div>
         <form class="form-horizontal">
-														                    <div class="form-group">
-                        <div class="col-sm-2 control-label">分数</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdComment.score" placeholder="分数"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">内容</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdComment.content" placeholder="内容"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">图片</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdComment.imgs" placeholder="图片"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">产品id</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdComment.productId" placeholder="产品id"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">用户id</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdComment.userId" placeholder="用户id"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">店铺id</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdComment.storeId" placeholder="店铺id"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">帖id</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdComment.postId" placeholder="帖id"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">评论id</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="cdComment.commentId" placeholder="评论id"/>
-                        </div>
-                    </div>
-							            <div class="form-group">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">分数</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="cdComment.score" placeholder="分数"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">内容</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="cdComment.content" placeholder="内容"/>
+                </div>
+            </div>
+            <div class="form-group">
                 <div class="col-sm-2 control-label"></div>
                 <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
                 &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>

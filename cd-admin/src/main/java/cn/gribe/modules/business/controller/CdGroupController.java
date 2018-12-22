@@ -1,5 +1,6 @@
 package cn.gribe.modules.business.controller;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -7,6 +8,8 @@ import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.entity.GroupEntity;
 import cn.gribe.common.validator.ValidatorUtils;
+import cn.gribe.modules.oss.cloud.OSSFactory;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.gribe.modules.business.service.CdGroupService;
+import org.springframework.web.multipart.MultipartFile;
 
 
 /**
@@ -58,9 +62,40 @@ public class CdGroupController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("business:cdgroup:save")
-    public R save(@RequestBody GroupEntity cdGroup){
-        cdGroupService.insert(cdGroup);
-
+    public R save(@RequestParam(value = "publicity_imgs_file", required = false) MultipartFile[] publicityImgs,
+                  @RequestParam(value = "backstage_imgs_file", required = false) MultipartFile[] backstageImgs,
+                  @RequestParam(value = "head_img_file", required = false) MultipartFile headImg,
+                  GroupEntity group) throws IOException {
+        ValidatorUtils.validateEntity(group);
+        if (headImg != null && !headImg.isEmpty()) {
+            //上传文件
+            String suffix = headImg.getOriginalFilename().substring(headImg.getOriginalFilename().lastIndexOf("."));
+            String url = OSSFactory.build().uploadSuffix(headImg.getBytes(), suffix);
+            group.setHeadImg(url);
+        }
+        if (publicityImgs != null && publicityImgs.length > 0) {
+            String urls = "";
+            for(MultipartFile file : publicityImgs){
+                String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+                String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
+                urls+=url+",";
+            }
+            if(StringUtils.isNotEmpty(urls)){
+                group.setPublicityImgs(urls);
+            }
+        }
+        if (backstageImgs != null && backstageImgs.length > 0) {
+            String urls = "";
+            for(MultipartFile file : backstageImgs){
+                String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+                String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
+                urls+=url+",";
+            }
+            if(StringUtils.isNotEmpty(urls)){
+                group.setBackstageImgs(urls);
+            }
+        }
+        cdGroupService.insertOrUpdate(group);
         return R.ok();
     }
 

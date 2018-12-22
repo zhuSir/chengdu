@@ -10,8 +10,10 @@ import cn.gribe.annotation.LoginUser;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.common.utils.oss.OSSFactory;
+import cn.gribe.entity.GroupEntity;
 import cn.gribe.entity.PostEntity;
 import cn.gribe.service.CommentService;
+import cn.gribe.service.GroupService;
 import cn.gribe.service.PostService;
 import cn.gribe.common.validator.Assert;
 import cn.gribe.common.validator.ValidatorUtils;
@@ -35,6 +37,9 @@ public class ApiPostController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private GroupService groupService;
+
     /**
      * 列表
      * @param params
@@ -42,8 +47,14 @@ public class ApiPostController {
      */
     @RequestMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
+        String groupId = params.get("groupId") == null ? null : (String) params.get("groupId");
+        Assert.isNull(groupId,"参数错误，请联系管理员");
+        GroupEntity groupEntity = groupService.selectById(groupId);
+        Assert.isNull(groupEntity,"请求错误，请联系管理员");
+        R r = R.ok().put("group",groupEntity);
         PageUtils page = postService.queryPage(params);
-        return R.ok().put("page", page);
+        r.put("page", page);
+        return r;
     }
 
 

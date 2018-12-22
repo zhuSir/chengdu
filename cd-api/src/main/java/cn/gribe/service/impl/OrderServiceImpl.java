@@ -17,6 +17,7 @@ import cn.gribe.common.utils.Query;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,9 @@ import java.util.Map;
 public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> implements OrderService {
 
     static Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    @Autowired
+    private AlipayUtils alipayUtils;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -42,11 +46,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         Assert.state(isExistAwaitPay(user.getId()),"您当前还有未支付订单，请先支付后再下单");
         if(OrderEntity.PAY_TYPE_ALIPAY.equals(order.getPayType())){
             //支付宝支付
-            Assert.state(order.getSum() > 0,"金额错误，必须大于零元");
+            Assert.state(order.getSum() < 1,"金额错误，必须大于零元");
             String remark = product.getName();//TODO 判断字数是否超出
             String subject = product.getName();//TODO 判断字数是否超出
             AliPayOrder payOrder = new AliPayOrder(String.valueOf(order.getSum()),remark,subject,order.getCode());
-            String result = AlipayUtils.getAliPayOrder(payOrder);
+            String result = alipayUtils.getAliPayOrder(payOrder);
             Assert.isNull(result,"支付下单错误,订单号为："+payOrder.toString());
             Assert.state(!this.insert(order),"保存订单错误，请联系管理员","==>:保存订单错误 orderInfo:"+order.toString());
             return result;

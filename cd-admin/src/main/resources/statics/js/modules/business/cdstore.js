@@ -12,14 +12,18 @@ $(function () {
                 return showValue(cellvalue, options, rowObject,vm.storeType);
             } },
 			{ label: '轮播图', name: 'imgs', index: 'imgs',formatter:function(cellvalue, options, rowObject){
-        		var resStr = "";
-        		if(cellvalue != "" && cellvalue != null){
+                if(cellvalue != null && cellvalue != ""){
+                    var resStr = "";
                     var urls = cellvalue.split(",");
                     for(var i =0;i<urls.length;i++){
-                        resStr += "<img style='width:35px;margin: 2px;' src='"+urls[i]+"' />"
+                        if(urls[i] != "" && urls[i] != null){
+                            resStr += "<img style='width:50px;' src='"+urls[i]+"' />";
+                        }
                     }
+                    return resStr;
+                }else{
+                    return "<img style='width:50px;' />";
                 }
-                return resStr;
             } },
 			{ label: '店铺联系电话', name: 'phone', index: 'phone', width: 80 }, 			
 			{ label: '备用电话', name: 'backupPhone', index: 'backup_phone', width: 80 }, 			
