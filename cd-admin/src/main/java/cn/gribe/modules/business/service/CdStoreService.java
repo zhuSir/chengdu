@@ -19,5 +19,7 @@ public interface CdStoreService extends IService<StoreEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     List<StoreEntity> queryAllStore();
+
+    StoreEntity queryByUserId(Long userId);
 }
 

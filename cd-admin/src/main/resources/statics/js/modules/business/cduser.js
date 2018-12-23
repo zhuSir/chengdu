@@ -3,7 +3,7 @@ $(function () {
         url: baseURL + 'business/cduser/list',
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
+			{ label: 'id', name: 'id', index: 'id', width: 50, key: true,hidden:true },
 			{ label: '用户名', name: 'userName', index: 'user_name', width: 80 }, 			
 			{ label: '手机号', name: 'phone', index: 'phone', width: 80 }, 			
 			{ label: '状态', name: 'state', index: 'state', width: 80 ,formatter:function(cellvalue, options, rowObject){

@@ -41,4 +41,10 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
 	 */
 	List<Long> queryAllMenuId(Long userId);
 
+	/**
+	 * 查询所有生效的商家
+	 * @return
+	 */
+	List<SysUserEntity> queryAllMerchants();
+
 }

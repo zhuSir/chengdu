@@ -1,9 +1,13 @@
 package cn.gribe.modules.business.controller;
 
 import java.util.Arrays;
+import java.util.List;
 
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.validator.ValidatorUtils;
+import cn.gribe.entity.StoreEntity;
+import cn.gribe.modules.sys.entity.SysDictEntity;
+import cn.gribe.modules.sys.service.SysDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +33,26 @@ import cn.gribe.common.utils.R;
 public class CdOrderController {
     @Autowired
     private CdOrderService cdOrderService;
+
+    @Autowired
+    private SysDictService dictService;
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/init")
+    public R init(){
+        R r = R.ok();
+        List<SysDictEntity> payType = dictService.getDict("order_pay_type");
+        if(payType != null){
+            r.put("payType", payType);
+        }
+        List<SysDictEntity>  status = dictService.getDict("order_status");
+        if(status != null){
+            r.put("status",status);
+        }
+        return r;
+    }
 
     /**
      * 列表

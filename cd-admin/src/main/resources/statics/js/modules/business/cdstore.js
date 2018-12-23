@@ -33,7 +33,8 @@ $(function () {
 			{ label: '最后更新时间', name: 'updateTime', index: 'update_time', width: 80 },
 			{ label: '评分', name: 'score', index: 'score', width: 80 },
 			{ label: '销量', name: 'sales', index: 'sales', width: 80 }, 			
-			{ label: '价格', name: 'price', index: 'price', width: 80 }			
+			{ label: '价格', name: 'price', index: 'price', width: 80 },
+            { label: '商家名称', name: 'userName', index: 'user_name', width: 80 }
         ],
 		viewrecords: true,
         height: 385,
@@ -77,7 +78,8 @@ var vm = new Vue({
 		showList: true,
 		title: null,
 		cdStore: {},
-        storeType:[]
+        storeType:[],
+        userList:[]
 	},
 	methods: {
 		query: function () {
@@ -158,6 +160,7 @@ var vm = new Vue({
             $.get(baseURL + "business/cdstore/init", function(r){
             	debugger;
                 vm.storeType= r.storeType;
+                vm.userList = r.userList;
             });
         }
 	},

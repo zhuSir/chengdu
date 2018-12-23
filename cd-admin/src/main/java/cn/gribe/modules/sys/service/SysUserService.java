@@ -57,4 +57,10 @@ public interface SysUserService extends IService<SysUserEntity> {
 	 * @param newPassword  新密码
 	 */
 	boolean updatePassword(Long userId, String password, String newPassword);
+
+	/**
+	 * 查询所有的生效的商家
+	 * @return
+	 */
+	List<SysUserEntity> queryAllMerchants();
 }

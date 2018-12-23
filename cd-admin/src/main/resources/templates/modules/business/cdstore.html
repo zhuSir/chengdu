@@ -28,6 +28,14 @@
         <form class="form-horizontal" id="storeForm" method="post" enctype="multipart/form-data" role="form">
             <input name="id" id="id" hidden >
             <div class="form-group">
+                <div class="col-sm-2 control-label">关联商家用户</div>
+                <div class="col-sm-10">
+                    <select v-model="cdStore.userId" name="userId" class="form-control">
+                        <option v-bind:value="u.userId" v-for="u in userList" style="padding: 10px 0px;">{{ u.username }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
                 <div class="col-sm-2 control-label">店铺名称</div>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="name" v-model="cdStore.name" placeholder="店铺名称"/>
@@ -42,7 +50,6 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">店铺类型</div>
                 <div class="col-sm-10">
-
                     <select v-model="cdStore.type" name="type" class="form-control">
                         <option v-bind:value="t.code" v-for="t in storeType" style="padding: 10px 0px;">{{ t.value }}</option>
                     </select>

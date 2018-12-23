@@ -11,7 +11,10 @@ import cn.gribe.common.utils.R;
 import cn.gribe.modules.oss.cloud.OSSFactory;
 import cn.gribe.modules.sys.entity.SysDictEntity;
 import cn.gribe.common.validator.ValidatorUtils;
+import cn.gribe.modules.sys.entity.SysUserEntity;
 import cn.gribe.modules.sys.service.SysDictService;
+import cn.gribe.modules.sys.service.SysUserService;
+import cn.gribe.modules.sys.shiro.ShiroUtils;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,9 @@ public class CdStoreController {
     @Autowired
     private SysDictService sysDictService;
 
+    @Autowired
+    private SysUserService sysUserService;
+
     /**
      * 初始化信息
      */
@@ -48,6 +54,11 @@ public class CdStoreController {
         if(storeType != null){
             r.put("storeType",storeType);
         }
+        //查询所有商家
+        List<SysUserEntity> users = sysUserService.queryAllMerchants();
+        if(users != null){
+            r.put("userList",users);
+        }
         return r;
     }
 
@@ -57,8 +68,13 @@ public class CdStoreController {
     @RequestMapping("/list")
     @RequiresPermissions("business:cdstore:list")
     public R list(@RequestParam Map<String, Object> params){
+        SysUserEntity user = ShiroUtils.getUserEntity();
+        //判断如果用户有关联店铺则给与他查询店铺的信息
+        StoreEntity storeEntity = cdStoreService.queryByUserId(user.getUserId());
+        if(storeEntity != null){
+            params.put("storeId",storeEntity.getId());
+        }
         PageUtils page = cdStoreService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 
@@ -81,6 +97,7 @@ public class CdStoreController {
     @RequiresPermissions("business:cdstore:save")
     public R save(@RequestParam(value = "file", required = false) MultipartFile[] files,StoreEntity store) throws IOException {
         ValidatorUtils.validateEntity(store);
+        //TODO 判断用户是否绑定过一个商家
         if (files != null && files.length > 0) {
             String urls = "";
             for(MultipartFile file : files){

@@ -118,4 +118,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
                 new EntityWrapper<SysUserEntity>().eq("user_id", userId).eq("password", password));
     }
 
+	@Override
+	public List<SysUserEntity> queryAllMerchants() {
+		return this.baseMapper.queryAllMerchants();
+	}
+
 }

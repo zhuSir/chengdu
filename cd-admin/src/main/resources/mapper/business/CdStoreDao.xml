@@ -21,7 +21,18 @@
         <result property="score" column="score"/>
         <result property="sales" column="sales"/>
         <result property="price" column="price"/>
+        <result property="userName" column="username"/>
     </resultMap>
+
+    <select id="queryList" parameterType="map"  resultMap="cdStoreMap">
+        select
+        cs.*,su.username
+        from cd_store cs
+        INNER JOIN sys_user su ON cs.user_id = su.user_id
+        <if test="storeId != null and storeId != ''">
+            WHERE cs.id = #{storeId}
+        </if>
+    </select>
 
 
 </mapper>

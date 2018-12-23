@@ -1,12 +1,17 @@
 package cn.gribe.modules.sys.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
+import cn.gribe.entity.UserEntity;
+import cn.gribe.modules.sys.entity.SysUserEntity;
 import cn.gribe.modules.sys.service.DcUserService;
 import cn.gribe.common.validator.ValidatorUtils;
+import cn.gribe.modules.sys.shiro.ShiroUtils;
+import com.alibaba.fastjson.JSONArray;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;

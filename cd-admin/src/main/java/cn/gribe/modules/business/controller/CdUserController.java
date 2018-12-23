@@ -9,8 +9,11 @@ import cn.gribe.common.utils.R;
 import cn.gribe.entity.UserEntity;
 import cn.gribe.modules.business.service.CdUserService;
 import cn.gribe.modules.sys.entity.SysDictEntity;
+import cn.gribe.modules.sys.entity.SysUserEntity;
 import cn.gribe.modules.sys.service.SysDictService;
 import cn.gribe.common.validator.ValidatorUtils;
+import cn.gribe.modules.sys.shiro.ShiroUtils;
+import com.alibaba.fastjson.JSONArray;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +52,6 @@ public class CdUserController {
         return r;
     }
 
-
     /**
      * 列表
      */
@@ -57,7 +59,6 @@ public class CdUserController {
     @RequiresPermissions("business:cduser:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = cdUserService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 

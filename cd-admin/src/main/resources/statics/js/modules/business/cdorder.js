@@ -3,20 +3,25 @@ $(function () {
         url: baseURL + 'business/cdorder/list',
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
+			{ label: 'id', name: 'id', index: 'id', width: 50, key: true,hidden:true },
 			{ label: '订单编号', name: 'code', index: 'code', width: 80 },
             { label: '商家名称', name: 'storeName', index: 'store_name', width: 80 },
             { label: '商品名称', name: 'productName', index: 'product_name', width: 80 },
 			{ label: '收货人手机号', name: 'phone', index: 'phone', width: 80 }, 			
 			{ label: '收货人姓名', name: 'userName', index: 'user_name', width: 80 }, 			
 			{ label: '创建时间', name: 'createTime', index: 'create_time', width: 80 }, 			
-			{ label: '订单状态', name: 'state', index: 'state', width: 80 }, 			
+			{ label: '订单状态', name: 'state', index: 'state', width: 80 ,formatter:function(cellvalue, options, rowObject){
+                return showValue(cellvalue, options, rowObject,vm.status);
+            } },
 			{ label: '收货地址', name: 'address', index: 'address', width: 80 }, 			
 			{ label: '更新时间', name: 'updateTime', index: 'update_time', width: 80 },
 			{ label: '数量', name: 'count', index: 'count', width: 80 }, 			
 			{ label: '总价', name: 'sum', index: 'sum', width: 80 }, 			
-			{ label: '运费', name: 'freight', index: 'freight', width: 80 }
-			// { label: '支付类型', name: 'payType', index: 'pay_type', width: 80 }
+			{ label: '运费', name: 'freight', index: 'freight', width: 80 },
+			{ label: '支付类型', name: 'payType', index: 'pay_type', width: 80 ,formatter:function(cellvalue, options, rowObject){
+                return showValue(cellvalue, options, rowObject,vm.payType);
+            } },
+            { label: '支付结果', name: 'payDescription', index: 'pay_description', width: 80 }
         ],
 		viewrecords: true,
         height: 385,
@@ -43,7 +48,14 @@ $(function () {
         	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
         }
     });
-
+    function showValue(cellvalue, options, rowObject,e){
+        for(var i in e){
+            if(e[i].code == cellvalue ){
+                return e[i].value;
+            }
+        }
+        return "";
+    }
 });
 
 var vm = new Vue({
@@ -51,7 +63,9 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
-		cdOrder: {}
+		cdOrder: {},
+		payType:[],
+		status:[]
 	},
 	methods: {
 		query: function () {
@@ -137,6 +151,15 @@ var vm = new Vue({
                 }
 
             }).trigger("reloadGrid");
-		}
-	}
+		},
+        init: function(){
+            $.get(baseURL + "business/cdorder/init", function(r){
+                vm.payType = r.payType;
+                vm.status = r.status;
+            });
+        }
+	},
+    created: function(){
+        this.init();
+    }
 });

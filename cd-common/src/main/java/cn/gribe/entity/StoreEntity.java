@@ -64,16 +64,24 @@ public class StoreEntity {
     private Integer score;
 
     //销量 --new
-    @NotBlank(message="店铺销量不能为空")
+    @NotNull(message="店铺销量不能为空")
     private Integer sales;
 
     //价格 --new
-    @NotBlank(message="店铺价格不能为空")
+    @NotNull(message="店铺价格不能为空")
     private Double price;
+
+    /**
+     * 系统用户（商家号）
+     */
+    private Integer userId;
 
     //收藏
     @TableField(exist = false)
     private boolean isCollected;
+
+    @TableField(exist = false)
+    private String userName;
 
     public Integer getId() {
         return id;
@@ -209,5 +217,21 @@ public class StoreEntity {
 
     public void setCollected(boolean collected) {
         isCollected = collected;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

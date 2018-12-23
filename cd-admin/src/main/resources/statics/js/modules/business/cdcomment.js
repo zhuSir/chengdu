@@ -3,7 +3,7 @@ $(function () {
         url: baseURL + 'business/cdcomment/list',
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
+			{ label: 'id', name: 'id', index: 'id', width: 50, key: true,hidden:true },
 			{ label: '分数', name: 'score', index: 'score', width: 80 }, 			
 			{ label: '内容', name: 'content', index: 'content'},
 			{ label: '图片', name: 'imgs', index: 'imgs', width: 80 ,formatter:function(cellvalue, options, rowObject){
