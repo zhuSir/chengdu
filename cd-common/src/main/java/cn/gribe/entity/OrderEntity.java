@@ -73,7 +73,7 @@ public class OrderEntity {
 
     //总价
     @NotNull(message="总价不能为空")
-    private Double sum;
+    private double sum;
 
     //运费
     @NotBlank(message="运费不能为空")
@@ -192,11 +192,11 @@ public class OrderEntity {
         this.count = count;
     }
 
-    public Double getSum() {
+    public double getSum() {
         return sum;
     }
 
-    public void setSum(Double sum) {
+    public void setSum(double sum) {
         this.sum = sum;
     }
 

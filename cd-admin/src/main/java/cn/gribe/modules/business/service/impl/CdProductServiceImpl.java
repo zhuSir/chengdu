@@ -26,9 +26,18 @@ public class CdProductServiceImpl extends ServiceImpl<CdProductDao, ProductEntit
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        EntityWrapper wrapper = new EntityWrapper<ProductEntity>();
+        Object storeId = params.get("storeId") != null ? params.get("storeId") : null;
+        if(storeId != null && !"0".equals(String.valueOf(storeId))){
+            wrapper.eq("store_id",storeId);
+        }
+        String name = params.get("name") != null ? (String) params.get("name") : null;
+        if(name != null){
+            wrapper.like("name",name);
+        }
         Page<ProductEntity> page = this.selectPage(
                 new Query<ProductEntity>(params).getPage(),
-                new EntityWrapper<ProductEntity>()
+                wrapper
         );
         List<ProductEntity> res = page.getRecords();
         List<ProductEntity> result = new ArrayList<>();

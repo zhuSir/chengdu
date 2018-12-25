@@ -24,6 +24,7 @@ $(function () {
 			{ label: '类型', name: 'type', index: 'type', width: 80,formatter:function(cellvalue, options, rowObject){
                 return showValue(cellvalue, options, rowObject,vm.type);
             }},
+            { label: '关联对应名称', name: 'name', index: 'name', width: 80 },
             { label: '状态', name: 'status', index: 'status', width: 80,formatter:function(cellvalue, options, rowObject){
                 return showValue(cellvalue, options, rowObject,vm.status);
             }}
@@ -139,8 +140,12 @@ var vm = new Vue({
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
+            var content = $('#content').val();
 			$("#jqGrid").jqGrid('setGridParam',{ 
-                page:page
+                page:page,
+				postData:{
+                	"content":content
+				}
             }).trigger("reloadGrid");
 		},
         init: function(){

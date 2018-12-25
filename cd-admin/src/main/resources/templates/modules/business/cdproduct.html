@@ -19,6 +19,24 @@
                 <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
             </#if>
         </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">查询条件</div>
+            <div class="panel-body">
+                <form>
+                    <div class="form-group">
+                        <div id="formSearch" class="form-inline">
+                            <input type="text" class="form-control" placeholder="商铺名称" id="name">
+                            <select id="storeId" class="form-control" >
+                                <option disabled selected>请选择店铺</option>
+                                <option v-bind:value="t.id" v-for="t in storesList" style="padding: 10px 0px;">{{ t.name }}</option>
+                            </select>
+                            <button type="button" class="btn btn-primary" @click="query" >查询</button>
+                            <button type="reset" class="btn btn-default" >重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
     </div>
@@ -30,7 +48,7 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">商品名称</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="cdProduct.name" name="name" placeholder="店铺名称"/>
+                    <input type="text" class="form-control" v-model="cdProduct.name" name="name" placeholder="商品名称"/>
                 </div>
             </div>
             <div class="form-group">

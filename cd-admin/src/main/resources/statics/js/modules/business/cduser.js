@@ -67,6 +67,7 @@ var vm = new Vue({
 	},
 	methods: {
 		query: function () {
+			debugger;
 			vm.reload();
 		},
 		add: function(){
@@ -132,10 +133,16 @@ var vm = new Vue({
             });
 		},
 		reload: function (event) {
+			debugger;
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
+            var phone = $('#phone').val();
 			$("#jqGrid").jqGrid('setGridParam',{ 
-                page:page
+                page:page,
+                postData:{
+                    'phone':phone
+				}
+
             }).trigger("reloadGrid");
 		},
         init: function(){

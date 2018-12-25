@@ -17,6 +17,6 @@ import java.util.List;
 @Repository
 public interface CdOrderDao extends BaseMapper<OrderEntity> {
 
-    List<OrderEntity> selectPage(@Param("phone") String phone, @Param("storeName")String storeName, @Param("startTime") String startTime, @Param("endTime") String endTime);
+    List<OrderEntity> selectPage(@Param("phone") String phone, @Param("storeName")String storeName,@Param("storeId")Integer storeId, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
 }

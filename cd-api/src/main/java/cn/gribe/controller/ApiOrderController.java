@@ -103,16 +103,16 @@ public class ApiOrderController {
      * 支付后回调接口，存入数据库更新状态为支付成功
      * @return
      */
-    @Login
     @RequestMapping("/callback")
     @ResponseBody
-    public void checkParams(HttpServletRequest request,@LoginUser UserEntity user){
+    public String checkParams(HttpServletRequest request){
         String tradeNo = request.getParameter("out_trade_no");
         if(StringUtils.isNotEmpty(tradeNo)){
             //查询单子
             OrderEntity orderEntity = orderService.queryByCode(tradeNo);
-            Assert.state(orderEntity != null && orderEntity.getUserId().intValue() != user.getId().intValue(),
-                    "query error","回调用户错误；userInfo:"+user.toString());
+            if(orderEntity == null){
+                return "fail";
+            }
             //状态为待支付，则更改
             if(orderEntity != null
                     && !OrderEntity.PAY_STATUS_SUCCESS.equals(orderEntity.getPayStatus())
@@ -129,10 +129,12 @@ public class ApiOrderController {
                         orderEntity.setState(OrderEntity.STATE_AWAIT_USE);
                     }
                     orderService.updateById(orderEntity);
+                    return "success";
                 }
             }
 
         }
+        return "fail";
     }
 
     /**

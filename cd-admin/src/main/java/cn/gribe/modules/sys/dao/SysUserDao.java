@@ -18,6 +18,7 @@ package cn.gribe.modules.sys.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import cn.gribe.modules.sys.entity.SysUserEntity;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -47,4 +48,11 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
 	 */
 	List<SysUserEntity> queryAllMerchants();
 
+	/**
+	 * 查询所有角色
+	 * @param roleName
+	 * @param userId
+	 * @return
+	 */
+	SysUserEntity queryByRoleNameAndUserId(@Param("roleName") String roleName,@Param("userId") Long userId);
 }

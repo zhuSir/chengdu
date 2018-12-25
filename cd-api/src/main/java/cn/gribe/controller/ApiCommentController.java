@@ -71,9 +71,8 @@ public class ApiCommentController {
             }
         }
         //上传文件
-        comment.setUserHeadUrl(urls.toString());
+        comment.setImgs(urls.toString());
         comment.setUserId(user.getId());
-        comment.setUserName(user.getUserName());
         comment.setCreateTime(new Date());
         comment.setUpdateTime(new Date());
         comment.setStatus(CommentEntity.STATUS_DISABLE);//默认未生效

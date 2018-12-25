@@ -1,10 +1,7 @@
 package cn.gribe.modules.business.controller;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
@@ -15,6 +12,7 @@ import cn.gribe.modules.sys.entity.SysUserEntity;
 import cn.gribe.modules.sys.service.SysDictService;
 import cn.gribe.modules.sys.service.SysUserService;
 import cn.gribe.modules.sys.shiro.ShiroUtils;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +42,9 @@ public class CdStoreController {
     @Autowired
     private SysUserService sysUserService;
 
+    @Autowired
+    private CdStoreService storeService;
+
     /**
      * 初始化信息
      */
@@ -54,10 +55,19 @@ public class CdStoreController {
         if(storeType != null){
             r.put("storeType",storeType);
         }
-        //查询所有商家
-        List<SysUserEntity> users = sysUserService.queryAllMerchants();
-        if(users != null){
+        SysUserEntity user = ShiroUtils.getUserEntity();
+        //判断如果用户有关联店铺则给与他查询店铺的信息
+        user = sysUserService.queryByRoleNameAndUserId("商家",user.getUserId());
+        if(user != null){
+            List<SysUserEntity> users = new ArrayList<>();
+            users.add(user);
             r.put("userList",users);
+        }else{
+            //查询所有商家
+            List<SysUserEntity> users = sysUserService.queryAllMerchants();
+            if(users != null){
+                r.put("userList",users);
+            }
         }
         return r;
     }

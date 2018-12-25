@@ -18,8 +18,10 @@ import cn.gribe.modules.business.service.CdStoreService;
 import cn.gribe.modules.business.service.ProductTagService;
 import cn.gribe.modules.oss.cloud.OSSFactory;
 import cn.gribe.modules.sys.entity.SysDictEntity;
+import cn.gribe.modules.sys.entity.SysUserEntity;
 import cn.gribe.modules.sys.service.SysDictService;
 import cn.gribe.common.validator.ValidatorUtils;
+import cn.gribe.modules.sys.shiro.ShiroUtils;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +44,6 @@ public class CdProductController {
     @Autowired
     private SysDictService sysDictService;
 
-
     @Autowired
     private CdStoreService storeService;
 
@@ -56,7 +57,14 @@ public class CdProductController {
         if(state != null){
             r.put("state",state);
         }
-        List<StoreEntity> storesList = storeService.queryAllStore();
+        SysUserEntity user = ShiroUtils.getUserEntity();
+        //判断如果用户有关联店铺则给与他查询店铺的信息
+        StoreEntity storeEntity = storeService.queryByUserId(user.getUserId());
+        Integer storeId = null;
+        if(storeEntity != null){
+            storeId = storeEntity.getId();
+        }
+        List<StoreEntity> storesList = storeService.queryAllStore(storeId);
         if(storesList != null){
             r.put("storesList",storesList);
         }
@@ -69,6 +77,12 @@ public class CdProductController {
     @RequestMapping("/list")
     @RequiresPermissions("business:cdproduct:list")
     public R list(@RequestParam Map<String, Object> params){
+        SysUserEntity user = ShiroUtils.getUserEntity();
+        //判断如果用户有关联店铺则给与他查询店铺的信息
+        StoreEntity storeEntity = storeService.queryByUserId(user.getUserId());
+        if(storeEntity != null){
+            params.put("storeId",storeEntity.getId());
+        }
         PageUtils page = cdProductService.queryPage(params);
         return R.ok().put("page", page);
     }

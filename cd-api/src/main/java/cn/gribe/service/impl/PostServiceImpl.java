@@ -19,16 +19,6 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-//        EntityWrapper wrapper = new EntityWrapper<PostEntity>();
-//        Object groupId = params.get("groupId");
-//        if(groupId != null){
-//            wrapper.eq("group_id",groupId);
-//        }
-//        Page<PostEntity> page = this.selectPage(
-//                new Query<PostEntity>(params).getPage(),
-//                wrapper
-//        );
-
         Page<PostEntity> page = new Query<PostEntity>(params).getPage();// 当前页，总条数 构造 page 对象
         String groupId = params.get("groupId") == null ? null : (String) params.get("groupId");
         page.setRecords(this.baseMapper.selectPageByGroupId(groupId));

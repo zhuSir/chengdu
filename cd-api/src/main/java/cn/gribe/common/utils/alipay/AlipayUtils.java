@@ -36,17 +36,8 @@ public class AlipayUtils {
 
     public static Logger logger = LoggerFactory.getLogger(AlipayUtils.class);
 
-    @Value("${alipay.isSandBox}")
-    private boolean isSandBox = true;
-
-    @Value("${alipay.TEST_APP_ID}")
-    private String TEST_APP_ID;
-
     @Value("${alipay.APP_ID}")
     private String APP_ID;
-
-    @Value("${alipay.TEST_SERVER_URL}")
-    private String TEST_SERVER_URL;
 
     @Value("${alipay.SERVER_URL}")
     private String SERVER_URL;
@@ -71,11 +62,7 @@ public class AlipayUtils {
 
     public AlipayClient getAlipayClient(){
         if(alipayClient == null){
-            if(isSandBox){
-                alipayClient = new DefaultAlipayClient(TEST_SERVER_URL, TEST_APP_ID, APP_PRIVATE_KEY, "json", "UTF-8", ALIPAY_PUBLIC_KEY, "RSA2");
-            }else{
-                alipayClient = new DefaultAlipayClient(SERVER_URL, APP_ID, APP_PRIVATE_KEY, "json", "UTF-8", ALIPAY_PUBLIC_KEY, "RSA2");;
-            }
+            alipayClient = new DefaultAlipayClient(SERVER_URL, APP_ID, APP_PRIVATE_KEY, "json", "UTF-8", ALIPAY_PUBLIC_KEY, "RSA2");;
         }
         return alipayClient;
     }

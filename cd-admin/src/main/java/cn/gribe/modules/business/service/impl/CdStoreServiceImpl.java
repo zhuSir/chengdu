@@ -23,8 +23,12 @@ import cn.gribe.entity.StoreEntity;
 public class CdStoreServiceImpl extends ServiceImpl<CdStoreDao, StoreEntity> implements CdStoreService {
 
     @Override
-    public List<StoreEntity> queryAllStore() {
-        return this.selectList(new EntityWrapper<StoreEntity>());
+    public List<StoreEntity> queryAllStore(Integer storeId) {
+        EntityWrapper wrapper = new EntityWrapper<StoreEntity>();
+        if(storeId != null){
+            wrapper.eq("id",storeId);
+        }
+        return this.selectList(wrapper);
     }
 
     @Override

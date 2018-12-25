@@ -28,4 +28,14 @@
 		WHERE `status` = 1 AND sr.role_name = '商家'
 	</select>
 
+	<select id="queryByRoleNameAndUserId" parameterType="map" resultType="cn.gribe.modules.sys.entity.SysUserEntity">
+		select
+		su.user_id as userId,su.username,su.salt,su.`password`,su.email,su.mobile,su.`status`
+		FROM sys_user su
+		INNER JOIN sys_user_role sur ON sur.user_id = su.user_id
+		INNER JOIN sys_role sr ON sur.role_id = sr.role_id
+		WHERE `status` = 1 AND sr.role_name = #{roleName}
+		AND su.user_id = #{userId}
+	</select>
+
 </mapper>

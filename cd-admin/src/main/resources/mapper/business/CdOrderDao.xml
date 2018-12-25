@@ -33,6 +33,9 @@
         <if test="storeName != null and storeName != '' ">
             AND s.`name` LIKE CONCAT('%',#{storeName},'%')
         </if>
+        <if test="storeId != null and storeId != '' ">
+            AND s.id = #{storeId}
+        </if>
         <if test="startTime != null and startTime != '' ">
             AND o.create_time &gt;= #{startTime}
         </if>

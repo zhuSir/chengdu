@@ -83,6 +83,11 @@ public class CommentEntity implements Serializable {
 	private Date updateTime;
 
 	/**
+	 * 评论id
+	 */
+	private Integer commentId;
+
+	/**
 	 * 用户名
 	 */
 	@TableField(exist = false)
@@ -90,6 +95,12 @@ public class CommentEntity implements Serializable {
 
 	@TableField(exist = false)
 	private String userHeadUrl;
+
+	/**
+	 * 评论名称
+	 */
+	@TableField(exist = false)
+	private String name;
 
 	/**
 	 * 设置：id
@@ -234,5 +245,21 @@ public class CommentEntity implements Serializable {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getCommentId() {
+		return commentId;
+	}
+
+	public void setCommentId(Integer commentId) {
+		this.commentId = commentId;
 	}
 }

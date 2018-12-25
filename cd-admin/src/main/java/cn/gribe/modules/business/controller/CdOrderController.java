@@ -6,8 +6,11 @@ import java.util.List;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.validator.ValidatorUtils;
 import cn.gribe.entity.StoreEntity;
+import cn.gribe.modules.business.service.CdStoreService;
 import cn.gribe.modules.sys.entity.SysDictEntity;
+import cn.gribe.modules.sys.entity.SysUserEntity;
 import cn.gribe.modules.sys.service.SysDictService;
+import cn.gribe.modules.sys.shiro.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +40,9 @@ public class CdOrderController {
     @Autowired
     private SysDictService dictService;
 
+    @Autowired
+    private CdStoreService cdStoreService;
+
     /**
      * 信息
      */
@@ -60,7 +66,14 @@ public class CdOrderController {
     @RequestMapping("/list")
     @RequiresPermissions("business:cdorder:list")
     public R list(Integer page,Integer limit,String phone,String storeName,String startTime,String endTime){
-        PageUtils res = cdOrderService.queryPage(page,limit,phone,storeName,startTime,endTime);
+        SysUserEntity user = ShiroUtils.getUserEntity();
+        //判断如果用户有关联店铺则给与他查询店铺的信息
+        StoreEntity storeEntity = cdStoreService.queryByUserId(user.getUserId());
+        Integer storeId = null;
+        if(storeEntity != null){
+            storeId = storeEntity.getId();
+        }
+        PageUtils res = cdOrderService.queryPage(page,limit,phone,storeName,storeId,startTime,endTime);
         return R.ok().put("page", res);
     }
 

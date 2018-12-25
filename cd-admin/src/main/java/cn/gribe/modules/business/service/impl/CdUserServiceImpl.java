@@ -18,11 +18,15 @@ public class CdUserServiceImpl extends ServiceImpl<CdUserDao, UserEntity> implem
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        EntityWrapper wrapper = new EntityWrapper<UserEntity>();
+        String phone = params.get("phone") != null ? (String) params.get("phone") : null;
+        if(phone != null){
+            wrapper.like("phone",phone);
+        }
         Page<UserEntity> page = this.selectPage(
                 new Query<UserEntity>(params).getPage(),
-                new EntityWrapper<UserEntity>()
+                wrapper
         );
-
         return new PageUtils(page);
     }
 

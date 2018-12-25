@@ -123,4 +123,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		return this.baseMapper.queryAllMerchants();
 	}
 
+	@Override
+	public SysUserEntity queryByRoleNameAndUserId(String roleName,Long userId) {
+		return this.baseMapper.queryByRoleNameAndUserId(roleName,userId);
+	}
+
 }

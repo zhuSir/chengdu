@@ -59,7 +59,7 @@ public class CdActivityController {
         if(states != null){
             r.put("states",states);
         }
-        List<StoreEntity> storesList = storeService.queryAllStore();
+        List<StoreEntity> storesList = storeService.queryAllStore(null);
         if(storesList != null){
             r.put("storesList",storesList);
         }

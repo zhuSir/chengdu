@@ -63,4 +63,6 @@ public interface SysUserService extends IService<SysUserEntity> {
 	 * @return
 	 */
 	List<SysUserEntity> queryAllMerchants();
+
+	SysUserEntity queryByRoleNameAndUserId(String roleName,Long userId);
 }

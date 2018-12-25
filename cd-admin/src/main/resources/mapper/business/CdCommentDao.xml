@@ -14,11 +14,24 @@
         <result property="storeId" column="store_id"/>
         <result property="postId" column="post_id"/>
         <result property="commentId" column="comment_id"/>
+        <result property="name" column="name"/>
     </resultMap>
 
-    <!--<select id="queryPageByParams" parameterType="map"  resultMap="commentMap">-->
-        <!--select * from-->
-    <!--</select>-->
+    <select id="selectPage" parameterType="map"  resultMap="commentMap">
+        select
+        cc.*,
+        (CASE cc.type WHEN 1 THEN cp.`name` WHEN 2 THEN cs.`name` WHEN 3 THEN po.title ELSE '' END) as `name`
+        from cd_comment cc LEFT JOIN cd_product cp ON cc.product_id = cp.id
+        LEFT JOIN cd_store cs ON cc.store_id = cs.id
+        LEFT JOIN cd_post po ON cc.post_id = po.id
+        WHERE 1=1
+        <if test="content != null and content != '' ">
+            AND cc.content LIKE concat("%",#{content},"%");
+        </if>
+        <if test="storeId != null and storeId != ''">
+            AND cc.store_id = #{storeId}
+        </if>
+    </select>
 
 
 </mapper>

@@ -29,9 +29,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
 
     static Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
-    @Autowired
-    private AlipayUtils alipayUtils;
-
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         Page<OrderEntity> page = new Query<OrderEntity>(params).getPage();// 当前页，总条数 构造 page 对象
@@ -44,16 +41,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     public String saveAndPay(OrderEntity order, ProductEntity product,UserEntity user) {
         //验证是否有没有支付的订单
         Assert.state(isExistAwaitPay(user.getId()),"您当前还有未支付订单，请先支付后再下单");
+        Assert.state(order.getSum() < 0,"金额错误，必须大于零元");
         if(OrderEntity.PAY_TYPE_ALIPAY.equals(order.getPayType())){
             //支付宝支付
-            Assert.state(order.getSum() < 1,"金额错误，必须大于零元");
-            String remark = product.getName();//TODO 判断字数是否超出
-            String subject = product.getName();//TODO 判断字数是否超出
-            AliPayOrder payOrder = new AliPayOrder(String.valueOf(order.getSum()),remark,subject,order.getCode());
-            String result = alipayUtils.getAliPayOrder(payOrder);
-            Assert.isNull(result,"支付下单错误,订单号为："+payOrder.toString());
+//            String remark = product.getName();//TODO 判断字数是否超出
+//            String subject = product.getName();//TODO 判断字数是否超出
+//            AliPayOrder payOrder = new AliPayOrder(String.valueOf(order.getSum()),remark,subject,order.getCode());
+//            String result = alipayUtils.getAliPayOrder(payOrder);
+//            Assert.isNull(result,"支付下单错误,订单号为："+payOrder.toString());
             Assert.state(!this.insert(order),"保存订单错误，请联系管理员","==>:保存订单错误 orderInfo:"+order.toString());
-            return result;
+            return "success";
         }else if(OrderEntity.PAY_TYPE_WECHATPAY.equals(order.getPayType())){
             return null;
             //微信支付
