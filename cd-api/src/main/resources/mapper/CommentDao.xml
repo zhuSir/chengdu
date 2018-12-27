@@ -19,7 +19,7 @@
         SELECT c.*,u.user_name,u.head_img as user_head_url
         FROM cd_comment c,cd_user u
         WHERE c.user_id = u.id
-        <if test="postId != null and postId != '' ">
+        <if test="postId != null and postId != '' and postId != 'null' ">
             and c.post_id = #{postId}
         </if>
         <if test="storeId != null and storeId != '' ">
@@ -38,6 +38,12 @@
         from cd_collect col
         LEFT JOIN cd_comment com ON col.comment_id = com.id
         WHERE col.user_id = #{userId}
+    </select>
+
+    <select id="selectPageByCommentId" parameterType="map"  resultMap="commentMap">
+        select com.*
+        from cd_comment com
+        WHERE com.comment_id = #{commentId}
     </select>
 
 </mapper>

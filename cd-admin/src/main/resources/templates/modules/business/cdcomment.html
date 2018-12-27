@@ -3,7 +3,7 @@
 <head>
     <title></title>
     <#include "/header.html">
-        </head>
+</head>
 <body>
 <div id="rrapp" v-cloak>
     <div v-show="showList">
@@ -12,7 +12,9 @@
             <!--<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>-->
             <!--</#if>-->
             <#if shiro.hasPermission("business:cdcomment:update")>
-                <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+                <#if rule.hasBusiness()>
+                    <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+                </#if>
             </#if>
             <!--<#if shiro.hasPermission("business:cdcomment:delete")>-->
             <!--<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>-->

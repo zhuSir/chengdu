@@ -96,6 +96,12 @@ public class OrderEntity {
     //支付描述
     private String payDescription;
 
+    //快递公司
+    private String expressCompany;
+
+    //快递号
+    private String expressCode;
+
     //商店名称
     @TableField(exist = false)
     private String storeName;
@@ -278,6 +284,22 @@ public class OrderEntity {
 
     public void setPayDescription(String payDescription) {
         this.payDescription = payDescription;
+    }
+
+    public String getExpressCompany() {
+        return expressCompany;
+    }
+
+    public void setExpressCompany(String expressCompany) {
+        this.expressCompany = expressCompany;
+    }
+
+    public String getExpressCode() {
+        return expressCode;
+    }
+
+    public void setExpressCode(String expressCode) {
+        this.expressCode = expressCode;
     }
 
     @Override

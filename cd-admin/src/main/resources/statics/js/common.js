@@ -63,6 +63,13 @@ function getSelectedRow() {
     return selectedIDs[0];
 }
 
+//返回一行的数据
+function getSelectedRowData(id){
+    var grid = $("#jqGrid");
+    var rowData = grid.getRowData(id);
+	return rowData;
+}
+
 //选择多条记录
 function getSelectedRows() {
     var grid = $("#jqGrid");

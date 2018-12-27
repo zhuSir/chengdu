@@ -16,6 +16,7 @@
 
 package cn.gribe.common.config;
 
+import cn.gribe.modules.sys.shiro.RuleTag;
 import cn.gribe.modules.sys.shiro.ShiroTag;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,11 +36,12 @@ import java.util.Properties;
 public class FreemarkerConfig {
 
     @Bean
-    public FreeMarkerConfigurer freeMarkerConfigurer(ShiroTag shiroTag){
+    public FreeMarkerConfigurer freeMarkerConfigurer(ShiroTag shiroTag, RuleTag ruleTag){
         FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
         configurer.setTemplateLoaderPath("classpath:/templates");
         Map<String, Object> variables = new HashMap<>(1);
         variables.put("shiro", shiroTag);
+        variables.put("rule",ruleTag);
         configurer.setFreemarkerVariables(variables);
 
         Properties settings = new Properties();

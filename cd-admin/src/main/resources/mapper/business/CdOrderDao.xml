@@ -21,6 +21,8 @@
         <result property="storeId" column="store_id"/>
         <result property="storeName" column="store_name"/>
         <result property="productName" column="product_name"/>
+        <result property="expressCompany" column="express_company"/>
+        <result property="expressCode" column="express_code"/>
     </resultMap>
 
     <select id="selectPage" parameterType="map"  resultMap="orderMap">
@@ -35,6 +37,9 @@
         </if>
         <if test="storeId != null and storeId != '' ">
             AND s.id = #{storeId}
+        </if>
+        <if test="status != null and status != '' ">
+            AND o.state = #{status}
         </if>
         <if test="startTime != null and startTime != '' ">
             AND o.create_time &gt;= #{startTime}

@@ -7,6 +7,7 @@ import cn.gribe.modules.business.dao.CdProductDao;
 import cn.gribe.entity.ProductEntity;
 import cn.gribe.modules.business.dao.ProductTagDao;
 import cn.gribe.modules.business.service.CdProductService;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ public class CdProductServiceImpl extends ServiceImpl<CdProductDao, ProductEntit
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper wrapper = new EntityWrapper<ProductEntity>();
         Object storeId = params.get("storeId") != null ? params.get("storeId") : null;
-        if(storeId != null && !"0".equals(String.valueOf(storeId))){
+        if(storeId != null && StringUtils.isNotEmpty(String.valueOf(storeId)) && !"0".equals(String.valueOf(storeId))){
             wrapper.eq("store_id",storeId);
         }
         String name = params.get("name") != null ? (String) params.get("name") : null;

@@ -4,6 +4,8 @@ import cn.gribe.common.utils.PageUtils;
 import cn.gribe.entity.OrderEntity;
 import com.baomidou.mybatisplus.service.IService;
 
+import java.util.Map;
+
 /**
  * 
  *
@@ -13,6 +15,6 @@ import com.baomidou.mybatisplus.service.IService;
  */
 public interface CdOrderService extends IService<OrderEntity> {
 
-    PageUtils queryPage(Integer page,Integer limit,String phone, String storeName,Integer storeId, String startTime, String endTime);
+    PageUtils queryPage(Map<String, Object> params);
 }
 

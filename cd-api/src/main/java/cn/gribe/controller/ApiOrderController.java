@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -39,6 +40,7 @@ public class ApiOrderController {
 
     @Autowired
     private AlipayUtils alipayUtils;
+
 
     /**
      * 列表
@@ -90,12 +92,14 @@ public class ApiOrderController {
         order.setFreight(product.getFreight());
         //待支付
         order.setState(OrderEntity.STATE_AWAIT_PAY);
+        order.setCreateTime(new Date());
+        order.setUpdateTime(new Date());
         String results = orderService.saveAndPay(order,product,user);
         if(results == null){
             return R.error("支付下单失败，请联系管理员");
         }
-        R r = R.ok().put("results",results);
-        r.put("orderCode",order.getCode());
+        R r = R.ok().put("orderCode",order.getCode());
+        r.put("callback",alipayUtils.NOTIFY_URL);
         return r;
     }
 
@@ -143,7 +147,7 @@ public class ApiOrderController {
     @Login
     @RequestMapping("/queryResult")
     @ResponseBody
-    public R queryAliPayOrder(String orderCode,@LoginUser UserEntity user){
+    public R queryAliPayOrder(String orderCode,String tradeNo,@LoginUser UserEntity user){
         org.springframework.util.Assert.state(orderCode != null,"订单错误，请联系管理员");
         OrderEntity orderEntity = orderService.queryByCode(orderCode);
         Assert.isNull(orderEntity,"订单错误，请联系管理员");

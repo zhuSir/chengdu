@@ -17,5 +17,5 @@ public interface PostDao extends BaseMapper<PostEntity> {
 
     List<PostEntity> selectPageByUserId(@Param("userId") Integer userId);
 
-    List<PostEntity> selectPageByGroupId(@Param("groupId") String groupId);
+    List<PostEntity> selectPageByGroupId(@Param("groupId") Object groupId);
 }

@@ -13,7 +13,9 @@ import java.util.List;
 @Repository
 public interface CommentDao extends BaseMapper<CommentEntity> {
 
-    List<CommentEntity> selectPage(@Param("postId") String postId , @Param("storeId")String storeId,@Param("name") String name,@Param("userId") String userId);
+    List<CommentEntity> selectPage(@Param("postId") Object postId , @Param("storeId")Object storeId,@Param("name") Object name,@Param("userId") Object userId);
+
+    List<CommentEntity> selectPageByCommentId(@Param("commentId") Object commentId );
 
     List<CommentEntity> selectPageByUserId(@Param("userId") Integer userId);
 

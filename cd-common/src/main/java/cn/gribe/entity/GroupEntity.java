@@ -1,5 +1,6 @@
 package cn.gribe.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -55,6 +56,10 @@ public class GroupEntity implements Serializable {
 	 * 收藏数
 	 */
 	private Integer collectNum;
+
+	//收藏
+	@TableField(exist = false)
+	private boolean isCollected;
 
 	/**
 	 * 设置：
@@ -159,5 +164,13 @@ public class GroupEntity implements Serializable {
 
 	public void setCollectNum(Integer collectNum) {
 		this.collectNum = collectNum;
+	}
+
+	public boolean isCollected() {
+		return isCollected;
+	}
+
+	public void setCollected(boolean collected) {
+		isCollected = collected;
 	}
 }

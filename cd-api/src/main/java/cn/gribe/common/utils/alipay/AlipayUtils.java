@@ -37,26 +37,26 @@ public class AlipayUtils {
     public static Logger logger = LoggerFactory.getLogger(AlipayUtils.class);
 
     @Value("${alipay.APP_ID}")
-    private String APP_ID;
+    private String APP_ID;// = "2017091808790585";
 
     @Value("${alipay.SERVER_URL}")
-    private String SERVER_URL;
+    private String SERVER_URL;// = "https://openapi.alipay.com/gateway.do";
 
     //APP私钥
     @Value("${alipay.APP_PRIVATE_KEY}")
-    private String APP_PRIVATE_KEY;
+    private String APP_PRIVATE_KEY;// = "MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCNnkLRAjNcSSgXGexfF4kxKM7TTrXZpaUuikkyoA+2x7Okpkd04De9iDlO3S67UJ/88PYpqG930dSS8gvf3Zy8HKPV2onTGEFjctEiFt1Cb5srVemXiPpawDJoFsk7WJyZpXzqgmredexF/4CaoO4+ZqIP1vcS4rtRuY0I+cer2u+IyAe8NteUSPKxuZG3Q0f7qsdwJZF+ZUhcybWOJVPLuh/uaJsV9+67U4hxztQzGlamMlua1klnL8afI0+alxemIjTyYvV/CEI5Mcqo3iLh6f9JF1W94n9DmZH/PT9cNdCYb+vi6QWsfDeqDOLKIdOit/IQAmS68dqb7jp3v7y5AgMBAAECggEBAIMstHcksq4olRnQyUDLbCg8xFa18XtIE1iofmSGHggPsjYwTr/Tb83/ABYsiby3UXnZOCod+iHiGiSCTr1taGBVpuvPIRqGvQqAr3YD964x8miRi2zxU/P7UrVXZc2yplsrDimp45NrZw7vOw//QK5MIpDJbNHxcdChLiHCO1DSeNSOV73eIWrIOQDxzslJhe8byAyKwhImsiz/IZl/FeSWrX59gt9/7JrNhp5f9obbnk/BK9NFaZApdPr90OkNv/hJ7blhRA6/HZeQzUuk0eAVyHlx1x1RmNB5QMA+qLSnPfLOxxFGvqaGcnbbyocJPyoYgzXUI1ivcJy7kPEogoECgYEAyx7D0K1Ja/03DDLYfpvBVtzuNwb0twsaOK+ZdUS0BfoIgpmJqGJVQ2wdelmrF3hPyaKrT/Ykw+hSPUR4P10xcJrzaVHKLECOafklmWc977GdSg0WQUaTcZO2VxVZgH0GRQ5puFTtNIxEbPkISiSYuyv55VvrjQnq0y03kUz5ri8CgYEAsnyb+1vkPyds+cE6nXOpjY7fayEu5wOEiBqPVEpiZQPXmB05oO9FgK/+uDdJB7uoyqNPdvot0t2nq3pNW6XanbTodg4c6bMPLqhNn2P2LGulMvGJLLFve6maje9s0STArDjdm3dA+qJsURzq8y+kDzSm6sVDrLkuIBO0tr5NMZcCgYAJZBS9kyVv3rcq0zb7M4xOzcwdsy6hP9wofsXjjBeepx65mwuoQ1OZ2GfMflTQsvlNYz30Znbwr88NkhrVIyPkBuX2Gpf0T8/FyoUYgJN2f4m8ILrErdSnTaMCh7Qpop4llzMAGL0Wzt1jBGiDtQlyrefR2NwdGzZGKTMGfr6UdQKBgQCiDmHRp21lqfZYDgmaTBn2XXKdYlOjjJ4YtYTNk3wjG4n0oxRf+t+wKBuuRwQX8VsgIYdVD3HrszU5jKIQRFZqOoeWKNo3lkyCoG1Z+vjY/CPSTVuvKKuALE4X8PtsKWKG/Fq5fV2SM0cFnqv0gZ0D8Vpcbx8zBC/NEBdUlRShoQKBgQC5eK/Sez+9OvDpwbInghph6yTadu0dctJ7jtz1tMeluV2xBgRuonD1eKc9UVQqIh3XElOQQNrnp2zwnAHR5LMKZHC6K1/A5ykKY87AR2zMhU3oO20vIqSSw1eZZJXehm8T4Ljz2psYpracZV9mV/cM+5Rt+1arUpw++a15VScVxw==";
 
     //APP公钥
     @Value("${alipay.APP_PUBLIC_KEY}")
     private String APP_PUBLIC_KEY;
 
     //阿里公钥
-    @Value("${alipay.APP_PUBLIC_KEY}")
-    private String ALIPAY_PUBLIC_KEY;
+    @Value("${alipay.ALIPAY_PUBLIC_KEY}")
+    private String ALIPAY_PUBLIC_KEY;// = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmppeXWfiS3BgGDoSkPcEOe22BMnQLw0XINeSoCjhCHLq1s61ClGcVZgKgUeqva0TylolBM8j10gwYkds+NIuHGJMn7XOw5uIn5bITxpvgSYwS2xR1umRub4iSyXslF9fralgvIZ9PGvOR9boNl8Yxcz+8pcDu1dNckhG81zTw55NqHrESN/3f0gzfgYlCTOwVruV41W9q84wJyrwGHCxp3/53Dst3+HEex1nu3Tj12KFxmew7wb/dJimU92W+Q7QvYM1MoHIYMV8j7DAaWDiDZknNm5h1EnIeoYaaw10PJhKi3jK2jijkUqaUvvsi40zsl7pXRMPKaJ5hJEyhJFtwwIDAQAB";
 
     //商户外网可以访问的异步地址
     @Value("${alipay.NOTIFY_URL}")
-    private String NOTIFY_URL;
+    public String NOTIFY_URL;
 
     private AlipayClient alipayClient;
 
@@ -139,8 +139,8 @@ public class AlipayUtils {
         AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();//创建API对应的request类
         Map params = new HashMap();
         params.put("out_trade_no",String.valueOf(orderNo));
-        //params.put("trade_no",String.valueOf(payOrder.getTradeNo()));
-        request.setBizContent(params.toString());//设置业务参数
+//        params.put("trade_no",tradeNo);
+        request.setBizContent(JSONObject.toJSONString(params));//设置业务参数
         AlipayTradeQueryResponse response = null;//通过alipayClient调用API，获得对应的response类
         try {
             response = getAlipayClient().execute(request);
@@ -258,14 +258,21 @@ public class AlipayUtils {
 
     public static void main(String[] args){
         AlipayUtils alipayUtils = new AlipayUtils();
-        AliPayOrder payOrder = new AliPayOrder();
-//        payOrder.setOrderNo(createOrderNo());
-        payOrder.setAccount("jfdhfp2236@sandbox.com");
-        payOrder.setAmount("0.1");
-        payOrder.setRemark("remark");
-        payOrder.setSubject("商品名称");
-        payOrder.setAccountRealName("沙箱环境");
-        alipayUtils.transferOrder(payOrder);
+//        AliPayOrder payOrder = new AliPayOrder();
+////        payOrder.setOrderNo(createOrderNo());
+//        payOrder.setAccount("jfdhfp2236@sandbox.com");
+//        payOrder.setAmount("0.1");
+//        payOrder.setRemark("remark");
+//        payOrder.setSubject("商品名称");
+//        payOrder.setAccountRealName("沙箱环境");
+//        alipayUtils.transferOrder(payOrder);
+        alipayUtils.queryAliPayOrder("7750dd8d-186f-4539-a943-8ee380527dd4");
+
+        Map params = new HashMap();
+        params.put("out_trade_no",String.valueOf("688-4839-92c7-c22f54603c7b"));
+//        params.put("trade_no",tradeNo);
+        System.out.println(JSONObject.toJSONString(params));
+
     }
 
 

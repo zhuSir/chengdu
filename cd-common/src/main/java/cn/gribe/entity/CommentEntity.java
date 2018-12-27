@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 
@@ -86,6 +87,11 @@ public class CommentEntity implements Serializable {
 	 * 评论id
 	 */
 	private Integer commentId;
+
+	/**
+	 * 评论列表
+	 */
+	List<CommentEntity> commentEntityList;
 
 	/**
 	 * 用户名
@@ -261,5 +267,13 @@ public class CommentEntity implements Serializable {
 
 	public void setCommentId(Integer commentId) {
 		this.commentId = commentId;
+	}
+
+	public List<CommentEntity> getCommentEntityList() {
+		return commentEntityList;
+	}
+
+	public void setCommentEntityList(List<CommentEntity> commentEntityList) {
+		this.commentEntityList = commentEntityList;
 	}
 }
