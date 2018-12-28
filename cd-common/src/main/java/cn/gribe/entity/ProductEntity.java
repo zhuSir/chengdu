@@ -38,6 +38,7 @@ public class ProductEntity {
     @NotBlank(message="产品运费不能为空")
     private String freight;
 
+
     //缩略图
     private String shortImg;
 
