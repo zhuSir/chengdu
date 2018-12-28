@@ -154,6 +154,7 @@
             <artifactId>alipay-sdk-java</artifactId>
             <version>3.3.49.ALL</version>
         </dependency>
+
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>aliyun-java-sdk-core</artifactId>
