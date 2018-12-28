@@ -51,24 +51,6 @@
 			<version>${aliyun.oss.version}</version>
 		</dependency>
 
-		<!-- alipay sdk -->
-		<dependency>
-			<groupId>com.alipay.sdk</groupId>
-			<artifactId>alipay-sdk-java</artifactId>
-			<version>3.3.49.ALL</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.aliyun</groupId>
-			<artifactId>aliyun-java-sdk-core</artifactId>
-			<version>3.5.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.aliyun</groupId>
-			<artifactId>aliyun-java-sdk-green</artifactId>
-			<version>3.3.0</version>
-		</dependency>
-
 		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
