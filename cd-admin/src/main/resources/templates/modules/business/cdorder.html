@@ -14,6 +14,9 @@
             <#if shiro.hasPermission("business:cdorder:shipments")>
                 <a class="btn btn-primary" @click="shipments"><i class="fa fa-car"></i>&nbsp;发货</a>
             </#if>
+            <#if shiro.hasPermission("business:cdorder:finished")>
+                <a class="btn btn-primary" @click="finished"><i class="fa fa-check-square-o"></i>&nbsp;完成</a>
+            </#if>
             <#if shiro.hasPermission("business:cdorder:refund")>
                 <a class="btn btn-primary" @click="refund"><i class="fa fa-reply"></i>&nbsp;退款</a>
             </#if>

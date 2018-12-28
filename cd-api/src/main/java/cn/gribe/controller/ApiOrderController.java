@@ -110,10 +110,11 @@ public class ApiOrderController {
     @RequestMapping("/callback")
     @ResponseBody
     public String checkParams(HttpServletRequest request){
-        String tradeNo = request.getParameter("out_trade_no");
-        if(StringUtils.isNotEmpty(tradeNo)){
+        String orderNo = request.getParameter("out_trade_no");
+        String tradeNo = request.getParameter("trade_no");
+        if(StringUtils.isNotEmpty(orderNo)){
             //查询单子
-            OrderEntity orderEntity = orderService.queryByCode(tradeNo);
+            OrderEntity orderEntity = orderService.queryByCode(orderNo);
             if(orderEntity == null){
                 return "fail";
             }
@@ -128,6 +129,7 @@ public class ApiOrderController {
                     Map<String,Object> status = alipayUtils.transferStatus(tradeStatus);
                     orderEntity.setPayStatus((Integer) status.get("status"));
                     orderEntity.setPayDescription((String) status.get("description"));
+                    orderEntity.setTradeNo(tradeNo);//支付宝订单号
                     //支付成功
                     if(OrderEntity.PAY_STATUS_SUCCESS.equals(orderEntity.getPayStatus())){
                         orderEntity.setState(OrderEntity.STATE_AWAIT_USE);
@@ -161,6 +163,7 @@ public class ApiOrderController {
         if(status != null){
             orderEntity.setPayStatus((Integer) status.get("status"));
             orderEntity.setPayDescription((String) status.get("description"));
+            orderEntity.setTradeNo(tradeNo);//支付宝订单号
             //支付成功
             if(OrderEntity.PAY_STATUS_SUCCESS.equals(orderEntity.getPayStatus())){
                 orderEntity.setState(OrderEntity.STATE_AWAIT_USE);
@@ -181,14 +184,14 @@ public class ApiOrderController {
      * @param status
      * @return
      */
-    @Login
-    @RequestMapping("/set")
-    public R set(String orderId,Integer status){
-        Assert.isNull(orderId,"订单错误，请刷新重试");
-        Assert.isNull(status,"订单错误，请刷新重试");
-        OrderEntity orderEntity = orderService.selectById(orderId);
-        //TODO 订单操作
-        return R.ok();
-    }
+//    @Login
+//    @RequestMapping("/set")
+//    public R set(String orderId,Integer status){
+//        Assert.isNull(orderId,"订单错误，请刷新重试");
+//        Assert.isNull(status,"订单错误，请刷新重试");
+//        OrderEntity orderEntity = orderService.selectById(orderId);
+//        //TODO 订单操作
+//        return R.ok();
+//    }
 
 }

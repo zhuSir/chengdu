@@ -188,17 +188,18 @@ public class AlipayUtils {
 
     /**
      * 退款
-     * @param payOrder
+     * @param orderNo
+     * @param tradeNo
+     * @param amount
      * @return
-     * @throws AlipayApiException
      */
-    public String orderRefund(AliPayOrder payOrder){
+    public String orderRefund(String orderNo,String tradeNo,double amount){
         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();//创建API对应的request类
         Map params = new HashMap();
-        params.put("out_trade_no",payOrder.getOrderNo());
-        params.put("trade_no",payOrder.getTradeNo());
-        params.put("out_request_no",payOrder.getOrderNo());
-        params.put("refund_amount",payOrder.getAmount());
+        params.put("out_trade_no",orderNo);
+        params.put("trade_no",tradeNo);
+        params.put("out_request_no",orderNo);
+        params.put("refund_amount",amount);
         request.setBizContent(JSONObject.toJSONString(params));//设置业务参数
         AlipayTradeRefundResponse response = null;//通过alipayClient调用API，获得对应的response类
         try {
@@ -206,7 +207,7 @@ public class AlipayUtils {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-        System.out.print(response.getBody());
+        logger.info(" orderNo:"+orderNo+"  ==退款结果: "+response.getBody());
         // 根据response中的结果继续业务逻辑处理
         return response.getBody();
     }

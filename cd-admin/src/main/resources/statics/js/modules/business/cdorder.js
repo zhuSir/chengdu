@@ -216,7 +216,6 @@ var vm = new Vue({
                 }
             });
         },
-
         refund: function() {
             var id = getSelectedRow();
             if(id == null){
@@ -230,6 +229,37 @@ var vm = new Vue({
                 $.ajax({
                     type: "POST",
                     url: baseURL + "business/cdorder/refund",
+                    data: "orderId=" + orderId,
+                    success: function(r){
+                        if(r.code === 0){
+                            alert('操作成功', function(){
+                                vm.reload();
+                            });
+                        }else{
+                            alert(r.msg);
+                        }
+                    }
+                });
+            });
+        },
+        finished: function() {
+            var id = getSelectedRow();
+            if(id == null){
+                alert("请选择要退款订单")
+                return ;
+            }
+            var rowData = getSelectedRowData(id);
+            var state = rowData.state;
+            if(state != 2){
+                alert("该订单状态不能进行完成操作")
+                return ;
+            }
+            var orderId = rowData.id;
+            //退款
+            confirm('确定要完成该订单么？', function () {
+                $.ajax({
+                    type: "POST",
+                    url: baseURL + "business/cdorder/finished",
                     data: "orderId=" + orderId,
                     success: function(r){
                         if(r.code === 0){

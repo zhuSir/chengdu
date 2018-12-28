@@ -16,5 +16,7 @@ import java.util.Map;
 public interface CdOrderService extends IService<OrderEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void refundOrder(Integer orderId);
 }
 

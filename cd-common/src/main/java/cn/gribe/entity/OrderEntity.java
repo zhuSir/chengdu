@@ -30,6 +30,9 @@ public class OrderEntity {
     //退单
     public static Integer STATE_CHARGE_BACK = 4;
 
+    //完成
+    public static Integer STATE_FINISHED = 5;
+
     //支付宝支付
     public static Integer PAY_TYPE_ALIPAY = 1;
 
@@ -101,6 +104,9 @@ public class OrderEntity {
 
     //快递号
     private String expressCode;
+
+    //支付宝订单号
+    private String tradeNo;
 
     //商店名称
     @TableField(exist = false)
@@ -300,6 +306,14 @@ public class OrderEntity {
 
     public void setExpressCode(String expressCode) {
         this.expressCode = expressCode;
+    }
+
+    public String getTradeNo() {
+        return tradeNo;
+    }
+
+    public void setTradeNo(String tradeNo) {
+        this.tradeNo = tradeNo;
     }
 
     @Override

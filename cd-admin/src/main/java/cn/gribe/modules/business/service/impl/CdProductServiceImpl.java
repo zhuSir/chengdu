@@ -7,6 +7,7 @@ import cn.gribe.modules.business.dao.CdProductDao;
 import cn.gribe.entity.ProductEntity;
 import cn.gribe.modules.business.dao.ProductTagDao;
 import cn.gribe.modules.business.service.CdProductService;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,7 @@ public class CdProductServiceImpl extends ServiceImpl<CdProductDao, ProductEntit
             result.add(entity);
         }
         page.setRecords(result);
+        System.out.println("==>: page: "+JSONObject.toJSONString(page));
         return new PageUtils(page);
     }
 

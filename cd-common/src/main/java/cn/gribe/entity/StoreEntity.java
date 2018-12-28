@@ -63,6 +63,9 @@ public class StoreEntity {
     //评分 -- new
     private Integer score;
 
+    //缩略图
+    private String shortImg;
+
     //销量 --new
     @NotNull(message="店铺销量不能为空")
     private Integer sales;
@@ -233,5 +236,13 @@ public class StoreEntity {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getShortImg() {
+        return shortImg;
+    }
+
+    public void setShortImg(String shortImg) {
+        this.shortImg = shortImg;
     }
 }

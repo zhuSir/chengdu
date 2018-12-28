@@ -156,13 +156,27 @@ public class CdOrderController {
     @RequiresPermissions("business:cdorder:refund")
     public R refund(Integer orderId){
         Assert.isNull(orderId,"参数错误，请刷新重试");
+        //退单
+        cdOrderService.refundOrder(orderId);
+        return R.ok();
+    }
+
+    /**
+     * 完成订单
+     * @param orderId
+     * @return
+     */
+    @RequestMapping("/finished")
+    @RequiresPermissions("business:cdorder:finished")
+    public R finished(Integer orderId){
+        Assert.isNull(orderId,"参数错误，请刷新重试");
         OrderEntity orderEntity = cdOrderService.selectById(orderId);
         Assert.isNull(orderEntity,"订单错误，请刷新重试");
         Assert.state(orderEntity.getState().intValue() != OrderEntity.STATE_AWAIT_USE.intValue(),
-                "该订单待使用，不能实现退单操作");
-        //TODO 退单
-        orderEntity.setState(OrderEntity.STATE_CHARGE_BACK);
+                "该订单不是待使用状态，不能进行完成操作");
+        orderEntity.setState(OrderEntity.STATE_FINISHED);
         cdOrderService.updateById(orderEntity);
         return R.ok();
     }
+
 }

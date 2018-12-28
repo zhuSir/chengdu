@@ -4,7 +4,10 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true,hidden:true },
-			{ label: '店铺名称', name: 'name', index: 'name', width: 80 }, 			
+			{ label: '店铺名称', name: 'name', index: 'name', width: 80 },
+            { label: '缩略图', name: 'shortImg', index: 'short_img',formatter:function(cellvalue, options, rowObject){
+                    return "<img style='width:50px;' src='"+cellvalue+"' />";
+            } },
 			{ label: '店铺地址', name: 'address', index: 'address', width: 80 }, 			
 			{ label: '备注', name: 'remark', index: 'remark', width: 80 }, 			
 			{ label: '简介', name: 'about', index: 'about', width: 80 }, 			

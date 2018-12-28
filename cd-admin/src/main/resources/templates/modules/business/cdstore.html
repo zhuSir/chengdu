@@ -42,6 +42,14 @@
                 </div>
             </div>
             <div class="form-group">
+                <div class="col-sm-2 control-label">缩略图</div>
+                <div class="col-sm-10">
+                    <!--<input type="text" class="form-control" v-model="cdStore.imgs" placeholder="轮播图"/>-->
+                    <input type="file" name="short_img_file" accept="image/*" class="btn btn-default" value="请选择图片" />
+                    <img v-model="cdStore.imgs" placeholder="缩略图"/>
+                </div>
+            </div>
+            <div class="form-group">
                 <div class="col-sm-2 control-label">简介</div>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="about" v-model="cdStore.about" placeholder="简介"/>
@@ -60,7 +68,7 @@
                 <div class="col-sm-2 control-label">轮播图</div>
                 <div class="col-sm-10">
                     <!--<input type="text" class="form-control" v-model="cdStore.imgs" placeholder="轮播图"/>-->
-                    <input type="file" name="file" accept="image/*" class="btn btn-default" multiple id="updateFile" value="请选择图片" />
+                    <input type="file" name="desc_img_file" accept="image/*" class="btn btn-default" multiple value="请选择图片" />
                     <img v-model="cdStore.imgs" placeholder="轮播图"/>
                 </div>
             </div>

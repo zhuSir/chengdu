@@ -2,9 +2,13 @@ package cn.gribe.modules.business.service.impl;
 
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.Query;
+//import cn.gribe.common.utils.alipay.AlipayUtils;
+import cn.gribe.common.validator.Assert;
 import cn.gribe.entity.OrderEntity;
 import cn.gribe.entity.PostEntity;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -19,6 +23,9 @@ import java.util.Map;
 @Service("cdOrderService")
 public class CdOrderServiceImpl extends ServiceImpl<CdOrderDao, OrderEntity> implements CdOrderService {
 
+//    @Autowired
+//    private AlipayUtils alipayUtils;
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         Page<OrderEntity> resPage = new Query<OrderEntity>(params).getPage();// 当前页，总条数 构造 page 对象
@@ -31,7 +38,21 @@ public class CdOrderServiceImpl extends ServiceImpl<CdOrderDao, OrderEntity> imp
         Object status = params.get("status");
         List<OrderEntity> records = this.baseMapper.selectPage(phone,storeName,storeId,status,startTime,endTime);
         resPage.setRecords(records);
+        System.out.println("==>:json : "+ JSONObject.toJSONString(resPage));
         return new PageUtils(resPage);
+    }
+
+    @Override
+    public void refundOrder(Integer orderId) {
+        Assert.isNull(orderId,"参数错误，请刷新重试");
+        OrderEntity orderEntity = this.baseMapper.selectById(orderId);
+        Assert.isNull(orderEntity,"订单错误，请刷新重试");
+        Assert.state(orderEntity.getState().intValue() != OrderEntity.STATE_AWAIT_USE.intValue(),
+                "该订单不是待使用状态，不能进行退单操作");
+        //退款
+//        alipayUtils.orderRefund(orderEntity.getCode(),orderEntity.getTradeNo(),orderEntity.getSum());
+        orderEntity.setState(OrderEntity.STATE_CHARGE_BACK);
+        this.baseMapper.updateById(orderEntity);
     }
 
 }

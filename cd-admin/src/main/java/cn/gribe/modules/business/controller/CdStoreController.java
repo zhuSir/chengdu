@@ -105,19 +105,28 @@ public class CdStoreController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("business:cdstore:save")
-    public R save(@RequestParam(value = "file", required = false) MultipartFile[] files,StoreEntity store) throws IOException {
+    public R save(@RequestParam(value = "desc_img_file", required = false) MultipartFile[] descImg,
+                  @RequestParam(value = "short_img_file", required = false) MultipartFile shortImg,
+                  StoreEntity store) throws IOException {
         ValidatorUtils.validateEntity(store);
         //TODO 判断用户是否绑定过一个商家
-        if (files != null && files.length > 0) {
+        if (descImg != null && descImg.length > 0) {
             String urls = "";
-            for(MultipartFile file : files){
-                String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-                String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
-                urls+=url+",";
+            for(MultipartFile file : descImg){
+                if(file != null && !file.isEmpty()){
+                    String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+                    String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
+                    urls+=url+",";
+                }
             }
             if(StringUtils.isNotEmpty(urls)){
                 store.setImgs(urls);
             }
+        }
+        if(shortImg != null && !shortImg.isEmpty()){
+            String suffix = shortImg.getOriginalFilename().substring(shortImg.getOriginalFilename().lastIndexOf("."));
+            String url = OSSFactory.build().uploadSuffix(shortImg.getBytes(), suffix);
+            store.setShortImg(url);
         }
         if(store.getId() == null){
             store.setCreateTime(new Date());
