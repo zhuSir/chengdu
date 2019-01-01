@@ -20,7 +20,7 @@ $(function () {
 			{ label: '收藏数', name: 'collectNum', index: 'collect_num', width: 80 }			
         ],
 		viewrecords: true,
-        height: 385,
+        height: 600,
         rowNum: 10,
 		rowList : [10,30,50],
         rownumbers: true, 

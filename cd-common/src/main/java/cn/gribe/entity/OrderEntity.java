@@ -56,7 +56,7 @@ public class OrderEntity {
     //创建时间
     private Date createTime;
 
-    //订单状态( 1：待付款；2：待用/待收；3：待评价；4：退单；)
+    //订单状态( 1：待付款；2：待用/待收；3：待评价；4：退单；5：取消)
     private Integer state;
 
     //收货地址

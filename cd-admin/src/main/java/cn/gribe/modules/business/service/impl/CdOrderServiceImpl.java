@@ -2,10 +2,9 @@ package cn.gribe.modules.business.service.impl;
 
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.Query;
-//import cn.gribe.common.utils.alipay.AlipayUtils;
+import cn.gribe.common.utils.alipay.AlipayUtils;
 import cn.gribe.common.validator.Assert;
 import cn.gribe.entity.OrderEntity;
-import cn.gribe.entity.PostEntity;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,8 @@ import java.util.Map;
 @Service("cdOrderService")
 public class CdOrderServiceImpl extends ServiceImpl<CdOrderDao, OrderEntity> implements CdOrderService {
 
-//    @Autowired
-//    private AlipayUtils alipayUtils;
+    @Autowired
+    private AlipayUtils alipayUtils;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -50,7 +49,7 @@ public class CdOrderServiceImpl extends ServiceImpl<CdOrderDao, OrderEntity> imp
         Assert.state(orderEntity.getState().intValue() != OrderEntity.STATE_AWAIT_USE.intValue(),
                 "该订单不是待使用状态，不能进行退单操作");
         //退款
-//        alipayUtils.orderRefund(orderEntity.getCode(),orderEntity.getTradeNo(),orderEntity.getSum());
+        alipayUtils.orderRefund(orderEntity.getCode(),orderEntity.getTradeNo(),orderEntity.getSum());
         orderEntity.setState(OrderEntity.STATE_CHARGE_BACK);
         this.baseMapper.updateById(orderEntity);
     }

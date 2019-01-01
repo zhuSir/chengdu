@@ -41,7 +41,11 @@ public class ApiCollectController {
     @RequestMapping("/save")
     public R save(CollectEntity collect,@LoginUser UserEntity user){
         collect.setUserId(user.getId());
-        collectService.insert(collect);
+        CollectEntity collectEntity = collectService.selectByParams(collect);
+        if(collectEntity != null){
+            collect.setId(collectEntity.getId());
+        }
+        collectService.insertOrUpdate(collectEntity);
         return R.ok();
     }
 

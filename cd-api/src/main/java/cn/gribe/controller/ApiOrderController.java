@@ -179,19 +179,21 @@ public class ApiOrderController {
     }
 
     /**
-     * 执行订单操作
+     * 订单取消
      * @param orderId
-     * @param status
      * @return
      */
-//    @Login
-//    @RequestMapping("/set")
-//    public R set(String orderId,Integer status){
-//        Assert.isNull(orderId,"订单错误，请刷新重试");
-//        Assert.isNull(status,"订单错误，请刷新重试");
-//        OrderEntity orderEntity = orderService.selectById(orderId);
-//        //TODO 订单操作
-//        return R.ok();
-//    }
+    @Login
+    @RequestMapping("/cancel")
+    public R set(String orderId,@LoginUser UserEntity userEntity){
+        Assert.isNull(orderId,"订单错误，请刷新重试");
+        OrderEntity orderEntity = orderService.selectById(orderId);
+        Assert.isNull(orderEntity,"订单参数错误，请联系管理员");
+        Assert.state(!OrderEntity.STATE_AWAIT_PAY.equals(orderEntity.getState()),"该订单不允许取消");
+        Assert.state(orderEntity.getUserId().intValue() == userEntity.getId().intValue(),"您当前无权限修改该记录");
+        orderEntity.setState(OrderEntity.STATE_FINISHED);
+        orderService.updateById(orderEntity);
+        return R.ok();
+    }
 
 }

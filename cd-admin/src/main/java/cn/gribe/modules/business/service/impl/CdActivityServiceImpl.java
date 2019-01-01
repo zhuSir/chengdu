@@ -5,6 +5,8 @@ import cn.gribe.common.utils.Query;
 import cn.gribe.entity.PostEntity;
 import cn.gribe.modules.business.dao.CdActivityDao;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.plugins.Page;
@@ -19,15 +21,12 @@ public class CdActivityServiceImpl extends ServiceImpl<CdActivityDao, ActivityEn
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-//        Page<ActivityEntity> page = this.selectPage(
-//                new Query<ActivityEntity>(params).getPage(),
-//                new EntityWrapper<ActivityEntity>()
-//        );
-//
-//        return new PageUtils(page);
         Page<ActivityEntity> page = new Query<ActivityEntity>(params).getPage();// 当前页，总条数 构造 page 对象
-        page.setRecords(this.baseMapper.selectPage());
+        List<ActivityEntity> res = this.baseMapper.selectPage();
+        page.setTotal(res.size());
+        page.setRecords(res);
         return new PageUtils(page);
     }
 
 }
+

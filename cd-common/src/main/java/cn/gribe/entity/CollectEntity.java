@@ -13,92 +13,92 @@ public class CollectEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@TableId
-	private Integer id;
+	private int id;
 	/**
 	 * 店铺id
 	 */
-	private Integer storeId;
+	private int storeId;
 	/**
 	 * 评论id
 	 */
-	private Integer commentId;
+	private int commentId;
 	/**
 	 * 用户id
 	 */
-	private Integer userId;
+	private int userId;
 
 	/**
 	 * 小组id
 	 */
-	private Integer groupId;
+	private int groupId;
 
 	/**
 	 * 帖id
 	 */
-	private Integer postId;
+	private int postId;
 
 	/**
 	 * 设置：
 	 */
-	public void setId(Integer id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	/**
 	 * 获取：
 	 */
-	public Integer getId() {
+	public int getId() {
 		return id;
 	}
 	/**
 	 * 设置：店铺id
 	 */
-	public void setStoreId(Integer storeId) {
+	public void setStoreId(int storeId) {
 		this.storeId = storeId;
 	}
 	/**
 	 * 获取：店铺id
 	 */
-	public Integer getStoreId() {
+	public int getStoreId() {
 		return storeId;
 	}
 	/**
 	 * 设置：评论id
 	 */
-	public void setCommentId(Integer commentId) {
+	public void setCommentId(int commentId) {
 		this.commentId = commentId;
 	}
 	/**
 	 * 获取：评论id
 	 */
-	public Integer getCommentId() {
+	public int getCommentId() {
 		return commentId;
 	}
 	/**
 	 * 设置：用户id
 	 */
-	public void setUserId(Integer userId) {
+	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 	/**
 	 * 获取：用户id
 	 */
-	public Integer getUserId() {
+	public int getUserId() {
 		return userId;
 	}
 
-	public Integer getGroupId() {
+	public int getGroupId() {
 		return groupId;
 	}
 
-	public void setGroupId(Integer groupId) {
+	public void setGroupId(int groupId) {
 		this.groupId = groupId;
 	}
 
-	public Integer getPostId() {
+	public int getPostId() {
 		return postId;
 	}
 
-	public void setPostId(Integer postId) {
+	public void setPostId(int postId) {
 		this.postId = postId;
 	}
 

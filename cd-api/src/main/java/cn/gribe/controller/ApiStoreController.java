@@ -49,6 +49,7 @@ public class ApiStoreController {
         Assert.isNull(params, "参数错误;");
         Assert.isNull(params.get("lat"), "参数错误; 经纬度获取失败");
         Assert.isNull(params.get("lon"), "参数错误; 经纬度获取失败");
+        Assert.isNull(params.get("type"),"参数错误，获取类型失败");
         PageUtils page = storeService.queryPage(params);
         return R.ok().put("page", page);
     }

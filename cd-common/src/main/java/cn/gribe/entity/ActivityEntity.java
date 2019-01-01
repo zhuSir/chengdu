@@ -32,7 +32,7 @@ public class ActivityEntity {
     private Date updateTime;
 
     //状态（0：使用；1：禁用）
-    private String state;
+    private Integer state;
 
     //店铺id
     private Integer storeId;
@@ -87,11 +87,11 @@ public class ActivityEntity {
         this.createTime = createTime;
     }
 
-    public String getState() {
+    public Integer getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(Integer state) {
         this.state = state;
     }
 

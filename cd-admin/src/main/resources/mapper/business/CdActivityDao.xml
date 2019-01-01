@@ -19,7 +19,9 @@
     </resultMap>
 
     <select id="selectPage" parameterType="map"  resultMap="cdActivityMap">
-        select a.*,s.`name` as store_name from cd_activity a,cd_store s WHERE a.store_id = s.id
+        select a.*,s.`name` as store_name
+        from cd_activity a LEFT JOIN cd_store s ON a.store_id = s.id
+        ORDER BY a.location_type
     </select>
 
 

@@ -100,7 +100,7 @@ public class ApiPostController {
         post.setUpdateTime(new Date());
         post.setImgs(urls.toString());
         postService.insert(post);
-        return R.ok();
+        return R.ok().put("post",post);
     }
 
 }

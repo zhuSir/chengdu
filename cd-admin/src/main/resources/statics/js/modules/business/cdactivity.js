@@ -3,7 +3,7 @@ $(function () {
         url: baseURL + 'business/cdactivity/list',
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
+			{ label: 'id', name: 'id', index: 'id', width: 50, key: true,hidden:true },
 			{ label: '活动类型', name: 'type', index: 'type', width: 80,formatter:function(cellvalue, options, rowObject){
                 return showValue(cellvalue, options, rowObject,vm.type);
 			} },
@@ -21,11 +21,11 @@ $(function () {
             } }
         ],
 		viewrecords: true,
-        height: 385,
+        height: 600,
         rowNum: 10,
 		rowList : [10,30,50],
         rownumbers: true, 
-        rownumWidth: 25, 
+        // rownumWidth: 25,
         autowidth:true,
         multiselect: true,
         pager: "#jqGridPager",

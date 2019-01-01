@@ -1,11 +1,8 @@
 package cn.gribe.service.impl;
 
 import cn.gribe.common.utils.PageUtils;
-import cn.gribe.common.utils.R;
-import cn.gribe.common.utils.alipay.AlipayUtils;
 import cn.gribe.common.validator.Assert;
 import cn.gribe.dao.OrderDao;
-import cn.gribe.entity.AliPayOrder;
 import cn.gribe.entity.OrderEntity;
 import cn.gribe.entity.ProductEntity;
 import cn.gribe.entity.UserEntity;
@@ -14,11 +11,8 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import cn.gribe.common.utils.Query;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -33,6 +27,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     public PageUtils queryPage(Map<String, Object> params) {
         Page<OrderEntity> page = new Query<OrderEntity>(params).getPage();// 当前页，总条数 构造 page 对象
         String state = params.get("state") == null ? null : (String) params.get("state");
+        state = "0".equals(state) ? null : state;
         page.setRecords(this.baseMapper.selectPageByState(state));
         return new PageUtils(page);
     }
@@ -40,7 +35,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     @Override
     public String saveAndPay(OrderEntity order, ProductEntity product,UserEntity user) {
         //验证是否有没有支付的订单
-        Assert.state(isExistAwaitPay(user.getId()),"您当前还有未支付订单，请先支付后再下单");
+//        Assert.state(isExistAwaitPay(user.getId()),"您当前还有未支付订单，请先支付后再下单");
         Assert.state(order.getSum() < 0,"金额错误，必须大于零元");
         if(OrderEntity.PAY_TYPE_ALIPAY.equals(order.getPayType())){
             //支付宝支付

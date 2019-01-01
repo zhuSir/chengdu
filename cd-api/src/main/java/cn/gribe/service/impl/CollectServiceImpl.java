@@ -74,7 +74,7 @@ public class CollectServiceImpl extends ServiceImpl<CollectDao, CollectEntity> i
             wrapper.eq("post_id",postId);
         }
         List<CollectEntity> collects = this.selectList(wrapper);
-        Assert.state(collects != null && collects.size() > 1,"收藏错误，请联系管理员","查询收藏错误，参数："+collect.toString());
+        Assert.state(collects == null || collects.size() < 1,"收藏错误，请联系管理员","查询收藏错误，参数："+collect.toString());
         if(collects != null && collects.size() > 0){
             return collects.get(0);
         }

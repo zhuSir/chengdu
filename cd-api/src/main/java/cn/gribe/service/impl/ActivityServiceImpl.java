@@ -36,6 +36,7 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityDao, ActivityEntity
     public List<ActivityEntity> queryActivityByLocationType(String[] locationType){
         EntityWrapper wrapper = new EntityWrapper<>();
         wrapper.in("location_type",locationType);
+        wrapper.eq("state",0);
         List<ActivityEntity> res = this.selectList(wrapper);
         return res;
     }

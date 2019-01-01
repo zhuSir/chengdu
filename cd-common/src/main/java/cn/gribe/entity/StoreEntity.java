@@ -86,6 +86,10 @@ public class StoreEntity {
     @TableField(exist = false)
     private String userName;
 
+    //距离
+    @TableField(exist = false)
+    private double distance;
+
     public Integer getId() {
         return id;
     }
@@ -244,5 +248,13 @@ public class StoreEntity {
 
     public void setShortImg(String shortImg) {
         this.shortImg = shortImg;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 }

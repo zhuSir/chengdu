@@ -40,7 +40,7 @@ $(function () {
             { label: '商家名称', name: 'userName', index: 'user_name', width: 80 }
         ],
 		viewrecords: true,
-        height: 385,
+        height: 600,
         rowNum: 10,
 		rowList : [10,30,50],
         rownumbers: true, 
