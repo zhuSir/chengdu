@@ -68,6 +68,9 @@ public class ApiCommentController {
                 String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
                 urls.append(url+",");
             }
+            if(urls.length() > 0){
+                urls.replace(urls.lastIndexOf(","),urls.length(),"");
+            }
         }
         //上传文件
         comment.setImgs(urls.toString());

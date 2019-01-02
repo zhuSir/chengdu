@@ -103,7 +103,6 @@ public class CdUserController {
     @RequiresPermissions("business:cduser:delete")
     public R delete(@RequestBody Integer[] ids){
         cdUserService.deleteBatchIds(Arrays.asList(ids));
-
         return R.ok();
     }
 

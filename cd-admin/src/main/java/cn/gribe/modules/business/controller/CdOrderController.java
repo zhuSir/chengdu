@@ -1,6 +1,7 @@
 package cn.gribe.modules.business.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -97,8 +98,8 @@ public class CdOrderController {
     @RequestMapping("/save")
     @RequiresPermissions("business:cdorder:save")
     public R save(@RequestBody OrderEntity cdOrder){
+        cdOrder.setUpdateTime(new Date());
         cdOrderService.insert(cdOrder);
-
         return R.ok();
     }
 
@@ -109,8 +110,8 @@ public class CdOrderController {
     @RequiresPermissions("business:cdorder:update")
     public R update(@RequestBody OrderEntity cdOrder){
         ValidatorUtils.validateEntity(cdOrder);
+        cdOrder.setUpdateTime(new Date());
         cdOrderService.updateAllColumnById(cdOrder);//全部更新
-        
         return R.ok();
     }
 

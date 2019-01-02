@@ -22,5 +22,7 @@ public interface OrderService extends IService<OrderEntity> {
     String saveAndPay(OrderEntity order, ProductEntity productEntity,UserEntity user);
 
     OrderEntity queryByCode(String orderCode);
+
+    int selectSales(Integer productId);
 }
 

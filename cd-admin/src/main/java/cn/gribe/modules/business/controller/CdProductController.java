@@ -68,6 +68,11 @@ public class CdProductController {
         if(storesList != null){
             r.put("storesList",storesList);
         }
+        List<SysDictEntity> attributeTypeList = sysDictService.getDict("product_attribute_type");
+        if(attributeTypeList != null){
+            r.put("attributeTypeList",attributeTypeList);
+        }
+
         return r;
     }
 
@@ -118,18 +123,19 @@ public class CdProductController {
             String url = OSSFactory.build().uploadSuffix(shortImg.getBytes(), suffix);
             product.setShortImg(url);
         }
-        String imgsUrl = "";
+        StringBuilder imgsUrl = new StringBuilder();
         if(imgs.length > 0){
             for(MultipartFile img : imgs){
                 if(!img.isEmpty()){
                     String suffix = img.getOriginalFilename().substring(img.getOriginalFilename().lastIndexOf("."));
                     String url = OSSFactory.build().uploadSuffix(img.getBytes(), suffix);
-                    imgsUrl += url+",";
+                    imgsUrl.append(url+",");
                 }
             }
         }
-        if(StringUtils.isNotEmpty(imgsUrl)){
-            product.setImgs(imgsUrl);
+        if(imgsUrl.length() > 0){
+            imgsUrl.replace(imgsUrl.lastIndexOf(","),imgsUrl.length(),"");
+            product.setImgs(imgsUrl.toString());
         }
         List<ProductTagEntity> tags = product.getTags();
         if(tags != null && tags.size() > 0){

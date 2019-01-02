@@ -3,6 +3,7 @@ package cn.gribe.controller;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.entity.ProductEntity;
+import cn.gribe.service.OrderService;
 import cn.gribe.service.ProductService;
 import cn.gribe.entity.ProductTagEntity;
 import cn.gribe.service.ProductTagService;
@@ -26,6 +27,9 @@ public class ApiProductController {
     @Autowired
     private ProductTagService productTagService;
 
+    @Autowired
+    private OrderService orderService;
+
     /**
      * 列表
      */
@@ -46,6 +50,8 @@ public class ApiProductController {
         ProductEntity cdProduct = cdProductService.selectById(id);
         List<ProductTagEntity> productTags = productTagService.selectList(id);
         cdProduct.setTags(productTags);
+        int Sales = orderService.selectSales(id);
+        cdProduct.setSales(Sales);
         return R.ok().put("info", cdProduct);
     }
 

@@ -37,6 +37,9 @@ $(function () {
 			{ label: '总库存', name: 'sumInventory', index: 'sum_inventory', width: 80 }, 			
 			{ label: '价格', name: 'price', index: 'price', width: 80 }, 			
 			{ label: '商铺名称', name: 'storeName', index: 'store_id', width: 80 },
+            { label: '属性类型', name: 'attributeType', index: 'attribute_type', width: 80 ,formatter:function(cellvalue, options, rowObject){
+                return showValue(cellvalue, options, rowObject,vm.attributeTypeList);
+            } },
 			{ label: '状态', name: 'state', index: 'state', width: 80 ,formatter:function(cellvalue, options, rowObject){
                 return showValue(cellvalue, options, rowObject,vm.states);
             } },
@@ -72,7 +75,7 @@ $(function () {
     function showValue(cellvalue, options, rowObject,e){
         for(var i in e){
             if(e[i].code == cellvalue ){
-                return e[i].name;
+                return e[i].value;
             }
         }
     }
@@ -96,7 +99,8 @@ var vm = new Vue({
             nameName: "tags[0].name",
             valueName: "tags[0].value",
             sortName: "tags[0].sort"
-		}]
+		}],
+        attributeTypeList:[]
 	},
 	methods: {
 		query: function () {
@@ -183,6 +187,7 @@ var vm = new Vue({
             $.get(baseURL + "business/cdproduct/init", function(r){
                 vm.states = r.state;
                 vm.storesList = r.storesList;
+                vm.attributeTypeList = r.attributeTypeList;
             });
         },
         addTag:function(){

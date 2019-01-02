@@ -74,25 +74,27 @@ public class CdGroupController {
             group.setHeadImg(url);
         }
         if (publicityImgs != null && publicityImgs.length > 0) {
-            String urls = "";
+            StringBuilder urls = new StringBuilder();
             for(MultipartFile file : publicityImgs){
                 String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
                 String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
-                urls+=url+",";
+                urls.append(url+",");
             }
-            if(StringUtils.isNotEmpty(urls)){
-                group.setPublicityImgs(urls);
+            if(urls.length() > 0){
+                urls.replace(urls.lastIndexOf(","),urls.length(),"");
+                group.setPublicityImgs(urls.toString());
             }
         }
         if (backstageImgs != null && backstageImgs.length > 0) {
-            String urls = "";
+            StringBuilder urls = new StringBuilder();
             for(MultipartFile file : backstageImgs){
                 String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
                 String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
-                urls+=url+",";
+                urls.append(url+",");
             }
             if(StringUtils.isNotEmpty(urls)){
-                group.setBackstageImgs(urls);
+                urls.replace(urls.lastIndexOf(","),urls.length(),"");
+                group.setBackstageImgs(urls.toString());
             }
         }
         cdGroupService.insertOrUpdate(group);

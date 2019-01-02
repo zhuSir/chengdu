@@ -3,7 +3,9 @@ package cn.gribe.service.impl;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.dao.ProductDao;
 import cn.gribe.dao.ProductTagDao;
+import cn.gribe.entity.OrderEntity;
 import cn.gribe.entity.ProductEntity;
+import cn.gribe.service.OrderService;
 import cn.gribe.service.ProductService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -23,6 +25,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductDao, ProductEntity> i
     @Autowired
     private ProductTagDao productTagDao;
 
+    @Autowired
+    private OrderService orderService;
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper wrapper = new EntityWrapper<ProductEntity>();
@@ -38,6 +43,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductDao, ProductEntity> i
         for(ProductEntity entity : products){
             List<ProductTagEntity> tags = productTagDao.selectList(new EntityWrapper().eq("product_id",entity.getId()));
             entity.setTags(tags);
+            //entity 销量统计
+            int count = orderService.selectSales(entity.getId());
+            entity.setSales(count);
         }
         return new PageUtils(page);
     }

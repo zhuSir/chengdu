@@ -15,6 +15,6 @@ import java.util.List;
  */
 public interface OrderDao extends BaseMapper<OrderEntity> {
 
-    List<OrderEntity> selectPageByState(@Param("state")String state);
+    List<OrderEntity> selectPageByState(@Param("state")String state,@Param("userId")Integer userId);
 
 }

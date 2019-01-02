@@ -111,16 +111,17 @@ public class CdStoreController {
         ValidatorUtils.validateEntity(store);
         //TODO 判断用户是否绑定过一个商家
         if (descImg != null && descImg.length > 0) {
-            String urls = "";
+            StringBuilder urls = new StringBuilder();
             for(MultipartFile file : descImg){
                 if(file != null && !file.isEmpty()){
                     String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
                     String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
-                    urls+=url+",";
+                    urls.append(url+",");
                 }
             }
-            if(StringUtils.isNotEmpty(urls)){
-                store.setImgs(urls);
+            if(urls.length() > 0){
+                urls.replace(urls.lastIndexOf(","),urls.length(),"");
+                store.setImgs(urls.toString());
             }
         }
         if(shortImg != null && !shortImg.isEmpty()){

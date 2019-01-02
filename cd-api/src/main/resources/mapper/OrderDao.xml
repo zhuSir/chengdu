@@ -25,9 +25,13 @@
     <select id="selectPageByState" parameterType="map"  resultMap="orderMap">
         select co.*,cp.`name` as product_name,cp.about AS product_about,cp.short_img AS product_short_img
         from cd_order co INNER JOIN cd_product cp on co.product_id = cp.id
+        WHERE co.user_id = #{userId}
         <if test="state != null and state != '' ">
-            WHERE co.state = #{state}
+            AND co.state = #{state}
         </if>
+
+
+
     </select>
 
 

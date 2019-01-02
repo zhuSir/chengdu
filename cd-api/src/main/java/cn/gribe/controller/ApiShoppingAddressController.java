@@ -12,6 +12,7 @@ import cn.gribe.service.ShoppingAddressService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import cn.gribe.common.validator.ValidatorUtils;
 import cn.gribe.entity.UserEntity;
+import com.sun.org.apache.xerces.internal.impl.dv.dtd.ENTITYDatatypeValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,6 +66,14 @@ public class ApiShoppingAddressController {
         if(shoppingAddress.getId() == 0){
             shoppingAddress.setCreateTime(new Date());
             shoppingAddress.setIsDelete(0);
+        }
+        if(1 == shoppingAddress.getIsDefault()){
+            EntityWrapper wrapper = new EntityWrapper();
+            wrapper.eq("user_id",user.getId());
+            wrapper.eq("is_default",1);
+            ShoppingAddressEntity shoppingAddressEntity = shoppingAddressService.selectOne(wrapper);
+            shoppingAddressEntity.setIsDefault(0);
+            shoppingAddressService.updateById(shoppingAddressEntity);
         }
         shoppingAddress.setUpdateTime(new Date());
         shoppingAddressService.insertOrUpdate(shoppingAddress);

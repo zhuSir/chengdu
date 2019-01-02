@@ -35,6 +35,10 @@ public class StoreServiceImpl extends ServiceImpl<StoreDao, StoreEntity> impleme
         if(storeType != null){
             wrapper.eq("type",storeType);
         }
+        Object name = params.get("name");
+        if(name != null){
+            wrapper.like("name",String.valueOf(name));
+        }
         Page<StoreEntity> page = this.selectPage(
                 new Query<StoreEntity>(params).getPage(),
                 wrapper

@@ -18,6 +18,9 @@ import cn.gribe.service.PostService;
 import cn.gribe.common.validator.Assert;
 import cn.gribe.common.validator.ValidatorUtils;
 import cn.gribe.entity.UserEntity;
+import cn.gribe.service.UserService;
+import com.aliyuncs.utils.StringUtils;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +42,9 @@ public class ApiPostController {
 
     @Autowired
     private GroupService groupService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 列表
@@ -68,6 +74,12 @@ public class ApiPostController {
         Assert.isNull(id,"获取帖子错误，请刷新重试");
         PostEntity post = postService.selectById(id);
         Assert.isNull(post,"获取帖子错误，请刷新重试");
+        //获取用户头像等信息
+        EntityWrapper wrapper = new EntityWrapper();
+        wrapper.eq("id",post.getUserId());
+        UserEntity userEntity = userService.selectOne(wrapper);
+        post.setUserHeadImg(userEntity.getHeadImg());
+        post.setUserName(userEntity.getUserName());
         //获取评论
         Map params = new HashMap();
         params.put("postId",post.getId());
@@ -93,6 +105,9 @@ public class ApiPostController {
                 String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
                 String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
                 urls.append(url+",");
+            }
+            if(urls.length() > 0){
+                urls.replace(urls.lastIndexOf(","),urls.length(),"");
             }
         }
         post.setUserId(user.getId());

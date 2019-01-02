@@ -28,7 +28,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         Page<OrderEntity> page = new Query<OrderEntity>(params).getPage();// 当前页，总条数 构造 page 对象
         String state = params.get("state") == null ? null : (String) params.get("state");
         state = "0".equals(state) ? null : state;
-        page.setRecords(this.baseMapper.selectPageByState(state));
+        Integer userId = (Integer) params.get("userId");
+        page.setRecords(this.baseMapper.selectPageByState(state,userId));
         return new PageUtils(page);
     }
 
@@ -59,6 +60,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         EntityWrapper wrapper = new EntityWrapper<>();
         wrapper.eq("code",orderCode);
         return this.selectOne(wrapper);
+    }
+
+    @Override
+    public int selectSales(Integer productId) {
+        EntityWrapper orderWrapper = new EntityWrapper();
+        orderWrapper.eq("product_id",productId);
+        int count = this.baseMapper.selectCount(orderWrapper);
+        return count;
     }
 
     /**

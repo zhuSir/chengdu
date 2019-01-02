@@ -45,7 +45,7 @@ public class ApiCollectController {
         if(collectEntity != null){
             collect.setId(collectEntity.getId());
         }
-        collectService.insertOrUpdate(collectEntity);
+        collectService.insertOrUpdate(collect);
         return R.ok();
     }
 

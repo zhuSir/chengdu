@@ -68,6 +68,16 @@ public class ProductEntity {
 
     private Date updateTime;
 
+    /**
+     * 属性类型
+     */
+    private Integer attributeType;
+
+    /**
+     * 销量
+     */
+    private int sales;
+
     //标签
     @TableField(exist = false)
     private List<ProductTagEntity> tags;
@@ -198,5 +208,21 @@ public class ProductEntity {
 
     public void setTags(List<ProductTagEntity> tags) {
         this.tags = tags;
+    }
+
+    public Integer getAttributeType() {
+        return attributeType;
+    }
+
+    public void setAttributeType(Integer attributeType) {
+        this.attributeType = attributeType;
+    }
+
+    public int getSales() {
+        return sales;
+    }
+
+    public void setSales(int sales) {
+        this.sales = sales;
     }
 }

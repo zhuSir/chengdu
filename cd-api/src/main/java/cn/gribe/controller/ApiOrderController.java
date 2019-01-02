@@ -48,7 +48,8 @@ public class ApiOrderController {
     @Login
     @RequestMapping("/list")
     @ApiOperation("订单列表")
-    public R list(@RequestParam Map<String, Object> params){
+    public R list(@RequestParam Map<String, Object> params,@LoginUser UserEntity user){
+        params.put("userId",user.getId());
         PageUtils page = orderService.queryPage(params);
         return R.ok().put("page", page);
     }
@@ -185,7 +186,7 @@ public class ApiOrderController {
      */
     @Login
     @RequestMapping("/cancel")
-    public R set(String orderId,@LoginUser UserEntity userEntity){
+    public R cancel(String orderId,@LoginUser UserEntity userEntity){
         Assert.isNull(orderId,"订单错误，请刷新重试");
         OrderEntity orderEntity = orderService.selectById(orderId);
         Assert.isNull(orderEntity,"订单参数错误，请联系管理员");
@@ -196,4 +197,21 @@ public class ApiOrderController {
         return R.ok();
     }
 
+    /**
+     * 完成订单
+     * @param orderId
+     * @return
+     */
+    @Login
+    @RequestMapping("/finished")
+    public R finished(String orderId,@LoginUser UserEntity userEntity){
+        Assert.isNull(orderId,"订单错误，请刷新重试");
+        OrderEntity orderEntity = orderService.selectById(orderId);
+        Assert.isNull(orderEntity,"订单参数错误，请联系管理员");
+        Assert.state(!OrderEntity.STATE_AWAIT_USE.equals(orderEntity.getState()),"该订单错误，不允许完成，请联系管理员");
+        Assert.state(orderEntity.getUserId().intValue() == userEntity.getId().intValue(),"您当前无权限修改该记录");
+        orderEntity.setState(OrderEntity.STATE_FINISHED);
+        orderService.updateById(orderEntity);
+        return R.ok();
+    }
 }
