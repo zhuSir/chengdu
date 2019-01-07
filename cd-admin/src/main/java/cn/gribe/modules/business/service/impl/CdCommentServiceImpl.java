@@ -35,7 +35,7 @@ public class CdCommentServiceImpl extends ServiceImpl<CdCommentDao, CommentEntit
         Page<CommentEntity> page = new Query<CommentEntity>(params).getPage();// 当前页，总条数 构造 page 对象
         String content = params.get("content") != null  ? (String) params.get("content") : null;
         Integer storeId = params.get("storeId") != null ? (Integer) params.get("storeId") : null;
-        page.setRecords(this.baseMapper.selectPage(content,storeId));
+        page.setRecords(this.baseMapper.selectPage(page,content,storeId));
         return new PageUtils(page);
     }
 

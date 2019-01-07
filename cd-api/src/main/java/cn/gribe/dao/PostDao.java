@@ -3,6 +3,7 @@ package cn.gribe.dao;
 import cn.gribe.entity.PostEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public interface PostDao extends BaseMapper<PostEntity> {
 
-    List<PostEntity> selectPageByUserId(@Param("userId") Integer userId);
+    List<PostEntity> selectPageByUserId(RowBounds rowBounds, @Param("userId") Integer userId);
 
-    List<PostEntity> selectPageByGroupId(@Param("groupId") Object groupId);
+    List<PostEntity> selectPageByGroupId(RowBounds rowBounds, @Param("groupId") Object groupId,@Param("content") Object content,@Param("userId")Object userId);
 }

@@ -10,11 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 
- * 
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2018-11-10 12:25:06
+ *
  */
 @TableName("cd_comment")
 public class CommentEntity implements Serializable {

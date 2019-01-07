@@ -61,6 +61,13 @@ public class PostEntity implements Serializable {
 	@TableField(exist = false)
 	private String userName;
 
+	@TableField(exist = false)
+	private int comments;
+
+	//收藏
+	@TableField(exist = false)
+	private boolean isCollected;
+
 	/**
 	 * 设置：
 	 */
@@ -176,5 +183,21 @@ public class PostEntity implements Serializable {
 
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
+	}
+
+	public int getComments() {
+		return comments;
+	}
+
+	public void setComments(int comments) {
+		this.comments = comments;
+	}
+
+	public boolean isCollected() {
+		return isCollected;
+	}
+
+	public void setCollected(boolean collected) {
+		isCollected = collected;
 	}
 }

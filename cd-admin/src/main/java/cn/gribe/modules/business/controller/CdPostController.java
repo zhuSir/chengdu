@@ -1,10 +1,15 @@
 package cn.gribe.modules.business.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.validator.ValidatorUtils;
+import cn.gribe.entity.GroupEntity;
+import cn.gribe.modules.business.service.CdGroupService;
+import cn.gribe.modules.sys.entity.SysDictEntity;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +36,22 @@ import cn.gribe.common.utils.R;
 public class CdPostController {
     @Autowired
     private CdPostService cdPostService;
+
+    @Autowired
+    private CdGroupService groupService;
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/init")
+    public R init(){
+        R r = R.ok();
+        List<GroupEntity> groups = groupService.selectList(new EntityWrapper<>());
+        if(groups != null){
+            r.put("groups", groups);
+        }
+        return r;
+    }
 
     /**
      * 列表

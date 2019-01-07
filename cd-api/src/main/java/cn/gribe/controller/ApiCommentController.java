@@ -5,7 +5,6 @@ import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.service.CommentService;
 import cn.gribe.annotation.Login;
-import cn.gribe.common.utils.oss.OSSFactory;
 import cn.gribe.common.validator.Assert;
 import cn.gribe.common.validator.ValidatorUtils;
 import cn.gribe.entity.CommentEntity;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.Map;
 
 
@@ -32,7 +30,10 @@ public class ApiCommentController {
      * 列表
      */
     @RequestMapping("/list")
-    public R list(@RequestParam Map<String, Object> params){
+    public R list(@RequestParam Map<String, Object> params,@LoginUser UserEntity user){
+        if(user != null){
+            params.put("userId",user.getId());
+        }
         PageUtils page = commentService.queryPage(params);
         return R.ok().put("page", page);
     }
@@ -58,27 +59,8 @@ public class ApiCommentController {
                   CommentEntity comment, @LoginUser UserEntity user) throws IOException {
         //验证内容
         ValidatorUtils.validateEntity(comment);
-        //TODO 验证参数；保存图片到阿里云；内容需通过审核接口审核
-        StringBuffer urls = new StringBuffer();
-        //TODO 图片检测（是否涉黄）
-        //上传文件
-        if(files != null && files.length > 0){
-            for(MultipartFile file : files){
-                String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-                String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
-                urls.append(url+",");
-            }
-            if(urls.length() > 0){
-                urls.replace(urls.lastIndexOf(","),urls.length(),"");
-            }
-        }
-        //上传文件
-        comment.setImgs(urls.toString());
-        comment.setUserId(user.getId());
-        comment.setCreateTime(new Date());
-        comment.setUpdateTime(new Date());
-        comment.setStatus(CommentEntity.STATUS_DISABLE);//默认未生效
-        commentService.insert(comment);
+        //订单
+        commentService.save(files,comment,user);
         return R.ok().put("comment",comment);
     }
 

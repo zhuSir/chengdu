@@ -54,10 +54,8 @@ public class LoginUserHandlerMethodArgumentResolver implements HandlerMethodArgu
         if(object == null){
             return null;
         }
-
         //获取用户信息
         UserEntity user = userService.selectById((Long)object);
-
         return user;
     }
 }

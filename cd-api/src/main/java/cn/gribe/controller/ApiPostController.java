@@ -1,6 +1,7 @@
 package cn.gribe.controller;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,15 +11,13 @@ import cn.gribe.annotation.LoginUser;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.common.utils.oss.OSSFactory;
+import cn.gribe.entity.CollectEntity;
 import cn.gribe.entity.GroupEntity;
 import cn.gribe.entity.PostEntity;
-import cn.gribe.service.CommentService;
-import cn.gribe.service.GroupService;
-import cn.gribe.service.PostService;
+import cn.gribe.service.*;
 import cn.gribe.common.validator.Assert;
 import cn.gribe.common.validator.ValidatorUtils;
 import cn.gribe.entity.UserEntity;
-import cn.gribe.service.UserService;
 import com.aliyuncs.utils.StringUtils;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +34,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/post")
 public class ApiPostController {
+
     @Autowired
     private PostService postService;
+
     @Autowired
     private CommentService commentService;
 
@@ -46,18 +47,26 @@ public class ApiPostController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CollectService collectService;
+
     /**
      * 列表
      * @param params
      * @return
      */
     @RequestMapping("/list")
-    public R list(@RequestParam Map<String, Object> params){
-        String groupId = params.get("groupId") == null ? null : (String) params.get("groupId");
-        Assert.isNull(groupId,"参数错误，请联系管理员");
-        GroupEntity groupEntity = groupService.selectById(groupId);
-        Assert.isNull(groupEntity,"请求错误，请联系管理员");
-        R r = R.ok().put("group",groupEntity);
+    public R list(@RequestParam Map<String, Object> params,@LoginUser UserEntity user){
+        Object groupId = params.get("groupId");
+        //Assert.isNull(groupId,"参数错误，请联系管理员");
+        R r = R.ok();
+        if(groupId != null){
+            GroupEntity groupEntity = groupService.selectById((String) groupId);
+            r.put("group",groupEntity);
+        }
+        if(user != null){
+            params.put("userId",user.getId());
+        }
         PageUtils page = postService.queryPage(params);
         r.put("page", page);
         return r;
@@ -70,7 +79,7 @@ public class ApiPostController {
      * @return
      */
     @RequestMapping("/info/{id}")
-    public R info(@PathVariable("id") Integer id){
+    public R info(@PathVariable("id") Integer id, @LoginUser UserEntity user){
         Assert.isNull(id,"获取帖子错误，请刷新重试");
         PostEntity post = postService.selectById(id);
         Assert.isNull(post,"获取帖子错误，请刷新重试");
@@ -80,6 +89,15 @@ public class ApiPostController {
         UserEntity userEntity = userService.selectOne(wrapper);
         post.setUserHeadImg(userEntity.getHeadImg());
         post.setUserName(userEntity.getUserName());
+        if(user != null){
+            CollectEntity collectEntity = new CollectEntity();
+            collectEntity.setUserId(user.getId());
+            collectEntity.setStoreId(post.getId());
+            collectEntity = collectService.selectByParams(collectEntity);
+            if(collectEntity != null){
+                post.setCollected(true);
+            }
+        }
         //获取评论
         Map params = new HashMap();
         params.put("postId",post.getId());

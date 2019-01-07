@@ -27,10 +27,13 @@
     <select id="queryList" parameterType="map"  resultMap="cdStoreMap">
         select
         cs.*,su.username
-        from cd_store cs
-        INNER JOIN sys_user su ON cs.user_id = su.user_id
+        from cd_store cs,sys_user su
+        WHERE cs.user_id = su.user_id
         <if test="storeId != null and storeId != ''">
-            WHERE cs.id = #{storeId}
+            AND cs.id = #{storeId}
+        </if>
+        <if test="name != null and name != ''">
+            AND cs.name LIKE CONCAT('%',#{name},'%')
         </if>
     </select>
 

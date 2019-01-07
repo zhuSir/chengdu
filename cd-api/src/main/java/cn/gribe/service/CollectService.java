@@ -4,6 +4,8 @@ import cn.gribe.common.utils.PageUtils;
 import com.baomidou.mybatisplus.service.IService;
 import cn.gribe.entity.CollectEntity;
 
+import java.util.Map;
+
 /**
  * 
  *
@@ -13,7 +15,7 @@ import cn.gribe.entity.CollectEntity;
  */
 public interface CollectService extends IService<CollectEntity> {
 
-    PageUtils queryPage(Integer userId, Integer type);
+    PageUtils queryPage(Integer userId, Map<String, Object> type);
 
     CollectEntity selectByParams(CollectEntity collect);
 }

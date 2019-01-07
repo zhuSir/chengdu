@@ -1,11 +1,12 @@
 package cn.gribe.modules.business.dao;
 
-import cn.gribe.entity.OrderEntity;
 import cn.gribe.entity.PostEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -16,6 +17,6 @@ import java.util.List;
  */
 public interface CdPostDao extends BaseMapper<PostEntity> {
 
-    List<PostEntity> selectPage();
+    List<PostEntity> selectPage(RowBounds rowBounds,@Param("name") Object name,@Param("groupId") Object groupId);
 
 }

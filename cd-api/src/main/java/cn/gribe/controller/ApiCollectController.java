@@ -9,10 +9,11 @@ import cn.gribe.entity.CollectEntity;
 import cn.gribe.entity.UserEntity;
 import cn.gribe.service.CollectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
 
 /**
  * 收藏
@@ -28,9 +29,9 @@ public class ApiCollectController {
      */
     @Login
     @RequestMapping("/list")
-    public R list(@LoginUser UserEntity user, Integer type){
-        Assert.isNull(type,"数据错误，请刷新重试");
-        PageUtils page = collectService.queryPage(user.getId(),type);
+    public R list(@LoginUser UserEntity user, @RequestParam Map<String, Object> params){
+        Assert.isNull(params.get("type"),"数据错误，请刷新重试");
+        PageUtils page = collectService.queryPage(user.getId(),params);
         return R.ok().put("page", page);
     }
 
@@ -54,7 +55,7 @@ public class ApiCollectController {
      */
     @Login
     @RequestMapping("/delete")
-    public R delete(@RequestBody CollectEntity collect,@LoginUser UserEntity user){
+    public R delete(CollectEntity collect,@LoginUser UserEntity user){
         collect.setUserId(user.getId());
         CollectEntity resCollect = collectService.selectByParams(collect);
         Assert.state(resCollect == null,"删除收藏错误，请刷新重试");

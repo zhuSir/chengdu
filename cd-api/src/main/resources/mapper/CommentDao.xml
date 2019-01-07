@@ -36,14 +36,14 @@
     <select id="selectPageByUserId" parameterType="map"  resultMap="commentMap">
         select com.*
         from cd_collect col
-        LEFT JOIN cd_comment com ON col.comment_id = com.id
+        INNER JOIN cd_comment com ON col.comment_id = com.id
         WHERE col.user_id = #{userId}
     </select>
 
     <select id="selectPageByCommentId" parameterType="map"  resultMap="commentMap">
-        select com.*
-        from cd_comment com
-        WHERE com.comment_id = #{commentId}
+        select com.*,u.user_name,u.head_img as user_head_url
+        from cd_comment com,cd_user u
+        WHERE com.user_id = u.id AND com.comment_id = #{commentId}
     </select>
 
 </mapper>

@@ -1,6 +1,10 @@
 package cn.gribe.service.impl;
 
 import cn.gribe.common.utils.PageUtils;
+import cn.gribe.common.utils.Query;
+import cn.gribe.common.utils.oss.OSSFactory;
+import cn.gribe.entity.OrderEntity;
+import cn.gribe.entity.UserEntity;
 import cn.gribe.service.CommentService;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -9,7 +13,10 @@ import cn.gribe.entity.CommentEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -21,12 +28,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentDao, CommentEntity> i
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<CommentEntity> page = new Page<>();// 当前页，总条数 构造 page 对象
+        Page<CommentEntity> page = new Query<CommentEntity>(params).getPage();// 当前页，总条数 构造 page 对象
         Object postId = params.get("postId") == null ? null : params.get("postId");
         Object storeId = params.get("storeId") == null ? null : params.get("storeId");
         Object name = params.get("name") == null ? null : params.get("name");
         Object userId = params.get("userId") == null ? null : params.get("userId");
-        List<CommentEntity> res = this.baseMapper.selectPage(String.valueOf(postId),storeId,name,userId);
+        List<CommentEntity> res = this.baseMapper.selectPage(page,String.valueOf(postId),storeId,name,userId);
         if(res != null && res.size() > 0){
             //迭代遍历子数据
             res = querySubComment(res,100);
@@ -62,10 +69,36 @@ public class CommentServiceImpl extends ServiceImpl<CommentDao, CommentEntity> i
     }
 
     @Override
-    public PageUtils queryPageByUserId(Integer userId) {
-        Page<CommentEntity> page = new Page<>();// 当前页，总条数 构造 page 对象
-        page.setRecords(this.baseMapper.selectPageByUserId(userId));
+    public PageUtils queryPageByUserId(Map<String, Object> params,Integer userId) {
+        Page<CommentEntity> page = new Query<CommentEntity>(params).getPage();// 当前页，总条数 构造 page 对象
+        page.setRecords(this.baseMapper.selectPageByUserId(page,userId));
         return new PageUtils(page);
     }
+
+    @Override
+    public void save(MultipartFile[] files, CommentEntity comment, UserEntity user) throws IOException {
+        //TODO 验证参数；保存图片到阿里云；内容需通过审核接口审核
+        StringBuffer urls = new StringBuffer();
+        //TODO 图片检测（是否涉黄）
+        //上传文件
+        if(files != null && files.length > 0){
+            for(MultipartFile file : files){
+                String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+                String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
+                urls.append(url+",");
+            }
+            if(urls.length() > 0){
+                urls.replace(urls.lastIndexOf(","),urls.length(),"");
+            }
+        }
+        //上传文件
+        comment.setImgs(urls.toString());
+        comment.setUserId(user.getId());
+        comment.setCreateTime(new Date());
+        comment.setUpdateTime(new Date());
+        comment.setStatus(CommentEntity.STATUS_DISABLE);//默认未生效
+        this.baseMapper.insert(comment);
+    }
+
 
 }

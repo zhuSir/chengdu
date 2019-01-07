@@ -30,9 +30,9 @@ import java.util.UUID;
 @Service("tokenService")
 public class TokenServiceImpl extends ServiceImpl<TokenDao, TokenEntity> implements TokenService {
 	/**
-	 * 12小时后过期
+	 * 7天后过期
 	 */
-	private final static int EXPIRE = 3600 * 12;
+	private final static int EXPIRE = 7 * 3600 * 12;
 
 	@Override
 	public TokenEntity queryByToken(String token) {

@@ -47,6 +47,21 @@
         <if test="endTime != null and endTime != '' ">
             AND o.create_time &lt;= #{endTime}
         </if>
+        <if test="payResults != null and payResults != '' ">
+            AND o.pay_status = #{payResults}
+        </if>
+        ORDER BY o.create_time DESC
+    </select>
+
+    <select id="selectByParams" parameterType="map"  resultMap="orderMap">
+        select  o.*,s.`name` store_name,p.`name` product_name
+        FROM cd_order o,cd_store s,cd_product p
+        WHERE o.store_id = s.id
+        AND o.product_id = p.id
+        <if test="storeId != null and storeId != '' ">
+            AND o.store_id = #{storeId}
+        </if>
+        ORDER BY o.create_time DESC
     </select>
 
 </mapper>

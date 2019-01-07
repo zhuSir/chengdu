@@ -18,6 +18,9 @@ public class OrderEntity {
     //支付成功状态
     public static Integer PAY_STATUS_SUCCESS = 1;
 
+    //支付失败状态
+    public static Integer PAY_STATUS_FAIL = 0;
+
     //待支付
     public static Integer STATE_AWAIT_PAY = 1;
 

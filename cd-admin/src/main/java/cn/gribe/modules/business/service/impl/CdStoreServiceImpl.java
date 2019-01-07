@@ -42,7 +42,8 @@ public class CdStoreServiceImpl extends ServiceImpl<CdStoreDao, StoreEntity> imp
     public PageUtils queryPage(Map<String, Object> params) {
         Page page = new Query(params).getPage();// 当前页，总条数 构造 page 对象
         Integer storeId = params.get("storeId") == null ? null : (Integer) params.get("storeId");
-        List<StoreEntity> storeEntityList = this.baseMapper.queryList(storeId);
+        Object name = params.get("name");
+        List<StoreEntity> storeEntityList = this.baseMapper.queryList(page,storeId,name);
         page.setRecords(storeEntityList);
         page.setTotal(storeEntityList.size());
         return new PageUtils(page);

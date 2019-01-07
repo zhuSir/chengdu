@@ -6,6 +6,7 @@ import cn.gribe.common.utils.alipay.AlipayUtils;
 import cn.gribe.common.validator.Assert;
 import cn.gribe.entity.OrderEntity;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,8 @@ public class CdOrderServiceImpl extends ServiceImpl<CdOrderDao, OrderEntity> imp
         Object storeName = params.get("storeName");
         Object storeId = params.get("storeId");
         Object status = params.get("status");
-        List<OrderEntity> records = this.baseMapper.selectPage(phone,storeName,storeId,status,startTime,endTime);
+        Object payResults = params.get("payResults");
+        List<OrderEntity> records = this.baseMapper.selectPage(resPage,phone,storeName,storeId,status,startTime,endTime,payResults);
         resPage.setRecords(records);
         System.out.println("==>:json : "+ JSONObject.toJSONString(resPage));
         return new PageUtils(resPage);
@@ -52,6 +54,10 @@ public class CdOrderServiceImpl extends ServiceImpl<CdOrderDao, OrderEntity> imp
         alipayUtils.orderRefund(orderEntity.getCode(),orderEntity.getTradeNo(),orderEntity.getSum());
         orderEntity.setState(OrderEntity.STATE_CHARGE_BACK);
         this.baseMapper.updateById(orderEntity);
+    }
+
+    public List<OrderEntity> selectByParams(Integer storeId){
+        return this.baseMapper.selectByParams(storeId);
     }
 
 }

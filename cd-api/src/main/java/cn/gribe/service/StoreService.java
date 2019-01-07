@@ -19,5 +19,7 @@ public interface StoreService extends IService<StoreEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     List<StoreEntity> queryByLocation(String lat,String lon,Integer page,Integer limit);
+
+    PageUtils queryPageByUserId(Map<String, Object> params, Integer userId);
 }
 

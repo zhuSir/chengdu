@@ -22,8 +22,7 @@ public class CdActivityServiceImpl extends ServiceImpl<CdActivityDao, ActivityEn
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         Page<ActivityEntity> page = new Query<ActivityEntity>(params).getPage();// 当前页，总条数 构造 page 对象
-        List<ActivityEntity> res = this.baseMapper.selectPage();
-        page.setTotal(res.size());
+        List<ActivityEntity> res = this.baseMapper.selectPage(page);
         page.setRecords(res);
         return new PageUtils(page);
     }

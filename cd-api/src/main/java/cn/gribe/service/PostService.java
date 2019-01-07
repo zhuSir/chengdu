@@ -17,6 +17,6 @@ public interface PostService extends IService<PostEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    PageUtils queryPageByUserId(Integer userId);
+    PageUtils queryPageByUserId(Map<String, Object> params,Integer userId);
 }
 

@@ -6,7 +6,7 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="cn.gribe.entity.PostEntity" id="postMap">
         <result property="id" column="id"/>
-        <result property="conetnt" column="conetnt"/>
+        <result property="content" column="conetnt"/>
         <result property="imgs" column="imgs"/>
         <result property="userId" column="user_id"/>
         <result property="createTime" column="create_time"/>
@@ -18,17 +18,26 @@
 
     <select id="selectPageByUserId" parameterType="map"  resultMap="postMap">
         select pos.*
-        from cd_collect col LEFT JOIN cd_post pos
+        from cd_collect col INNER JOIN cd_post pos
+        ON col.post_id = pos.id
         WHERE col.user_id = #{userId}
     </select>
 
     <select id="selectPageByGroupId" parameterType="map" resultMap="postMap">
-        select cp.*,cu.user_name,cu.head_img AS user_head_img from cd_post cp INNER JOIN cd_user cu ON cp.user_id = cu.id
+        select cp.*,cu.user_name,cu.head_img
+        AS user_head_img
+        from cd_post cp,cd_user cu
+        WHERE cp.user_id = cu.id
         <if test="groupId != null and groupId != 0 ">
-            WHERE cp.group_id = #{groupId}
+            AND cp.group_id = #{groupId}
+        </if>
+        <if test="content != null and content != 0 ">
+            AND cp.content LIKE cancat('%',#{content},'%')
+        </if>
+        <if test="userId != null and userId != 0 ">
+            AND cp.user_id = #{userId}
         </if>
     </select>
-
 
 
 </mapper>

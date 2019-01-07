@@ -2,6 +2,7 @@ package cn.gribe.modules.business.dao;
 
 import cn.gribe.entity.ActivityEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
 
@@ -14,6 +15,6 @@ import java.util.List;
  */
 public interface CdActivityDao extends BaseMapper<ActivityEntity> {
 
-    List<ActivityEntity> selectPage();
+    List<ActivityEntity> selectPage(RowBounds rowBounds);
 
 }

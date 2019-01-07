@@ -3,6 +3,7 @@ package cn.gribe.modules.business.dao;
 import cn.gribe.entity.CommentEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
 
@@ -15,6 +16,6 @@ import java.util.List;
  */
 public interface CdCommentDao extends BaseMapper<CommentEntity> {
 
-    List<CommentEntity> selectPage(@Param("content") String content,@Param("storeId") Integer storeId);
+    List<CommentEntity> selectPage(RowBounds rowBounds, @Param("content") String content, @Param("storeId") Integer storeId);
 
 }

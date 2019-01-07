@@ -19,6 +19,8 @@ $(function () {
 			{ label: '数量', name: 'count', index: 'count', width: 50 },
 			{ label: '总价', name: 'sum', index: 'sum', width: 50 },
 			{ label: '运费', name: 'freight', index: 'freight', width: 50 },
+            { label: '预约开始时间', name: 'startTime', index: 'start_time', width: 50 },
+            { label: '预约结束时间', name: 'endTime', index: 'end_time', width: 50 },
 			{ label: '支付类型', name: 'payType', index: 'pay_type', width: 80 ,formatter:function(cellvalue, options, rowObject){
                 return showValue(cellvalue, options, rowObject,vm.payType);
             } },
@@ -27,12 +29,13 @@ $(function () {
             { label: '快递编号', name: 'expressCode', index: 'express_code', width: 80 }
         ],
 		viewrecords: true,
-        height: 600,
+        width:"100%",
+        autowidth:true,
+        height:"100%",
         rowNum: 10,
 		rowList : [10,30,50],
         rownumbers: true, 
-        rownumWidth: 25, 
-        autowidth:true,
+        rownumWidth: 25,
         multiselect: true,
         pager: "#jqGridPager",
         jsonReader : {
@@ -68,7 +71,8 @@ var vm = new Vue({
 		title: null,
 		cdOrder: {},
 		payType:[],
-		status:[]
+		status:[],
+        payResults:[]
 	},
 	methods: {
 		query: function () {
@@ -145,6 +149,7 @@ var vm = new Vue({
             var phone = $('#phone').val();
             var storeName = $('#storeName').val();
             var status = $('#status').val();
+            var payResults = $('#payResults').val();
 			$("#jqGrid").jqGrid('setGridParam',{ 
                 page:page,
                 postData:{
@@ -152,7 +157,8 @@ var vm = new Vue({
                     'endTime':endTime,
 					'phone':phone,
 					'storeName':storeName,
-					'status':status
+					'status':status,
+                    "payResults":payResults
                 }
 
             }).trigger("reloadGrid");
@@ -161,6 +167,7 @@ var vm = new Vue({
             $.get(baseURL + "business/cdorder/init", function(r){
                 vm.payType = r.payType;
                 vm.status = r.status;
+                vm.payResults = r.payResults;
             });
         },
         shipments: function() {
@@ -272,6 +279,9 @@ var vm = new Vue({
                     }
                 });
             });
+        },
+        exportOrder: function(){
+            window.open(baseURL + "business/cdorder/export");
         }
 	},
     created: function(){

@@ -19,6 +19,20 @@
                 <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
             </#if>
         </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">查询条件</div>
+            <div class="panel-body">
+                <form>
+                    <div class="form-group">
+                        <div id="formSearch" class="form-inline">
+                            <input type="text" class="form-control" placeholder="店铺名称" id="name">
+                            <button type="button" class="btn btn-primary" @click="query" >查询</button>
+                            <button type="reset" class="btn btn-default" >重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
     </div>

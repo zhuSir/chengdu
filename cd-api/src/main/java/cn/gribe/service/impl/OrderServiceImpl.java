@@ -29,7 +29,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         String state = params.get("state") == null ? null : (String) params.get("state");
         state = "0".equals(state) ? null : state;
         Integer userId = (Integer) params.get("userId");
-        page.setRecords(this.baseMapper.selectPageByState(state,userId));
+        page.setRecords(this.baseMapper.selectPageByState(page,state,userId));
         return new PageUtils(page);
     }
 

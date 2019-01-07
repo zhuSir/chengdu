@@ -5,6 +5,7 @@ import cn.gribe.common.utils.R;
 import cn.gribe.common.utils.alipay.AlipayUtils;
 import cn.gribe.common.validator.ValidatorUtils;
 import cn.gribe.entity.*;
+import cn.gribe.service.CommentService;
 import cn.gribe.service.OrderService;
 import cn.gribe.service.ProductService;
 import cn.gribe.service.StoreService;
@@ -15,8 +16,10 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -40,6 +43,9 @@ public class ApiOrderController {
 
     @Autowired
     private AlipayUtils alipayUtils;
+
+    @Autowired
+    private CommentService commentService;
 
 
     /**
@@ -65,10 +71,15 @@ public class ApiOrderController {
     public R info(@PathVariable("id") Integer id){
         Assert.isNull(id, "参数错误;获取订单详情失败");
         OrderEntity order= orderService.selectById(id);
-        //TODO 物流信息;
         Assert.isNull(order,"订单获取失败；请联系管理员");
         StoreEntity storeEntity = storeService.selectById(order.getStoreId());
+        ProductEntity productEntity= productService.selectById(order.getProductId());
+        Assert.isNull(productEntity,"订单错误，请联系管理员");
+        order.setProductShortImg(productEntity.getShortImg());
+        order.setProductAbout(productEntity.getAbout());
+        order.setProductName(productEntity.getName());
         R r = R.ok().put("order", order);
+        r.put("product",productEntity);
         r.put("store",storeEntity);
         return r;
     }
@@ -191,8 +202,10 @@ public class ApiOrderController {
         OrderEntity orderEntity = orderService.selectById(orderId);
         Assert.isNull(orderEntity,"订单参数错误，请联系管理员");
         Assert.state(!OrderEntity.STATE_AWAIT_PAY.equals(orderEntity.getState()),"该订单不允许取消");
-        Assert.state(orderEntity.getUserId().intValue() == userEntity.getId().intValue(),"您当前无权限修改该记录");
+        Assert.state(orderEntity.getUserId().intValue() != userEntity.getId().intValue(),"您当前无权限修改该记录");
         orderEntity.setState(OrderEntity.STATE_FINISHED);
+        orderEntity.setPayStatus(OrderEntity.PAY_STATUS_FAIL);
+        orderEntity.setPayDescription("支付失败");
         orderService.updateById(orderEntity);
         return R.ok();
     }
@@ -209,9 +222,31 @@ public class ApiOrderController {
         OrderEntity orderEntity = orderService.selectById(orderId);
         Assert.isNull(orderEntity,"订单参数错误，请联系管理员");
         Assert.state(!OrderEntity.STATE_AWAIT_USE.equals(orderEntity.getState()),"该订单错误，不允许完成，请联系管理员");
-        Assert.state(orderEntity.getUserId().intValue() == userEntity.getId().intValue(),"您当前无权限修改该记录");
+        Assert.state(orderEntity.getUserId().intValue() != userEntity.getId().intValue(),"您当前无权限修改该记录");
+        orderEntity.setState(OrderEntity.STATE_AWAIT_EVALUATE);
+        orderService.updateById(orderEntity);
+        return R.ok();
+    }
+
+    /**
+     * 订单评论
+     * @param orderId
+     * @return
+     */
+    @Login
+    @RequestMapping("/comment")
+    public R comment(@RequestParam(value = "file", required = false) MultipartFile[] files,
+                     CommentEntity comment, String orderId,@LoginUser UserEntity userEntity) throws IOException {
+        Assert.isNull(orderId,"订单错误，请刷新重试");
+        OrderEntity orderEntity = orderService.selectById(orderId);
+        Assert.isNull(orderEntity,"订单参数错误，请联系管理员");
+        Assert.state(!OrderEntity.STATE_AWAIT_EVALUATE.equals(orderEntity.getState()),"该订单不允许评论");
+        Assert.state(orderEntity.getUserId().intValue() != userEntity.getId().intValue(),"您当前无权限修改该记录");
+        comment.setProductId(orderEntity.getProductId());//商品id
+        commentService.save(files,comment,userEntity);//保存评论
         orderEntity.setState(OrderEntity.STATE_FINISHED);
         orderService.updateById(orderEntity);
         return R.ok();
     }
+
 }

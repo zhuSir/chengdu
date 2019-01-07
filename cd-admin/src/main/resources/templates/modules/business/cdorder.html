@@ -34,9 +34,16 @@
                                 <option value="" selected>请选择状态</option>
                                 <option v-bind:value="t.code" v-for="t in status" style="padding: 10px 0px;">{{ t.value }}</option>
                             </select>
+                            <select id="payResults" class="form-control" >
+                                <option value="" selected>请选择支付结果</option>
+                                <option v-bind:value="t.code" v-for="t in payResults" style="padding: 10px 0px;">{{ t.value }}</option>
+                            </select>
                             <input type="text" class="form-control" placeholder="店铺名称" id="storeName">
                             <button type="button" class="btn btn-primary" @click="query" >查询</button>
                             <button type="reset" class="btn btn-default" >重置</button>
+
+                            <button type="button" class="btn btn-default" @click="exportOrder" >导出订单</button>
+
                         </div>
                     </div>
                 </form>

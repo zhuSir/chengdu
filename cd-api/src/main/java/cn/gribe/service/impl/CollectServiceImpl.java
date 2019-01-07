@@ -3,10 +3,7 @@ package cn.gribe.service.impl;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.validator.Assert;
 import cn.gribe.dao.CollectDao;
-import cn.gribe.service.CollectService;
-import cn.gribe.service.CommentService;
-import cn.gribe.service.GroupService;
-import cn.gribe.service.PostService;
+import cn.gribe.service.*;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +12,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import cn.gribe.entity.CollectEntity;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Service("cdCollectService")
@@ -29,26 +27,35 @@ public class CollectServiceImpl extends ServiceImpl<CollectDao, CollectEntity> i
     @Autowired
     private GroupService groupService;
 
+    @Autowired
+    private StoreService storeService;
+
     @Override
-    public PageUtils queryPage(Integer userId, Integer type) {
+    public PageUtils queryPage(Integer userId, Map<String, Object> params) {
+        Assert.isNull(params.get("type"),"参数错误，请联系管理员");
+        String type = String.valueOf(params.get("type"));
         PageUtils res = null;
         switch (type){
-            case 1:
+            case "1":
                 //评论
-                res = commentService.queryPageByUserId(userId);
+                res = commentService.queryPageByUserId(params,userId);
                 break;
-            case 2:
+            case "2":
                 //帖子
-                res = postService.queryPageByUserId(userId);
+                res = postService.queryPageByUserId(params,userId);
                 break;
-            case 3:
+            case "3":
                 //小组
-                res = groupService.queryPageByUserId(userId);
+                res = groupService.queryPageByUserId(params,userId);
                 break;
-            default:
-                //TODO 获取全部的收藏
-                res = groupService.queryPageByUserId(userId);
+            case "4":
+                //店铺
+                res = storeService.queryPageByUserId(params,userId);
                 break;
+//            default:
+//                //TODO 获取全部的收藏
+//                res = groupService.queryPageByUserId(params,userId);
+//                break;
         }
         return res;
     }

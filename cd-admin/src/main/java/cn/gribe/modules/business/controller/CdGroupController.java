@@ -23,11 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 /**
- * 
- *
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2018-11-24 15:34:15
+ * 小组管理
  */
 @RestController
 @RequestMapping("business/cdgroup")
@@ -42,7 +38,6 @@ public class CdGroupController {
     @RequiresPermissions("business:cdgroup:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = cdGroupService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 

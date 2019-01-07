@@ -60,9 +60,28 @@ public class StoreServiceImpl extends ServiceImpl<StoreDao, StoreEntity> impleme
                     stores.set(i,store);
                 }
             }
+            sortDistance(stores);//排序
             page.setRecords(stores);
         }
         return new PageUtils(page);
+    }
+
+    /**
+     * 权重冒泡排序
+     * @param data
+     */
+    public static void sortDistance(List<StoreEntity> data){
+        for(int i =0; i< data.size();i++){
+            for(int j = i+1;j<data.size();j++){
+                StoreEntity temp = data.get(i);
+                StoreEntity baseCheck = data.get(j);
+                if(temp.getDistance() > baseCheck.getDistance()){
+                    data.set(i,baseCheck);
+                    data.set(j,temp);
+                }
+            }
+        }
+        //return data;
     }
 
     @Override
@@ -70,6 +89,13 @@ public class StoreServiceImpl extends ServiceImpl<StoreDao, StoreEntity> impleme
         //查询附近商铺
         List<StoreEntity> res = this.selectList(new EntityWrapper<>());
         return res;
+    }
+
+    @Override
+    public PageUtils queryPageByUserId(Map<String, Object> params, Integer userId) {
+        Page<StoreEntity> page = new Query<StoreEntity>(params).getPage();
+        page.setRecords(this.baseMapper.selectPageByUserId(page,userId));
+        return new PageUtils(page);
     }
 
 }

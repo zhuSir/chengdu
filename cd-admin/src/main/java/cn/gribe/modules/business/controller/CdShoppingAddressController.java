@@ -54,7 +54,6 @@ public class CdShoppingAddressController {
     @RequiresPermissions("business:cdshoppingaddress:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = cdShoppingAddressService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 

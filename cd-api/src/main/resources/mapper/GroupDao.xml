@@ -18,7 +18,7 @@
     <select id="selectPageByUserId" parameterType="map"  resultMap="groupMap">
         select gro.*
         from cd_collect col
-        LEFT JOIN cd_group gro ON col.group_id = gro.id
+        INNER JOIN cd_group gro ON col.group_id = gro.id
         WHERE col.user_id = #{userId}
     </select>
 

@@ -21,7 +21,9 @@ public class CdPostServiceImpl extends ServiceImpl<CdPostDao, PostEntity> implem
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         Page<PostEntity> page = new Query<PostEntity>(params).getPage();// 当前页，总条数 构造 page 对象
-        page.setRecords(this.baseMapper.selectPage());
+        Object name = params.get("name");
+        Object groupId = params.get("groupId");
+        page.setRecords(this.baseMapper.selectPage(page,name,groupId));
         return new PageUtils(page);
     }
 
