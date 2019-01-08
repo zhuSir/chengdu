@@ -3,6 +3,7 @@ package cn.gribe.modules.business.controller;
 import java.io.IOException;
 import java.util.*;
 
+import cn.gribe.common.CommonUtils;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.modules.oss.cloud.OSSFactory;
@@ -109,6 +110,10 @@ public class CdStoreController {
                   @RequestParam(value = "short_img_file", required = false) MultipartFile shortImg,
                   StoreEntity store) throws IOException {
         ValidatorUtils.validateEntity(store);
+        //图片检测
+        CommonUtils.validateImg(new MultipartFile[]{shortImg});
+        //图片检测
+        CommonUtils.validateImg(descImg);
         //TODO 判断用户是否绑定过一个商家
         if (descImg != null && descImg.length > 0) {
             StringBuilder urls = new StringBuilder();

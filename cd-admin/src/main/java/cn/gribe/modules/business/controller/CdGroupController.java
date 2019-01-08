@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 
+import cn.gribe.common.CommonUtils;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.entity.GroupEntity;
@@ -62,6 +63,10 @@ public class CdGroupController {
                   @RequestParam(value = "head_img_file", required = false) MultipartFile headImg,
                   GroupEntity group) throws IOException {
         ValidatorUtils.validateEntity(group);
+        //图片检测
+        CommonUtils.validateImg(publicityImgs);
+        //图片检测
+        CommonUtils.validateImg(backstageImgs);
         if (headImg != null && !headImg.isEmpty()) {
             //上传文件
             String suffix = headImg.getOriginalFilename().substring(headImg.getOriginalFilename().lastIndexOf("."));

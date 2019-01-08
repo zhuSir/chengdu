@@ -6,8 +6,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import cn.gribe.common.CommonUtils;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
+import cn.gribe.common.validator.ValidatorImgUtils;
+import cn.gribe.modules.oss.cloud.CloudStorageConfig;
 import cn.gribe.modules.oss.cloud.OSSFactory;
 import cn.gribe.modules.sys.entity.SysDictEntity;
 import cn.gribe.modules.sys.service.SysDictService;
@@ -94,8 +97,8 @@ public class CdActivityController {
     @RequestMapping("/save")
     @RequiresPermissions("business:cdactivity:save")
     public R save(@RequestParam(value = "file", required = false) MultipartFile file,ActivityEntity cdActivity) throws IOException {
-        //TODO 验证参数；保存图片到阿里云；内容需通过审核接口审核
-        //TODO 图片检测（是否涉黄）
+        //图片检测
+        CommonUtils.validateImg(new MultipartFile[]{file});
         if (file != null && !file.isEmpty()) {
             //上传文件
             String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
@@ -117,8 +120,8 @@ public class CdActivityController {
     @RequiresPermissions("business:cdactivity:update")
     public R update(@RequestParam(value = "file", required = false) MultipartFile file,ActivityEntity cdActivity) throws IOException {
         ValidatorUtils.validateEntity(cdActivity);
-        //TODO 验证参数；保存图片到阿里云；内容需通过审核接口审核
-        //TODO 图片检测（是否涉黄）
+        //图片检测
+        CommonUtils.validateImg(new MultipartFile[]{file});
         //上传文件
         System.out.println("=== cdActivity: "+cdActivity.toString());
         if (file != null && !file.isEmpty()) {

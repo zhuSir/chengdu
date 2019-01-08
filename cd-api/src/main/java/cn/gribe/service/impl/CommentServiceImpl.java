@@ -1,9 +1,9 @@
 package cn.gribe.service.impl;
 
+import cn.gribe.common.utils.CommonUtils;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.Query;
 import cn.gribe.common.utils.oss.OSSFactory;
-import cn.gribe.entity.OrderEntity;
 import cn.gribe.entity.UserEntity;
 import cn.gribe.service.CommentService;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -77,9 +77,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentDao, CommentEntity> i
 
     @Override
     public void save(MultipartFile[] files, CommentEntity comment, UserEntity user) throws IOException {
-        //TODO 验证参数；保存图片到阿里云；内容需通过审核接口审核
+        //图片检测
+        CommonUtils.validateImg(files);
         StringBuffer urls = new StringBuffer();
-        //TODO 图片检测（是否涉黄）
         //上传文件
         if(files != null && files.length > 0){
             for(MultipartFile file : files){

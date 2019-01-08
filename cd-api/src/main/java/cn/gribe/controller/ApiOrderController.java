@@ -1,5 +1,6 @@
 package cn.gribe.controller;
 
+import cn.gribe.common.utils.CommonUtils;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.common.utils.alipay.AlipayUtils;
@@ -242,6 +243,8 @@ public class ApiOrderController {
         Assert.isNull(orderEntity,"订单参数错误，请联系管理员");
         Assert.state(!OrderEntity.STATE_AWAIT_EVALUATE.equals(orderEntity.getState()),"该订单不允许评论");
         Assert.state(orderEntity.getUserId().intValue() != userEntity.getId().intValue(),"您当前无权限修改该记录");
+        //图片检测
+        CommonUtils.validateImg(files);
         comment.setProductId(orderEntity.getProductId());//商品id
         commentService.save(files,comment,userEntity);//保存评论
         orderEntity.setState(OrderEntity.STATE_FINISHED);

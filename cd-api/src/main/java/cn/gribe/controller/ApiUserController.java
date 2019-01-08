@@ -199,7 +199,8 @@ public class ApiUserController {
     public R userSet(@RequestParam(required = false) String nickName,
                      @RequestParam(value = "file", required = false) MultipartFile file,
                      @LoginUser UserEntity user) throws IOException {
-        //TODO 图片检测（是否涉黄）
+        //图片检测
+        CommonUtils.validateImg(new MultipartFile[]{file});
         if (file != null) {
             String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
             String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);

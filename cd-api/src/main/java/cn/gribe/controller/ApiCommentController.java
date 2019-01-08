@@ -1,6 +1,7 @@
 package cn.gribe.controller;
 
 import cn.gribe.annotation.LoginUser;
+import cn.gribe.common.utils.CommonUtils;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.service.CommentService;
@@ -59,6 +60,8 @@ public class ApiCommentController {
                   CommentEntity comment, @LoginUser UserEntity user) throws IOException {
         //验证内容
         ValidatorUtils.validateEntity(comment);
+        //图片检测
+        CommonUtils.validateImg(files);
         //订单
         commentService.save(files,comment,user);
         return R.ok().put("comment",comment);

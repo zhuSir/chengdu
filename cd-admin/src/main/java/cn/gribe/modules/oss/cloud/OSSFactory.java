@@ -50,4 +50,11 @@ public final class OSSFactory {
         return null;
     }
 
-}
+    public static CloudStorageConfig getSysConfig() {
+        //获取云存储配置信息
+        CloudStorageConfig config = sysConfigService.getConfigObject(ConfigConstant.CLOUD_STORAGE_CONFIG_KEY, CloudStorageConfig.class);
+        return config;
+    }
+
+
+    }

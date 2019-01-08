@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import cn.gribe.common.CommonUtils;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.common.validator.Assert;
@@ -116,7 +117,10 @@ public class CdProductController {
                   @RequestParam(value = "short_img_file", required = false) MultipartFile shortImg,
                   ProductEntity product) throws IOException {
         ValidatorUtils.validateEntity(product);
-        //TODO 图片检测（是否涉黄）
+        //图片检测
+        CommonUtils.validateImg(imgs);
+        //图片检测
+        CommonUtils.validateImg(new MultipartFile[]{shortImg});
         if (shortImg != null && !shortImg.isEmpty()) {
             //上传文件
             String suffix = shortImg.getOriginalFilename().substring(shortImg.getOriginalFilename().lastIndexOf("."));

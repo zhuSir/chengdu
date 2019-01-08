@@ -8,6 +8,7 @@ import java.util.Map;
 
 import cn.gribe.annotation.Login;
 import cn.gribe.annotation.LoginUser;
+import cn.gribe.common.utils.CommonUtils;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.common.utils.oss.OSSFactory;
@@ -116,7 +117,8 @@ public class ApiPostController {
         //表单校验
         ValidatorUtils.validateEntity(post);
         StringBuffer urls = new StringBuffer();
-        //TODO 图片检测（是否涉黄）
+        //图片检测
+        CommonUtils.validateImg(files);
         //上传文件
         if(files != null && files.length > 0){
             for(MultipartFile file : files){
