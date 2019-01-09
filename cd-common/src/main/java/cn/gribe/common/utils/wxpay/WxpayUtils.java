@@ -4,6 +4,7 @@ import com.github.wxpay.sdk.WXPay;
 import com.github.wxpay.sdk.WXPayUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -11,11 +12,13 @@ import java.util.*;
  * 微信支付
  * Created by Zhugw on 2019/1/3 0003.
  */
+@Component
 public class WxpayUtils {
 
     public static final Logger logger = LoggerFactory.getLogger(WxpayUtils.class);
 
-    private WXPay wxpay;
+    public WXPay wxpay;
+
     private WXPayConfigImpl config;
 
     public WxpayUtils() throws Exception {
@@ -28,10 +31,8 @@ public class WxpayUtils {
      * @param subject
      * @param tradeNo
      * @param amt
-     * @param ip
-     * @param notifyUrl
      */
-    public String unifiedOrder(String subject, String tradeNo, String amt, String ip, String notifyUrl) {
+    public String unifiedOrder(String subject, String tradeNo, String amt) {
         try {
             Map<String, String> data = new HashMap<String, String>();
             data.put("body", subject);
@@ -39,8 +40,8 @@ public class WxpayUtils {
             data.put("device_info", "");
             data.put("fee_type", "CNY");
             data.put("total_fee", amt);
-            data.put("spbill_create_ip", ip);
-            data.put("notify_url", notifyUrl);
+            data.put("spbill_create_ip", config.getIp());
+            data.put("notify_url", config.getNotifyUrl());
             data.put("trade_type", "APP");
             Map<String, String> resp = wxpay.unifiedOrder(data);
             logger.info("===>>>:微信下单成功", resp);
@@ -68,7 +69,13 @@ public class WxpayUtils {
         return null;
     }
 
-    public boolean queryOrder(String tradeNo) {
+    /**
+     * 查询支付
+     * @param tradeNo
+     * @return
+     */
+
+    public Map queryOrder(String tradeNo) {
         try {
             Map<String, String> data = new HashMap<String, String>();
             data.put("out_trade_no", tradeNo);
@@ -76,16 +83,20 @@ public class WxpayUtils {
             System.out.println(resp);
             logger.info("===>>>:微信订单查询",resp);
             String tradeState= resp.get("trade_state");
-            if("SUCCESS".equals(tradeState)){
-                return true;
-            }
+            return transferStatus(tradeState);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("===>>>:微信支付查询错误", e.getMessage());
         }
-        return false;
+        return null;
     }
 
+    /**
+     * 退款
+     * @param out_trade_no
+     * @param amt
+     * @return
+     */
     public boolean doRefund(String out_trade_no,String amt) {
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("out_trade_no", out_trade_no);
@@ -96,19 +107,58 @@ public class WxpayUtils {
         data.put("op_user_id", config.getMchID());
         try {
             Map<String, String> r = wxpay.refund(data);
-            System.out.println(r);
-            return true;
+            String resultCode = r.get("result_code");
+            if("SUCCESS".equals(resultCode)){
+                return true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("===>>>:微信退款失败",e.getMessage());
-            return false;
         }
+        return false;
     }
 
-    public static void main(String[] args) throws Exception {
-//        String tradeNo = "201901091519012";
-//        WxpayUtils.unifiedOrder("測試支付", tradeNo, "200", "120.36.144.200", "www.baidu.com");
-//        WxpayUtils.queryOrder(tradeNo);
+    /**
+     * 状态判断
+     * WAIT_BUYER_PAY	交易创建，等待买家付款
+     * TRADE_CLOSED	未付款交易超时关闭，或支付完成后全额退款
+     * TRADE_FINISHED	交易结束，不可退款
+     * TRADE_SUCCESS	交易支付成功
+     * @param status
+     */
+    public Map<String,Object> transferStatus(String status){
+        Map results = new HashMap();
+        if(status != null){
+            if(status.equals("SUCCESS")){
+                results.put("status",1);
+                results.put("description","支付成功");
+            }else if("REFUND".equals(status)){
+                results.put("status",-2);
+                results.put("description","转入退款");
+            }else if("NOTPAY".equals(status)){
+                results.put("status",-1);
+                results.put("description","未支付");
+            }else if("CLOSED".equals(status)){
+                results.put("status",1);
+                results.put("description","已关闭");
+            }else if("REVOKED".equals(status)){
+                results.put("status",-3);
+                results.put("description","已撤销（刷卡支付）");
+            }else if("USERPAYING".equals(status)){
+                results.put("status",-4);
+                results.put("description","用户支付中");
+            }else if("PAYERROR".equals(status)){
+                results.put("status",0);
+                results.put("description","支付失败(其他原因，如银行返回失败)");
+            }else {
+                results.put("status",0);
+                results.put("description","交易支付失败");
+            }
+        }else{
+            results.put("status",0);
+            results.put("description","交易错误");
+        }
+        return results;
     }
 
 }

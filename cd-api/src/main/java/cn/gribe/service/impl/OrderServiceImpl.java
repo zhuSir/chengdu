@@ -1,8 +1,10 @@
 package cn.gribe.service.impl;
 
 import cn.gribe.common.utils.PageUtils;
+import cn.gribe.common.utils.wxpay.WxpayUtils;
 import cn.gribe.common.validator.Assert;
 import cn.gribe.dao.OrderDao;
+import cn.gribe.entity.AliPayOrder;
 import cn.gribe.entity.OrderEntity;
 import cn.gribe.entity.ProductEntity;
 import cn.gribe.entity.UserEntity;
@@ -13,6 +15,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import cn.gribe.common.utils.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -22,6 +25,9 @@ import java.util.Map;
 public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> implements OrderService {
 
     static Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    @Autowired
+    private WxpayUtils wxpayUtils;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -48,7 +54,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
             Assert.state(!this.insert(order),"保存订单错误，请联系管理员","==>:保存订单错误 orderInfo:"+order.toString());
             return "success";
         }else if(OrderEntity.PAY_TYPE_WECHATPAY.equals(order.getPayType())){
-            return null;
+            String signString = wxpayUtils.unifiedOrder(product.getName(),order.getCode(),String.valueOf(order.getSum()));
+            Assert.isNull(signString,"下单错误，请联系管理员");
+            Assert.state(!this.insert(order),"保存订单错误，请联系管理员","==>:保存订单错误 orderInfo:"+order.toString());
+            return signString;
             //微信支付
         }
         Assert.isNull(null,"支付类型错误");

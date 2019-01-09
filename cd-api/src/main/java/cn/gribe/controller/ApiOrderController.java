@@ -4,6 +4,7 @@ import cn.gribe.common.utils.CommonUtils;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.common.utils.alipay.AlipayUtils;
+import cn.gribe.common.utils.wxpay.WxpayUtils;
 import cn.gribe.common.validator.ValidatorUtils;
 import cn.gribe.entity.*;
 import cn.gribe.service.CommentService;
@@ -13,6 +14,7 @@ import cn.gribe.service.StoreService;
 import cn.gribe.annotation.Login;
 import cn.gribe.annotation.LoginUser;
 import cn.gribe.common.validator.Assert;
+import com.github.wxpay.sdk.WXPayUtil;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -112,6 +116,7 @@ public class ApiOrderController {
             return R.error("支付下单失败，请联系管理员");
         }
         R r = R.ok().put("orderCode",order.getCode());
+        r.put("results",results);
         r.put("callback",alipayUtils.NOTIFY_URL);
         return r;
     }
@@ -172,7 +177,13 @@ public class ApiOrderController {
         if(!OrderEntity.STATE_AWAIT_PAY.equals(orderEntity.getState())){
             return R.ok("支付成功");
         }
-        Map<String,Object> status = alipayUtils.queryAliPayOrder(orderCode);
+        Map<String,Object> status = null;
+        //查询是否微信支付
+        if(OrderEntity.PAY_TYPE_WECHATPAY.equals(orderEntity.getPayType())){
+             status = alipayUtils.queryAliPayOrder(orderCode);
+        }else{
+            status = wxPayUtil.queryOrder(orderCode);
+        }
         if(status != null){
             orderEntity.setPayStatus((Integer) status.get("status"));
             orderEntity.setPayDescription((String) status.get("description"));
@@ -189,6 +200,62 @@ public class ApiOrderController {
             }
         }
         return R.error(-1,"查询支付错误，请稍后重试");
+    }
+
+    @Autowired
+    private WxpayUtils wxPayUtil;
+
+    /**
+     * 支付后回调接口，存入数据库更新状态为支付成功
+     * @return
+     */
+    @RequestMapping("/callback/wx")
+    @ResponseBody
+    public String wxCallback(HttpServletRequest request) throws Exception {
+        System.out.println("微信支付回调");
+        InputStream inStream = request.getInputStream();
+        ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len = 0;
+        while ((len = inStream.read(buffer)) != -1) {
+            outSteam.write(buffer, 0, len);
+        }
+        String resultxml = new String(outSteam.toByteArray(), "utf-8");
+        Map<String, String> params = WXPayUtil.xmlToMap(resultxml);
+        outSteam.close();
+        inStream.close();
+        //验证微信签名
+        if (wxPayUtil.wxpay.isPayResultNotifySignatureValid(params)) {
+            String orderNo = params.get("out_trade_no");
+            if(StringUtils.isNotEmpty(orderNo)){
+                //查询单子
+                OrderEntity orderEntity = orderService.queryByCode(orderNo);
+                if(orderEntity == null){
+                    return "fail";
+                }
+                //状态为待支付，则更改
+                if(orderEntity != null
+                        && !OrderEntity.PAY_STATUS_SUCCESS.equals(orderEntity.getPayStatus())
+                        && OrderEntity.STATE_AWAIT_PAY.equals(orderEntity.getState())){
+                    String resultCode = params.get("result_code");
+                    //验证支付宝
+                    if("SUCCESS".equals(resultCode)){
+                        String tradeStatus = request.getParameter("trade_status");
+                        Map<String,Object> status = wxPayUtil.transferStatus(tradeStatus);
+                        orderEntity.setPayStatus((Integer)status.get("status"));
+                        orderEntity.setPayDescription((String) status.get("description"));
+                        orderEntity.setTradeNo(params.get("transaction_id"));//支付宝订单号
+                        //支付成功
+                        if(OrderEntity.PAY_STATUS_SUCCESS.equals(orderEntity.getPayStatus())){
+                            orderEntity.setState(OrderEntity.STATE_AWAIT_USE);
+                        }
+                        orderService.updateById(orderEntity);
+                        return "success";
+                    }
+                }
+            }
+        }
+        return "fail";
     }
 
     /**

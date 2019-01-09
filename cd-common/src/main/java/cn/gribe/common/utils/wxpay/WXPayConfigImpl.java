@@ -1,22 +1,36 @@
 package cn.gribe.common.utils.wxpay;
 
 import com.github.wxpay.sdk.WXPayConfig;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 
-
+@Component
 public class WXPayConfigImpl implements WXPayConfig {
 
-    private String appId = "wxac580e862dd447ef";
-    private String mchId = "1521731881";//商户号
-    private String key = "wgl61052819911220721618780176563";//密钥key
+    @Value("${wxpay.appId}")
+    private String appId;// = "wxac580e862dd447ef";
+
+    @Value("${wxpay.mchId}")
+    private String mchId;// = "1521731881";//商户号
+
+    @Value("${wxpay.key}")
+    private String key;// = "wgl61052819911220721618780176563";//密钥key
+
+    @Value("${wxpay.ip}")
+    private String ip;
+
+    @Value("${wxpay.notifyUrl}")
+    private String notifyUrl;
 
     private byte[] certData;
+
     private static WXPayConfigImpl INSTANCE;
 
     private WXPayConfigImpl() throws Exception {
         String path = "E:/workspace/chengdu/cd-api/src/main/resources/apiclient_cert.p12";
-        String certPath = "src/resources/apiclient_cert.p12";//证书位置
+        String certPath = "src/main/resources/apiclient_cert.p12";//证书位置
         File file = new File(certPath);
         InputStream certStream = new FileInputStream(file);
         this.certData = new byte[(int) file.length()];
@@ -60,6 +74,22 @@ public class WXPayConfigImpl implements WXPayConfig {
 
     public int getHttpReadTimeoutMs() {
         return 10000;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getNotifyUrl() {
+        return notifyUrl;
+    }
+
+    public void setNotifyUrl(String notifyUrl) {
+        this.notifyUrl = notifyUrl;
     }
 }
 
