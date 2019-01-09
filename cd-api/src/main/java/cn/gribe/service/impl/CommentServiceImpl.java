@@ -79,6 +79,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentDao, CommentEntity> i
     public void save(MultipartFile[] files, CommentEntity comment, UserEntity user) throws IOException {
         //图片检测
         CommonUtils.validateImg(files);
+        //图片内容
+        CommonUtils.validateTxt(user.getUserName());
         StringBuffer urls = new StringBuffer();
         //上传文件
         if(files != null && files.length > 0){

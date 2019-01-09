@@ -62,6 +62,8 @@ public class ApiCommentController {
         ValidatorUtils.validateEntity(comment);
         //图片检测
         CommonUtils.validateImg(files);
+        //图片内容
+        CommonUtils.validateTxt(comment.getContent());
         //订单
         commentService.save(files,comment,user);
         return R.ok().put("comment",comment);

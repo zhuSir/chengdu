@@ -121,6 +121,8 @@ public class CdProductController {
         CommonUtils.validateImg(imgs);
         //图片检测
         CommonUtils.validateImg(new MultipartFile[]{shortImg});
+        //图片内容
+        CommonUtils.validateTxt(product.getAbout());
         if (shortImg != null && !shortImg.isEmpty()) {
             //上传文件
             String suffix = shortImg.getOriginalFilename().substring(shortImg.getOriginalFilename().lastIndexOf("."));

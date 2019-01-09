@@ -114,6 +114,8 @@ public class CdStoreController {
         CommonUtils.validateImg(new MultipartFile[]{shortImg});
         //图片检测
         CommonUtils.validateImg(descImg);
+        //图片内容
+        CommonUtils.validateTxt(store.getAbout());
         //TODO 判断用户是否绑定过一个商家
         if (descImg != null && descImg.length > 0) {
             StringBuilder urls = new StringBuilder();

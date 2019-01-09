@@ -15,9 +15,22 @@ public class CommonUtils {
      */
     public static void validateImg(MultipartFile[] file){
         CloudStorageConfig config = OSSFactory.getSysConfig();
-        boolean isTrue = ValidatorImgUtils.validate(config.getAliyunAccessKeyId(),config.getAliyunAccessKeySecret(),file);
+        boolean isTrue = ValidatorImgUtils.validateImg(config.getAliyunAccessKeyId(),config.getAliyunAccessKeySecret(),file);
         if(isTrue){
-            Assert.state(true,"图片检测涉黄请重新上传");
+            Assert.state(true,"图片涉及内容违规请重新上传");
+        }
+    }
+
+    /**
+     * 验证图片
+     * @param content
+     * @return
+     */
+    public static void validateTxt(String content){
+        CloudStorageConfig config = OSSFactory.getSysConfig();
+        boolean isTrue = ValidatorImgUtils.validateTxt(config.getAliyunAccessKeyId(),config.getAliyunAccessKeySecret(),content);
+        if(isTrue){
+            Assert.state(true,"涉及内容违规请重新填写");
         }
     }
 

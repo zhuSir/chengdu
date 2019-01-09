@@ -245,6 +245,8 @@ public class ApiOrderController {
         Assert.state(orderEntity.getUserId().intValue() != userEntity.getId().intValue(),"您当前无权限修改该记录");
         //图片检测
         CommonUtils.validateImg(files);
+        //图片内容
+        CommonUtils.validateTxt(comment.getContent());
         comment.setProductId(orderEntity.getProductId());//商品id
         commentService.save(files,comment,userEntity);//保存评论
         orderEntity.setState(OrderEntity.STATE_FINISHED);

@@ -119,6 +119,8 @@ public class ApiPostController {
         StringBuffer urls = new StringBuffer();
         //图片检测
         CommonUtils.validateImg(files);
+        //图片内容
+        CommonUtils.validateTxt(post.getContent());
         //上传文件
         if(files != null && files.length > 0){
             for(MultipartFile file : files){

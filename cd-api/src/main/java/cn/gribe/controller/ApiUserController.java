@@ -201,6 +201,8 @@ public class ApiUserController {
                      @LoginUser UserEntity user) throws IOException {
         //图片检测
         CommonUtils.validateImg(new MultipartFile[]{file});
+        //图片内容
+        CommonUtils.validateTxt(user.getUserName());
         if (file != null) {
             String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
             String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);

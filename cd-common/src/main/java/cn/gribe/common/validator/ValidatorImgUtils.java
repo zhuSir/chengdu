@@ -6,8 +6,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.green.extension.uploader.ClientUploader;
 import com.aliyuncs.green.model.v20180509.ImageSyncScanRequest;
+import com.aliyuncs.green.model.v20180509.TextScanRequest;
 import com.aliyuncs.http.FormatType;
 import com.aliyuncs.http.HttpResponse;
 import com.aliyuncs.http.MethodType;
@@ -18,13 +20,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 public class ValidatorImgUtils {
 
     public static final Logger logger = LoggerFactory.getLogger(ValidatorImgUtils.class);
 
-    public static boolean validate(String accessKeyId, String accessKeySecret, MultipartFile[] files){
+    public static boolean validateImg(String accessKeyId, String accessKeySecret, MultipartFile[] files){
 
         IClientProfile profile = DefaultProfile
                 .getProfile("cn-shanghai", accessKeyId, accessKeySecret);
@@ -51,7 +54,8 @@ public class ValidatorImgUtils {
          * 例如：检测2张图片，场景传递porn,terrorism，计费会按照2张图片鉴黄，2张图片暴恐检测计算
          * porn: porn表示色情场景检测
          */
-        httpBody.put("scenes", Arrays.asList("porn"));
+        String[] type = {"porn","terrorism"};
+        httpBody.put("scenes", type);
 
         /**
          * 如果您要检测的文件存于本地服务器上，可以通过下述代码片生成url，
@@ -119,7 +123,8 @@ public class ValidatorImgUtils {
                             //do something
                             logger.info("scene = [" + scene + "]");
                             logger.info("suggestion = [" + suggestion + "]");
-                            if(rate > 90 && scene.equals("porn")){
+                            String label = ((JSONObject) sceneResult).getString("label");
+                            if(!"normal".equals(label)){
                                 return true;
                             }
                         }
@@ -134,6 +139,88 @@ public class ValidatorImgUtils {
                  */
                 logger.error("the whole image scan request failed. response:" + JSON.toJSONString(scrResponse));
             }
+        }
+        return false;
+    }
+
+    /**
+     * 内容检测
+     * @param accessKeyId
+     * @param accessKeySecret
+     * @param content
+     * @return
+     * @throws Exception
+     */
+    public static boolean validateTxt(String accessKeyId, String accessKeySecret, String content){
+        //请替换成您自己的accessKeyId、accessKeySecret
+        IClientProfile profile = DefaultProfile.getProfile("cn-shanghai", accessKeyId, accessKeySecret);
+        try {
+            DefaultProfile.addEndpoint("cn-shanghai", "cn-shanghai", "Green", "green.cn-shanghai.aliyuncs.com");
+        } catch (ClientException e) {
+            e.printStackTrace();
+            logger.error("==>>>>:内容检测错误",e.getMessage());
+        }
+        IAcsClient client = new DefaultAcsClient(profile);
+        TextScanRequest textScanRequest = new TextScanRequest();
+        textScanRequest.setAcceptFormat(FormatType.JSON); // 指定api返回格式
+        textScanRequest.setHttpContentType(FormatType.JSON);
+        textScanRequest.setMethod(com.aliyuncs.http.MethodType.POST); // 指定请求方法
+        textScanRequest.setEncoding("UTF-8");
+        textScanRequest.setRegionId("cn-shanghai");
+        List<Map<String, Object>> tasks = new ArrayList<Map<String, Object>>();
+        Map<String, Object> task1 = new LinkedHashMap<String, Object>();
+        task1.put("dataId", UUID.randomUUID().toString());
+        task1.put("content", content);
+        tasks.add(task1);
+        JSONObject data = new JSONObject();
+        /**
+         * 文本垃圾检测：antispam
+         * 关键词检测：keyword
+         **/
+        data.put("scenes", Arrays.asList("antispam"));
+        data.put("tasks", tasks);
+        System.out.println(JSON.toJSONString(data, true));
+        try {
+            textScanRequest.setHttpContent(data.toJSONString().getBytes("UTF-8"), "UTF-8", FormatType.JSON);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            logger.error("==>>>>:内容检测错误",e.getMessage());
+        }
+        // 请务必设置超时时间
+        textScanRequest.setConnectTimeout(3000);
+        textScanRequest.setReadTimeout(6000);
+        try {
+            HttpResponse httpResponse = client.doAction(textScanRequest);
+            if(httpResponse.isSuccess()){
+                JSONObject scrResponse = JSON.parseObject(new String(httpResponse.getHttpContent(), "UTF-8"));
+                logger.info("==>>>>:内容检测:",JSON.toJSONString(scrResponse, true));
+                if (200 == scrResponse.getInteger("code")) {
+                    JSONArray taskResults = scrResponse.getJSONArray("data");
+                    for (Object taskResult : taskResults) {
+                        if(200 == ((JSONObject)taskResult).getInteger("code")){
+                            JSONArray sceneResults = ((JSONObject)taskResult).getJSONArray("results");
+                            for (Object sceneResult : sceneResults) {
+                                String label = ((JSONObject)sceneResult).getString("label");
+                                if(!"normal".equals(label)){
+                                    return true;
+                                }
+                            }
+                        }else{
+                            logger.error("task process fail:" + ((JSONObject)taskResult).getInteger("code"));
+                        }
+                    }
+                } else {
+                    logger.error("detect not success. code:" + scrResponse.getInteger("code"));
+                }
+            }else{
+                logger.error("response not success. status:" + httpResponse.getStatus());
+            }
+        } catch (ServerException e) {
+            e.printStackTrace();
+        } catch (ClientException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }
