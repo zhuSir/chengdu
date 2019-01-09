@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
+ * 計劃任務
  * Created by Zhugw on 2019/1/8 0008.
  */
 @Component

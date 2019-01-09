@@ -32,7 +32,7 @@
             AND cp.group_id = #{groupId}
         </if>
         <if test="content != null and content != '' ">
-            AND cp.content LIKE cancat('%',#{content},'%')
+            AND cp.content LIKE concat('%',#{content},'%')
         </if>
         <if test="userId != null and userId != 0 ">
             AND cp.user_id = #{userId}
