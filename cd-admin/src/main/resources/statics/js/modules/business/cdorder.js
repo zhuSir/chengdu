@@ -281,7 +281,20 @@ var vm = new Vue({
             });
         },
         exportOrder: function(){
-            window.open(baseURL + "business/cdorder/export");
+            var startTime = $('#startTime').val();
+            var endTime = $('#endTime').val();
+            var phone = $('#phone').val();
+            var storeName = $('#storeName').val();
+            var status = $('#status').val();
+            var payResults = $('#payResults').val();
+            var path = baseURL + "business/cdorder/export" +
+                "?startTime="+startTime+
+                '&endTime='+endTime+
+                '&phone='+phone+
+                '&storeName='+storeName+
+                '&status='+status+
+                "&payResults="+payResults;
+            window.open(path);
         }
 	},
     created: function(){

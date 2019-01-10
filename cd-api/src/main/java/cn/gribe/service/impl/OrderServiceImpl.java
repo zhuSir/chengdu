@@ -1,10 +1,10 @@
 package cn.gribe.service.impl;
 
+import cn.gribe.common.utils.DateUtils;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.wxpay.WxpayUtils;
 import cn.gribe.common.validator.Assert;
 import cn.gribe.dao.OrderDao;
-import cn.gribe.entity.AliPayOrder;
 import cn.gribe.entity.OrderEntity;
 import cn.gribe.entity.ProductEntity;
 import cn.gribe.entity.UserEntity;
@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Map;
 
 
@@ -40,10 +41,17 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     }
 
     @Override
-    public String saveAndPay(OrderEntity order, ProductEntity product,UserEntity user) {
+    public synchronized String saveAndPay(OrderEntity order, ProductEntity product,UserEntity user) {
         //验证是否有没有支付的订单
 //        Assert.state(isExistAwaitPay(user.getId()),"您当前还有未支付订单，请先支付后再下单");
         Assert.state(order.getSum() < 0,"金额错误，必须大于零元");
+        double sumPrice = product.getPrice()*order.getCount();
+        Assert.state(sumPrice != order.getSum(),"金额错误，请重新下单");
+        EntityWrapper wrapper = new EntityWrapper();
+        wrapper.like("create_time",DateUtils.format(new Date()));
+        int count = this.baseMapper.selectCount(wrapper);
+        String orderCode = DateUtils.format(new Date(),"yyyyMMddHHmmssSS")+count;
+        order.setCode(orderCode);//设置订单号
         if(OrderEntity.PAY_TYPE_ALIPAY.equals(order.getPayType())){
             //支付宝支付
 //            String remark = product.getName();//TODO 判断字数是否超出
@@ -54,7 +62,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
             Assert.state(!this.insert(order),"保存订单错误，请联系管理员","==>:保存订单错误 orderInfo:"+order.toString());
             return "success";
         }else if(OrderEntity.PAY_TYPE_WECHATPAY.equals(order.getPayType())){
-            String signString = wxpayUtils.unifiedOrder(product.getName(),order.getCode(),String.valueOf(order.getSum()));
+            String signString = wxpayUtils.unifiedOrder(product.getName(),order.getCode(),String.valueOf((int)order.getSum()*100));
             Assert.isNull(signString,"下单错误，请联系管理员");
             Assert.state(!this.insert(order),"保存订单错误，请联系管理员","==>:保存订单错误 orderInfo:"+order.toString());
             return signString;

@@ -3,6 +3,7 @@ package cn.gribe.common.utils.wxpay;
 import com.github.wxpay.sdk.WXPayConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 
 import java.io.*;
 
@@ -30,8 +31,8 @@ public class WXPayConfigImpl implements WXPayConfig {
 
     private WXPayConfigImpl() throws Exception {
         String path = "E:/workspace/chengdu/cd-api/src/main/resources/apiclient_cert.p12";
-        String certPath = "src/main/resources/apiclient_cert.p12";//证书位置
-        File file = new File(certPath);
+        String certPath = "classpath:apiclient_cert.p12";//证书位置
+        File file = ResourceUtils.getFile(certPath);
         InputStream certStream = new FileInputStream(file);
         this.certData = new byte[(int) file.length()];
         certStream.read(this.certData);

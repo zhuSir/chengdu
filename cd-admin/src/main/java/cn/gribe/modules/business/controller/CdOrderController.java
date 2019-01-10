@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import cn.gribe.common.CommonUtils;
 import cn.gribe.common.utils.DateUtils;
 import cn.gribe.common.utils.ExcelUtil;
 import cn.gribe.common.utils.PageUtils;
@@ -17,8 +18,9 @@ import cn.gribe.modules.business.service.CdStoreService;
 import cn.gribe.modules.sys.entity.SysDictEntity;
 import cn.gribe.modules.sys.entity.SysUserEntity;
 import cn.gribe.modules.sys.service.SysDictService;
+import cn.gribe.modules.sys.service.SysUserService;
 import cn.gribe.modules.sys.shiro.ShiroUtils;
-import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.plugins.Page;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -49,6 +51,12 @@ public class CdOrderController {
     @Autowired
     private CdStoreService cdStoreService;
 
+    @Autowired
+    private CommonUtils commonUtils;
+
+    @Autowired
+    private SysUserService sysUserService;
+
     /**
      * 信息
      */
@@ -76,16 +84,21 @@ public class CdOrderController {
     @RequestMapping("/list")
     @RequiresPermissions("business:cdorder:list")
     public R list(@RequestParam Map<String, Object> params) {
-        //,Integer page, Integer limit, String phone, String storeName, String startTime, String endTime, Integer status
         SysUserEntity user = ShiroUtils.getUserEntity();
         //判断如果用户有关联店铺则给与他查询店铺的信息
         StoreEntity storeEntity = cdStoreService.queryByUserId(user.getUserId());
-        if (storeEntity != null) {
-            params.put("storeId", storeEntity.getId());
+        //判断如果用户有关联店铺则给与他查询店铺的信息
+        user = sysUserService.queryByRoleNameAndUserId("商家",user.getUserId());
+        PageUtils page = new PageUtils(new Page<>());
+        if(user != null){
+            if(storeEntity != null){
+                params.put("storeId",storeEntity.getId());
+                page = cdOrderService.queryPage(params);
+            }
+        }else{
+            page = cdOrderService.queryPage(params);
         }
-        PageUtils res = cdOrderService.queryPage(params);
-        System.out.println("res:" + JSONObject.toJSONString(res));
-        return R.ok().put("page", res);
+        return R.ok().put("page", page);
     }
 
 
@@ -197,8 +210,7 @@ public class CdOrderController {
      */
     @RequestMapping(value = "/export")
     @ResponseBody
-    public void export(HttpServletResponse response) throws Exception {
-
+    public void export(@RequestParam Map<String, Object> params,HttpServletResponse response) throws Exception {
         SysUserEntity user = ShiroUtils.getUserEntity();
         //判断如果用户有关联店铺则给与他查询店铺的信息
         StoreEntity storeEntity = cdStoreService.queryByUserId(user.getUserId());
@@ -207,7 +219,8 @@ public class CdOrderController {
             storeId = storeEntity.getId();
         }
         //获取数据
-        List<OrderEntity> list = cdOrderService.selectByParams(storeId);
+        params.put("storeId",storeId);
+        List<OrderEntity> list = cdOrderService.selectByParams(params);
         //excel标题
         String[] title = {"订单号", "订单创建时间", "商品名称", "店铺名称",
                 "订单状态","收货人姓名","收货人手机号",

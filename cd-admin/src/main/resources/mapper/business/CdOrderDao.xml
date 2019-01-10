@@ -56,10 +56,27 @@
     <select id="selectByParams" parameterType="map"  resultMap="orderMap">
         select  o.*,s.`name` store_name,p.`name` product_name
         FROM cd_order o,cd_store s,cd_product p
-        WHERE o.store_id = s.id
-        AND o.product_id = p.id
+        WHERE o.store_id = s.id AND o.product_id = p.id
+        <if test="phone != null and phone != '' ">
+            AND o.phone LIKE CONCAT('%',#{phone},'%')
+        </if>
+        <if test="storeName != null and storeName != '' ">
+            AND s.`name` LIKE CONCAT('%',#{storeName},'%')
+        </if>
         <if test="storeId != null and storeId != '' ">
-            AND o.store_id = #{storeId}
+            AND s.id = #{storeId}
+        </if>
+        <if test="status != null and status != '' ">
+            AND o.state = #{status}
+        </if>
+        <if test="startTime != null and startTime != '' ">
+            AND o.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != '' ">
+            AND o.create_time &lt;= #{endTime}
+        </if>
+        <if test="payResults != null and payResults != '' ">
+            AND o.pay_status = #{payResults}
         </if>
         ORDER BY o.create_time DESC
     </select>

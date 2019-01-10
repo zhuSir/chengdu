@@ -100,7 +100,6 @@ public class ApiOrderController {
     public R save(OrderEntity order, @LoginUser UserEntity user){
         ValidatorUtils.validateEntity(order);//验证数据
         Assert.isNull(order,"数据错误，请刷新重试");
-        order.setCode(UUID.randomUUID().toString());
         order.setUserId(user.getId());
         Assert.isNull(order.getProductId(),"商品错误，请刷新重试");
         ProductEntity product = productService.selectById(order.getProductId());
@@ -180,9 +179,9 @@ public class ApiOrderController {
         Map<String,Object> status = null;
         //查询是否微信支付
         if(OrderEntity.PAY_TYPE_WECHATPAY.equals(orderEntity.getPayType())){
-             status = alipayUtils.queryAliPayOrder(orderCode);
-        }else{
             status = wxPayUtil.queryOrder(orderCode);
+        }else{
+            status = alipayUtils.queryAliPayOrder(orderCode);
         }
         if(status != null){
             orderEntity.setPayStatus((Integer) status.get("status"));

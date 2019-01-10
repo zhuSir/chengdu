@@ -22,8 +22,9 @@ import cn.gribe.modules.sys.entity.SysDictEntity;
 import cn.gribe.modules.sys.entity.SysUserEntity;
 import cn.gribe.modules.sys.service.SysDictService;
 import cn.gribe.common.validator.ValidatorUtils;
+import cn.gribe.modules.sys.service.SysUserService;
 import cn.gribe.modules.sys.shiro.ShiroUtils;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
+import com.baomidou.mybatisplus.plugins.Page;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,6 +48,9 @@ public class CdProductController {
 
     @Autowired
     private CdStoreService storeService;
+
+    @Autowired
+    private SysUserService sysUserService;
 
     /**
      * 信息
@@ -86,10 +90,18 @@ public class CdProductController {
         SysUserEntity user = ShiroUtils.getUserEntity();
         //判断如果用户有关联店铺则给与他查询店铺的信息
         StoreEntity storeEntity = storeService.queryByUserId(user.getUserId());
-        if(storeEntity != null){
-            params.put("storeId",storeEntity.getId());
+        //判断如果用户有关联店铺则给与他查询店铺的信息
+        user = sysUserService.queryByRoleNameAndUserId("商家",user.getUserId());
+        PageUtils page = new PageUtils(new Page<>());
+        if(user != null){
+            if(storeEntity != null){
+                params.put("storeId",storeEntity.getId());
+                page = cdProductService.queryPage(params);
+            }
+        }else{
+            page = cdProductService.queryPage(params);
         }
-        PageUtils page = cdProductService.queryPage(params);
+//        PageUtils page = cdProductService.queryPage(params);
         return R.ok().put("page", page);
     }
 

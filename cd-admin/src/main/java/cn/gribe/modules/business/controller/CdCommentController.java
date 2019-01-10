@@ -1,19 +1,19 @@
 package cn.gribe.modules.business.controller;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import cn.gribe.common.utils.PageUtils;
-import cn.gribe.common.validator.Assert;
 import cn.gribe.common.validator.ValidatorUtils;
 import cn.gribe.entity.StoreEntity;
 import cn.gribe.modules.business.service.CdStoreService;
 import cn.gribe.modules.sys.entity.SysDictEntity;
 import cn.gribe.modules.sys.entity.SysUserEntity;
 import cn.gribe.modules.sys.service.SysDictService;
+import cn.gribe.modules.sys.service.SysUserService;
 import cn.gribe.modules.sys.shiro.ShiroUtils;
+import com.baomidou.mybatisplus.plugins.Page;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +43,9 @@ public class CdCommentController {
     @Autowired
     private CdStoreService storeService;
 
+    @Autowired
+    private SysUserService sysUserService;
+
     @RequestMapping("/init")
     public R init(){
         R r = R.ok();
@@ -64,10 +67,18 @@ public class CdCommentController {
         SysUserEntity user = ShiroUtils.getUserEntity();
         //判断如果用户有关联店铺则给与他查询店铺的信息
         StoreEntity storeEntity = storeService.queryByUserId(user.getUserId());
-        if(storeEntity != null){
-            params.put("storeId",storeEntity.getId());
+        //判断如果用户有关联店铺则给与他查询店铺的信息
+        user = sysUserService.queryByRoleNameAndUserId("商家",user.getUserId());
+        PageUtils page = new PageUtils(new Page<>());
+        if(user != null){
+            if(storeEntity != null){
+                params.put("storeId",storeEntity.getId());
+                page = commentService.queryPage(params);
+            }
+        }else{
+            page = commentService.queryPage(params);
         }
-        PageUtils page = commentService.queryPage(params);
+//        PageUtils page = commentService.queryPage(params);
         return R.ok().put("page",page);
     }
 

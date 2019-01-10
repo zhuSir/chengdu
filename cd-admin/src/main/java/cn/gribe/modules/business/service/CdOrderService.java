@@ -20,6 +20,6 @@ public interface CdOrderService extends IService<OrderEntity> {
 
     void refundOrder(Integer orderId);
 
-    List<OrderEntity> selectByParams(Integer storeId);
+    List<OrderEntity> selectByParams(Map<String, Object> params);
 }
 
