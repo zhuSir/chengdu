@@ -100,7 +100,17 @@ var vm = new Vue({
             valueName: "tags[0].value",
             sortName: "tags[0].sort"
 		}],
-        attributeTypeList:[]
+        attributeTypeList:[],
+        priceMark:{
+            // '0-10-14': '生日'
+            // ,'0-12-31': '跨年' //每年的日期
+            // ,'0-0-10': '工资' //每月某天
+            // ,'0-0-15': '月中'
+            // ,'2017-8-15': '' //如果为空字符，则默认显示数字+徽章
+            // ,'2099-10-14': '呵呵'
+        },
+        specialPriceList:[],
+        current:''
 	},
 	methods: {
 		query: function () {
@@ -143,7 +153,6 @@ var vm = new Vue({
 			if(ids == null){
 				return ;
 			}
-			
 			confirm('确定要删除选中的记录？', function(){
 				$.ajax({
 					type: "POST",
@@ -167,7 +176,22 @@ var vm = new Vue({
                 vm.cdProduct = r.cdProduct;
                 if(r.tags != null && r.tags != ''){
                     vm.tags = r.tags;
+                    vm.specialPriceList = r.specialPriceList;
+                    //拼接json
+                    var specialMark = "{";
+                    for(var i =0;i<vm.specialPriceList.length;i++){
+                        var specialObj = vm.specialPriceList[i];
+                        var strDate = specialObj.strDate;
+                        var price = specialObj.price;
+                        var str = "'"+strDate+"':'',";
+                        specialMark+=str;
+                    }
+                    specialMark = specialMark.substr(0,specialMark.length-1);
+                    specialMark += "}"
+                    vm.priceMark = eval('(' + specialMark + ')');
+                    vm.initSpecialTime();
                 }
+                console.log(vm.priceMark);
             });
 		},
 		reload: function (event) {
@@ -208,7 +232,70 @@ var vm = new Vue({
         	vm.tags.push(itemObj);
         	console.log(vm.tags);
         	return false;
-		}
+		},
+        getSpecialPrice : function(list,key){
+            for(var i=0;i<list.length;i++){
+                var obj = list[i];
+                if(obj.strDate == key){
+                    return obj.price;
+                }
+            }
+            return null;
+        },
+        setSpecialPrice : function(list,key,value){
+            for(var i=0;i<list.length;i++){
+                var obj = list[i];
+                if(obj.strDate == key){
+                    obj.price = value;
+                    list[i] = obj;
+                    return list;
+                }
+            }
+            var newObj = {
+                strDate : key,
+                price : value
+            };
+            list.push(newObj);
+            return list;
+        },
+        initSpecialTime : function(){
+            //时间控件初始化
+            laydate.render({
+                elem: '#specialPrice',
+                mark: vm.priceMark,
+                position: 'static',
+                showBottom: false,
+                done: function(value, date){
+                    vm.current = value;
+                    var val = vm.getSpecialPrice(vm.specialPriceList,value);
+                    if(val != null){
+                        $('#specialPriceValue').val(val);
+                    }else{
+                        $('#specialPriceValue').val(0);
+                    }
+                }
+            });
+        },
+        addSpecialTime : function(){
+            var specialPrice = $('#specialPriceValue').val();
+            vm.specialPriceList = vm.setSpecialPrice(vm.specialPriceList,vm.current,specialPrice);
+            vm.specialPriceList[0].productId=vm.cdProduct.id;
+            $.ajax({
+                type: "POST",
+                url: baseURL + "business/cdproduct/save/price",
+                contentType: "application/json",
+                data: JSON.stringify(vm.specialPriceList),
+                success: function(r){
+                    if(r.code == 0){
+                        alert('操作成功', function(index){
+                            $("#jqGrid").trigger("reloadGrid");
+                        });
+                    }else{
+                        alert(r.msg);
+                    }
+                }
+            });
+        }
     },
     created: function(){
         this.init();

@@ -10,12 +10,11 @@ import cn.gribe.common.CommonUtils;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.common.validator.Assert;
+import cn.gribe.entity.*;
 import cn.gribe.entity.ProductEntity;
-import cn.gribe.entity.ProductEntity;
-import cn.gribe.entity.ProductTagEntity;
-import cn.gribe.entity.StoreEntity;
 import cn.gribe.modules.business.service.CdProductService;
 import cn.gribe.modules.business.service.CdStoreService;
+import cn.gribe.modules.business.service.ProductSpecialPriceService;
 import cn.gribe.modules.business.service.ProductTagService;
 import cn.gribe.modules.oss.cloud.OSSFactory;
 import cn.gribe.modules.sys.entity.SysDictEntity;
@@ -52,6 +51,9 @@ public class CdProductController {
     @Autowired
     private SysUserService sysUserService;
 
+    @Autowired
+    private ProductSpecialPriceService productSpecialPriceService;
+
     /**
      * 信息
      */
@@ -77,7 +79,6 @@ public class CdProductController {
         if(attributeTypeList != null){
             r.put("attributeTypeList",attributeTypeList);
         }
-
         return r;
     }
 
@@ -105,7 +106,6 @@ public class CdProductController {
         return R.ok().put("page", page);
     }
 
-
     /**
      * 信息
      */
@@ -115,7 +115,9 @@ public class CdProductController {
         Assert.isNull(id,"数据错误，请刷新重试！");
         ProductEntity cdProduct = cdProductService.selectById(id);
         List<ProductTagEntity> tags = cdProductService.queryTags(id);
+        List<ProductSpecialPrice> priceList = productSpecialPriceService.selectListByProductId(id);
         R r = R.ok().put("cdProduct", cdProduct);
+        r.put("specialPriceList",priceList);
         r.put("tags",tags);
         return r;
     }
@@ -186,7 +188,22 @@ public class CdProductController {
     @RequiresPermissions("business:cdproduct:delete")
     public R delete(@RequestBody Integer[] ids){
         cdProductService.deleteBatchIds(Arrays.asList(ids));
+        return R.ok();
+    }
 
+    /**
+     * save special price
+     */
+    @RequestMapping("/save/price")
+    public R saveSpecialPrice(@RequestBody ProductSpecialPrice[] prices){
+        if(prices != null && prices.length > 0){
+            Integer productId = prices[0].getProductId();
+            for(ProductSpecialPrice specialPrice : prices){
+                specialPrice.transDate();
+                specialPrice.setProductId(productId);
+            }
+            productSpecialPriceService.insertOrUpdateBatch(Arrays.asList(prices));
+        }
         return R.ok();
     }
 

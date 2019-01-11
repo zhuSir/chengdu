@@ -19,7 +19,7 @@ public interface OrderService extends IService<OrderEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    String saveAndPay(OrderEntity order, ProductEntity productEntity,UserEntity user);
+    Object saveAndPay(OrderEntity order, ProductEntity productEntity,UserEntity user);
 
     OrderEntity queryByCode(String orderCode);
 

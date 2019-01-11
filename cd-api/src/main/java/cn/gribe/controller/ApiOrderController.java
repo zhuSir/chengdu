@@ -110,7 +110,7 @@ public class ApiOrderController {
         order.setState(OrderEntity.STATE_AWAIT_PAY);
         order.setCreateTime(new Date());
         order.setUpdateTime(new Date());
-        String results = orderService.saveAndPay(order,product,user);
+        Object results = orderService.saveAndPay(order,product,user);
         if(results == null){
             return R.error("支付下单失败，请联系管理员");
         }

@@ -40,7 +40,7 @@ public class WxpayUtils {
      * @param tradeNo
      * @param amt 金额 分 单位
      */
-    public String unifiedOrder(String subject, String tradeNo, String amt) {
+    public Map unifiedOrder(String subject, String tradeNo, String amt) {
         try {
             init();
             Map<String, String> data = new HashMap<String, String>();
@@ -52,6 +52,7 @@ public class WxpayUtils {
             data.put("spbill_create_ip", config.getIp());
             data.put("notify_url", config.getNotifyUrl());
             data.put("trade_type", "APP");
+            logger.info("===>>>:微信下單參數:"+JSONObject.toJSONString(data));
             Map<String, String> resp = wxpay.unifiedOrder(data);
             logger.info("===>>>:微信下单成功 "+JSONObject.toJSONString(resp));
             String returnCode = resp.get("return_code");
@@ -71,9 +72,9 @@ public class WxpayUtils {
                 reqData.put("noncestr", resp.get("nonce_str"));
                 reqData.put("timestamp", String.valueOf(System.currentTimeMillis()));
                 reqData.put("package", "Sign=WXPay");
-                String signString = WXPayUtil.generateSignature(reqData,config.getKey());
-                logger.info("===>>>:微信支付统一下单后签名:"+signString);
-                return signString;
+                //String signString = WXPayUtil.generateSignature(reqData,config.getKey());
+                //logger.info("===>>>:微信支付统一下单后签名:"+signString);
+                return resp;
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -2,11 +2,8 @@ package cn.gribe.common;
 
 import cn.gribe.common.validator.Assert;
 import cn.gribe.common.validator.ValidatorImgUtils;
-import cn.gribe.modules.business.service.CdStoreService;
 import cn.gribe.modules.oss.cloud.CloudStorageConfig;
 import cn.gribe.modules.oss.cloud.OSSFactory;
-import cn.gribe.modules.sys.service.SysUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 

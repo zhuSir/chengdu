@@ -78,7 +78,6 @@ function getSelectedRows() {
     	alert("请选择一条记录");
     	return ;
     }
-    
     return grid.getGridParam("selarrrow");
 }
 

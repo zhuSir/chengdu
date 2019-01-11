@@ -54,7 +54,7 @@ public class TokenServiceImpl extends ServiceImpl<TokenDao, TokenEntity> impleme
 		tokenEntity.setUserId(userId);
 		tokenEntity.setToken(token);
 		tokenEntity.setUpdateTime(now);
-		//tokenEntity.setExpireTime(expireTime);
+		tokenEntity.setExpireTime(expireTime);
 		this.insertOrUpdate(tokenEntity);
 
 		return tokenEntity;

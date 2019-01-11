@@ -2,9 +2,11 @@ package cn.gribe.modules.business.service.impl;
 
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.Query;
+import cn.gribe.entity.ProductSpecialPrice;
 import cn.gribe.entity.ProductTagEntity;
 import cn.gribe.modules.business.dao.CdProductDao;
 import cn.gribe.entity.ProductEntity;
+import cn.gribe.modules.business.dao.ProductSpecialPriceDao;
 import cn.gribe.modules.business.dao.ProductTagDao;
 import cn.gribe.modules.business.service.CdProductService;
 import com.alibaba.fastjson.JSONObject;
@@ -25,6 +27,9 @@ public class CdProductServiceImpl extends ServiceImpl<CdProductDao, ProductEntit
 
     @Autowired
     private ProductTagDao tagDao;
+
+    @Autowired
+    private ProductSpecialPriceDao productSpecialPriceDao;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -61,6 +66,13 @@ public class CdProductServiceImpl extends ServiceImpl<CdProductDao, ProductEntit
         wrapper.eq("product_id",productId);
         List<ProductTagEntity> tags = tagDao.selectList(wrapper);
         return tags;
+    }
+
+    @Override
+    public void saveOrUpdateBySpecialPrice(List<ProductSpecialPrice> prices) {
+//        for(ProductSpecialPrice price : prices){
+//            productSpecialPriceDao
+//        }
     }
 
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * Created by Zhugw on 2018/11/4 0004.
  */
 @TableName("cd_product")
-public class ProductEntity {
+public class ProductEntity implements Serializable {
 
     @TableId
     private Integer id;
@@ -37,7 +38,6 @@ public class ProductEntity {
     //运费
     @NotBlank(message="产品运费不能为空")
     private String freight;
-
 
     //缩略图
     private String shortImg;
@@ -77,6 +77,12 @@ public class ProductEntity {
      * 销量
      */
     private int sales;
+
+    /**
+     * special price list
+     */
+    @TableField(exist = false)
+    private List<ProductSpecialPrice> specialPriceList;
 
     //标签
     @TableField(exist = false)
@@ -224,5 +230,13 @@ public class ProductEntity {
 
     public void setSales(int sales) {
         this.sales = sales;
+    }
+
+    public List<ProductSpecialPrice> getSpecialPriceList() {
+        return specialPriceList;
+    }
+
+    public void setSpecialPriceList(List<ProductSpecialPrice> specialPriceList) {
+        this.specialPriceList = specialPriceList;
     }
 }
