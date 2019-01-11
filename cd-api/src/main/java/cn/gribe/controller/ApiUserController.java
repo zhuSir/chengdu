@@ -164,7 +164,7 @@ public class ApiUserController {
     }
 
     /**
-     * 修改密码成功
+     * 修改密码
      * @param phone
      * @param password
      * @param validateCode
@@ -179,6 +179,8 @@ public class ApiUserController {
         }
         UserEntity user = userService.queryByMobile(phone);
         Assert.isNull(user, "该手机号未注册");
+        Assert.isNull(password,"密码请输入正确格式");
+        Assert.state(password.length() < 6,"密码必须6位数以上");
         //注册
         user.setRealPassword(password);
         user.setPassword(DigestUtils.sha256Hex(password));

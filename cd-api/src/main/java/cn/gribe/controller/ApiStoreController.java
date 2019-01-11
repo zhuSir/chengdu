@@ -6,9 +6,11 @@ import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.common.validator.Assert;
 import cn.gribe.entity.CollectEntity;
+import cn.gribe.entity.CommentEntity;
 import cn.gribe.entity.StoreEntity;
 import cn.gribe.entity.UserEntity;
 import cn.gribe.service.*;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,8 +80,11 @@ public class ApiStoreController {
         PageUtils productList = productService.queryPage(params);
         r.put("productList",productList);
         //获取评论列表
-        PageUtils commentList = commentService.queryPage(params);
-        r.put("commentList",commentList);
+        EntityWrapper wrapper = new EntityWrapper();
+        wrapper.eq("store_id",store.getId());
+        wrapper.orderBy("create_time",false);
+        CommentEntity comment = commentService.selectOne(wrapper);
+        r.put("comment",comment);
         return r;
     }
 

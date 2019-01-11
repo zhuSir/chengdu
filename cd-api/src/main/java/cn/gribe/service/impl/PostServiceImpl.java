@@ -25,6 +25,9 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private CollectService collectService;
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         Page<PostEntity> page = new Query<PostEntity>(params).getPage();// 当前页，总条数 构造 page 对象
@@ -40,6 +43,16 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
             int count = commentService.selectCount(wrapper);
             postEntity.setComments(count);
             posts.set(i,postEntity);
+            postEntity.setCollected(false);
+            if(userId != null){
+                EntityWrapper collWrapper = new EntityWrapper();
+                collWrapper.eq("user_id",userId);
+                collWrapper.eq("post_id",postEntity.getId());
+                int isExc = collectService.selectCount(collWrapper);
+                if(isExc > 0){
+                    postEntity.setCollected(true);
+                }
+            }
         }
         page.setRecords(posts);
         return new PageUtils(page);

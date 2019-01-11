@@ -87,6 +87,7 @@ public class CommentEntity implements Serializable {
 	/**
 	 * 评论列表
 	 */
+	@TableField(exist = false)
 	List<CommentEntity> commentEntityList;
 
 	/**
