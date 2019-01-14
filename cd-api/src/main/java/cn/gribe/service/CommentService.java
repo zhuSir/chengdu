@@ -16,6 +16,8 @@ public interface CommentService extends IService<CommentEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
+    PageUtils queryPostCommentPage(Map<String, Object> params);
+
     PageUtils queryPageByUserId(Map<String, Object> params,Integer userId);
 
     void save(MultipartFile[] files, CommentEntity comment, UserEntity user) throws IOException;

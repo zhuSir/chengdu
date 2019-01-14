@@ -18,6 +18,7 @@ import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.UnsupportedEncodingException;
@@ -28,7 +29,9 @@ public class ValidatorImgUtils {
     public static final Logger logger = LoggerFactory.getLogger(ValidatorImgUtils.class);
 
     public static boolean validateImg(String accessKeyId, String accessKeySecret, MultipartFile[] files){
-
+        if(files != null){
+            return false;
+        }
         IClientProfile profile = DefaultProfile
                 .getProfile("cn-shanghai", accessKeyId, accessKeySecret);
         try {
@@ -152,6 +155,9 @@ public class ValidatorImgUtils {
      * @throws Exception
      */
     public static boolean validateTxt(String accessKeyId, String accessKeySecret, String content){
+        if(StringUtils.isEmpty(content)){
+            return false;
+        }
         //请替换成您自己的accessKeyId、accessKeySecret
         IClientProfile profile = DefaultProfile.getProfile("cn-shanghai", accessKeyId, accessKeySecret);
         try {

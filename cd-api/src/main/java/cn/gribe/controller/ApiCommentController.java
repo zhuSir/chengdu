@@ -40,6 +40,17 @@ public class ApiCommentController {
     }
 
     /**
+     * 帖子列表评论
+     */
+    @Login
+    @RequestMapping("/post/list")
+    public R onlyPostList(@RequestParam Map<String, Object> params,@LoginUser UserEntity user){
+        params.put("userId",user.getId());
+        PageUtils page = commentService.queryPage(params);
+        return R.ok().put("page", page);
+    }
+
+    /**
      * 信息
      */
     @RequestMapping("/info/{id}")

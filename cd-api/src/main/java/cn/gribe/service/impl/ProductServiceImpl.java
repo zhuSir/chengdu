@@ -2,9 +2,10 @@ package cn.gribe.service.impl;
 
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.dao.ProductDao;
+import cn.gribe.dao.ProductSpecialPriceDao;
 import cn.gribe.dao.ProductTagDao;
-import cn.gribe.entity.OrderEntity;
 import cn.gribe.entity.ProductEntity;
+import cn.gribe.entity.ProductSpecialPrice;
 import cn.gribe.service.OrderService;
 import cn.gribe.service.ProductService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -15,6 +16,7 @@ import cn.gribe.entity.ProductTagEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductDao, ProductEntity> i
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private ProductSpecialPriceDao productSpecialPriceDao;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -49,5 +54,15 @@ public class ProductServiceImpl extends ServiceImpl<ProductDao, ProductEntity> i
         }
         return new PageUtils(page);
     }
+
+    @Override
+    public List<ProductSpecialPrice> selectSpecialPriceList(Date startTime,Integer productId) {
+        EntityWrapper wrapper = new EntityWrapper();
+        wrapper.ge("date",startTime);
+        wrapper.eq("product_id",productId);
+        List<ProductSpecialPrice> res = productSpecialPriceDao.selectList(wrapper);
+        return res;
+    }
+
 
 }

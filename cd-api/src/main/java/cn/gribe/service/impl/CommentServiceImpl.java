@@ -6,6 +6,7 @@ import cn.gribe.common.utils.Query;
 import cn.gribe.common.utils.oss.OSSFactory;
 import cn.gribe.entity.UserEntity;
 import cn.gribe.service.CommentService;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import cn.gribe.dao.CommentDao;
@@ -34,6 +35,29 @@ public class CommentServiceImpl extends ServiceImpl<CommentDao, CommentEntity> i
         Object name = params.get("name") == null ? null : params.get("name");
         Object userId = params.get("userId") == null ? null : params.get("userId");
         List<CommentEntity> res = this.baseMapper.selectPage(page,String.valueOf(postId),storeId,name,userId);
+        if(res != null && res.size() > 0){
+            //迭代遍历子数据
+            res = querySubComment(res,100);
+        }
+        page.setRecords(res);
+        return new PageUtils(page);
+    }
+
+    /**
+     * 帖子评论列表
+     * @param params
+     * @return
+     */
+    @Override
+    public PageUtils queryPostCommentPage(Map<String, Object> params) {
+        Page<CommentEntity> page = new Query<CommentEntity>(params).getPage();// 当前页，总条数 构造 page 对象
+        Object userId = params.get("userId") == null ? null : params.get("userId");
+        EntityWrapper wrapper = new EntityWrapper();
+        wrapper.isNotNull("post_id");
+        if(userId != null){
+            wrapper.eq("user_id",userId);
+        }
+        List<CommentEntity> res = this.baseMapper.selectPage(page,wrapper);
         if(res != null && res.size() > 0){
             //迭代遍历子数据
             res = querySubComment(res,100);

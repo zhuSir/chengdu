@@ -47,7 +47,9 @@ public class StoreTask {
 			for(CommentEntity comment : commentList){
 				sumScore+=Integer.valueOf(comment.getScore());
 			}
-			store.setScore(sumScore/commentList.size());
+			if(sumScore > 0){
+				store.setScore(sumScore/commentList.size());
+			}
 			//销量
 			wrapper.eq("state", OrderEntity.STATE_FINISHED);//完成状态
 			int orderCount = orderService.selectCount(wrapper);

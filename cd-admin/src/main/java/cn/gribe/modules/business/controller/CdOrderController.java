@@ -222,7 +222,7 @@ public class CdOrderController {
         params.put("storeId",storeId);
         List<OrderEntity> list = cdOrderService.selectByParams(params);
         //excel标题
-        String[] title = {"订单号", "订单创建时间", "商品名称", "店铺名称",
+        String[] title = {"订单号", "订单创建时间", "商品名称", "店铺名称","用户手机号",
                 "订单状态","收货人姓名","收货人手机号",
                 "收货地址","数量","价格","支付类型","支付结果"
         };
@@ -238,14 +238,15 @@ public class CdOrderController {
             content[i][1] = DateUtils.format(obj.getCreateTime());
             content[i][2] = obj.getProductName();
             content[i][3] = obj.getStoreName();
-            content[i][4] = getDistValue("order_status",String.valueOf(obj.getState()));
-            content[i][5] = String.valueOf(obj.getUserName());
-            content[i][6] = String.valueOf(obj.getPhone());
-            content[i][7] = String.valueOf(obj.getAddress());
-            content[i][8] = String.valueOf(obj.getCount());
-            content[i][9] = String.valueOf(obj.getSum());
-            content[i][10] = getDistValue("order_pay_type",String.valueOf(obj.getPayType()));
-            content[i][11] = String.valueOf(obj.getPayDescription());
+            content[i][4] = obj.getUserPhone();
+            content[i][5] = getDistValue("order_status",String.valueOf(obj.getState()));
+            content[i][6] = String.valueOf(obj.getUserName());
+            content[i][7] = String.valueOf(obj.getPhone());
+            content[i][8] = String.valueOf(obj.getAddress());
+            content[i][9] = String.valueOf(obj.getCount());
+            content[i][10] = String.valueOf(obj.getSum());
+            content[i][11] = getDistValue("order_pay_type",String.valueOf(obj.getPayType()));
+            content[i][12] = String.valueOf(obj.getPayDescription());
         }
 
         //创建HSSFWorkbook

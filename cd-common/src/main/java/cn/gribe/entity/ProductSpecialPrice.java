@@ -37,6 +37,11 @@ public class ProductSpecialPrice implements Serializable {
      */
     private double price;
 
+    /**
+     * 库存
+     */
+    private int inventory;
+
     @TableField(exist = false)
     private String strDate;
 
@@ -93,5 +98,13 @@ public class ProductSpecialPrice implements Serializable {
 
     public void setStrDate(String strDate) {
         this.strDate = strDate;
+    }
+
+    public int getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(int inventory) {
+        this.inventory = inventory;
     }
 }

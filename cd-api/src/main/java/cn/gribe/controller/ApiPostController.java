@@ -57,7 +57,27 @@ public class ApiPostController {
      * @return
      */
     @RequestMapping("/list")
-    public R list(@RequestParam Map<String, Object> params,@LoginUser UserEntity user){
+    public R list(@RequestParam Map<String, Object> params){
+        Object groupId = params.get("groupId");
+        //Assert.isNull(groupId,"参数错误，请联系管理员");
+        R r = R.ok();
+        if(groupId != null){
+            GroupEntity groupEntity = groupService.selectById((String) groupId);
+            r.put("group",groupEntity);
+        }
+        PageUtils page = postService.queryPage(params);
+        r.put("page", page);
+        return r;
+    }
+
+    /**
+     * 我的列表
+     * @param params
+     * @return
+     */
+    @Login
+    @RequestMapping("/my/list")
+    public R myList(@RequestParam Map<String, Object> params,@LoginUser UserEntity user){
         Object groupId = params.get("groupId");
         //Assert.isNull(groupId,"参数错误，请联系管理员");
         R r = R.ok();
@@ -93,7 +113,7 @@ public class ApiPostController {
         if(user != null){
             CollectEntity collectEntity = new CollectEntity();
             collectEntity.setUserId(user.getId());
-            collectEntity.setStoreId(post.getId());
+            collectEntity.setPostId(post.getId());
             collectEntity = collectService.selectByParams(collectEntity);
             if(collectEntity != null){
                 post.setCollected(true);

@@ -27,9 +27,9 @@ public class StoreServiceImpl extends ServiceImpl<StoreDao, StoreEntity> impleme
             String lat = (String) params.get("lat");
             wrapper.orderBy("("+lon+" - lon)+("+lat+" - lat)",true);
         }else if("2".equals(params.get("type"))){
-            wrapper.orderBy("score",true);
+            wrapper.orderBy("score",false);
         }else if("3".equals(params.get("type"))){
-            wrapper.orderBy("sales",true);
+            wrapper.orderBy("sales",false);
         }
         Object storeType = params.get("storeType");
         if(storeType != null){

@@ -23,12 +23,14 @@
         <result property="productName" column="product_name"/>
         <result property="expressCompany" column="express_company"/>
         <result property="expressCode" column="express_code"/>
+        <result property="userPhone" column="user_phone"/>
     </resultMap>
 
     <select id="selectPage" parameterType="map"  resultMap="orderMap">
-        select  o.*,s.`name` store_name,p.`name` product_name
-        FROM cd_order o,cd_store s,cd_product p
+        select  o.*,s.`name` store_name,p.`name` product_name,u.phone as user_phone
+        FROM cd_order o,cd_store s,cd_product p,cd_user u
         WHERE o.store_id = s.id AND o.product_id = p.id
+        AND o.user_id = u.id
         <if test="phone != null and phone != '' ">
             AND o.phone LIKE CONCAT('%',#{phone},'%')
         </if>
@@ -54,9 +56,10 @@
     </select>
 
     <select id="selectByParams" parameterType="map"  resultMap="orderMap">
-        select  o.*,s.`name` store_name,p.`name` product_name
-        FROM cd_order o,cd_store s,cd_product p
+        select  o.*,s.`name` store_name,p.`name` product_name,u.phone as user_phone
+        FROM cd_order o,cd_store s,cd_product p,cd_user u
         WHERE o.store_id = s.id AND o.product_id = p.id
+        AND o.user_id = u.id
         <if test="phone != null and phone != '' ">
             AND o.phone LIKE CONCAT('%',#{phone},'%')
         </if>

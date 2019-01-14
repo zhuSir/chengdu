@@ -186,7 +186,9 @@ var vm = new Vue({
                         var str = "'"+strDate+"':'',";
                         specialMark+=str;
                     }
-                    specialMark = specialMark.substr(0,specialMark.length-1);
+                    if(specialMark.indexOf(",") != -1 ){
+                        specialMark = specialMark.substr(0,specialMark.length-1);
+                    }
                     specialMark += "}"
                     vm.priceMark = eval('(' + specialMark + ')');
                     vm.initSpecialTime();
@@ -237,7 +239,7 @@ var vm = new Vue({
             for(var i=0;i<list.length;i++){
                 var obj = list[i];
                 if(obj.strDate == key){
-                    return obj.price;
+                    return obj;
                 }
             }
             return null;
@@ -258,7 +260,24 @@ var vm = new Vue({
             list.push(newObj);
             return list;
         },
+        setSpecialInventory : function(list,key,value){
+            for(var i=0;i<list.length;i++){
+                var obj = list[i];
+                if(obj.strDate == key){
+                    obj.inventory = value;
+                    list[i] = obj;
+                    return list;
+                }
+            }
+            var newObj = {
+                strDate : key,
+                inventory : value
+            };
+            list.push(newObj);
+            return list;
+        },
         initSpecialTime : function(){
+            $("#specialPrice").html("");
             //时间控件初始化
             laydate.render({
                 elem: '#specialPrice',
@@ -269,16 +288,20 @@ var vm = new Vue({
                     vm.current = value;
                     var val = vm.getSpecialPrice(vm.specialPriceList,value);
                     if(val != null){
-                        $('#specialPriceValue').val(val);
+                        $('#specialPriceValue').val(val.price);
+                        $('#specialInventoryValue').val(val.inventory);
                     }else{
                         $('#specialPriceValue').val(0);
+                        $('#specialInventoryValue').val(0);
                     }
                 }
             });
         },
         addSpecialTime : function(){
             var specialPrice = $('#specialPriceValue').val();
+            var specialInventory = $('#specialInventoryValue').val();
             vm.specialPriceList = vm.setSpecialPrice(vm.specialPriceList,vm.current,specialPrice);
+            vm.specialPriceList = vm.setSpecialInventory(vm.specialPriceList,vm.current,specialInventory);
             vm.specialPriceList[0].productId=vm.cdProduct.id;
             $.ajax({
                 type: "POST",

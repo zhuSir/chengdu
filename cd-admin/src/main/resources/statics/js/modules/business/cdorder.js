@@ -6,6 +6,7 @@ $(function () {
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true,hidden:true },
 			{ label: '订单编号', name: 'code', index: 'code', width: 80 },
             { label: '商家名称', name: 'storeName', index: 'store_name', width: 80 },
+            { label: '用户手机号', name: 'userPhone', index: 'user_hone', width: 80 },
             { label: '商品名称', name: 'productName', index: 'product_name', width: 80 },
 			{ label: '收货人手机号', name: 'phone', index: 'phone', width: 80 }, 			
 			{ label: '收货人姓名', name: 'userName', index: 'user_name', width: 80 }, 			

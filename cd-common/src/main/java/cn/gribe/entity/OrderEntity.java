@@ -137,6 +137,12 @@ public class OrderEntity {
     @TableField(exist = false)
     private String productAbout;
 
+    /**
+     * 用户手机号
+     */
+    @TableField(exist = false)
+    private String userPhone;
+
     public Integer getId() {
         return id;
     }
@@ -343,6 +349,14 @@ public class OrderEntity {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
     }
 
     @Override

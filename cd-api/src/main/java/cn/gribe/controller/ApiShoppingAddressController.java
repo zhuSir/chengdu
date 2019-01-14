@@ -72,8 +72,10 @@ public class ApiShoppingAddressController {
             wrapper.eq("user_id",user.getId());
             wrapper.eq("is_default",1);
             ShoppingAddressEntity shoppingAddressEntity = shoppingAddressService.selectOne(wrapper);
-            shoppingAddressEntity.setIsDefault(0);
-            shoppingAddressService.updateById(shoppingAddressEntity);
+            if(shoppingAddressEntity != null){
+                shoppingAddressEntity.setIsDefault(0);
+                shoppingAddressService.updateById(shoppingAddressEntity);
+            }
         }
         shoppingAddress.setUpdateTime(new Date());
         shoppingAddressService.insertOrUpdate(shoppingAddress);

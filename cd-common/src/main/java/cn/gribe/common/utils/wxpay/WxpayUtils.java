@@ -72,8 +72,9 @@ public class WxpayUtils {
                 reqData.put("noncestr", resp.get("nonce_str"));
                 reqData.put("timestamp", String.valueOf(System.currentTimeMillis()));
                 reqData.put("package", "Sign=WXPay");
-                //String signString = WXPayUtil.generateSignature(reqData,config.getKey());
-                //logger.info("===>>>:微信支付统一下单后签名:"+signString);
+                String signString = WXPayUtil.generateSignature(reqData,config.getKey());
+                logger.info("===>>>:微信支付统一下单后签名:"+signString);
+                reqData.put("sign",signString);
                 return resp;
             }
         } catch (Exception e) {
