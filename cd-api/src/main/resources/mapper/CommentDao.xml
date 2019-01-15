@@ -34,9 +34,10 @@
     </select>
 
     <select id="selectPageByUserId" parameterType="map"  resultMap="commentMap">
-        select com.*
+        select com.*,u.user_name,u.head_img as user_head_url
         from cd_collect col
         INNER JOIN cd_comment com ON col.comment_id = com.id
+         INNER JOIN cd_user u on u.id = com.user_id
         WHERE col.user_id = #{userId}
     </select>
 
@@ -45,5 +46,16 @@
         from cd_comment com,cd_user u
         WHERE com.user_id = u.id AND com.comment_id = #{commentId}
     </select>
+
+    <select id="selectPageByPostComment" parameterType="map"  resultMap="commentMap">
+        select com.*,u.user_name,u.head_img as user_head_url
+        from cd_comment com,cd_user u
+        WHERE com.user_id = u.id AND com.post_id IS NOT NULL
+        <if test="userId != null and userId != '' ">
+            AND com.user_id = ${userId}
+        </if>
+    </select>
+
+
 
 </mapper>

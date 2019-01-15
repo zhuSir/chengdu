@@ -17,9 +17,10 @@
     </resultMap>
 
     <select id="selectPageByUserId" parameterType="map"  resultMap="postMap">
-        select pos.*
+        select pos.*,cu.user_name,cu.head_img as user_head_img
         from cd_collect col INNER JOIN cd_post pos
         ON col.post_id = pos.id
+        inner join cd_user cu on cu.id = col.user_id
         WHERE col.user_id = #{userId}
     </select>
 

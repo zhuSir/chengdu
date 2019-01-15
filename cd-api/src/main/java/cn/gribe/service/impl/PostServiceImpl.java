@@ -1,6 +1,5 @@
 package cn.gribe.service.impl;
 
-import cn.gribe.entity.CommentEntity;
 import cn.gribe.service.CollectService;
 import cn.gribe.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;

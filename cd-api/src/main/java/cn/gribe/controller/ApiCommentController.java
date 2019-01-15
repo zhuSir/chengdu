@@ -46,7 +46,7 @@ public class ApiCommentController {
     @RequestMapping("/post/list")
     public R onlyPostList(@RequestParam Map<String, Object> params,@LoginUser UserEntity user){
         params.put("userId",user.getId());
-        PageUtils page = commentService.queryPage(params);
+        PageUtils page = commentService.queryPostCommentPage(params);
         return R.ok().put("page", page);
     }
 

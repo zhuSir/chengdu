@@ -2,6 +2,7 @@ package cn.gribe.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import cn.gribe.entity.CommentEntity;
+import com.baomidou.mybatisplus.plugins.Page;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
@@ -20,4 +21,5 @@ public interface CommentDao extends BaseMapper<CommentEntity> {
 
     List<CommentEntity> selectPageByUserId(RowBounds rowBounds, @Param("userId") Integer userId);
 
+    List<CommentEntity> selectPageByPostComment(Page<CommentEntity> page,@Param("userId")  Object userId);
 }
