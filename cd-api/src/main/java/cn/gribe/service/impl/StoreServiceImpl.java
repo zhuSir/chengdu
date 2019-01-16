@@ -1,5 +1,6 @@
 package cn.gribe.service.impl;
 
+import cn.gribe.common.utils.DistanceUtils;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.Query;
 import cn.gribe.common.utils.Utils;
@@ -12,6 +13,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +58,7 @@ public class StoreServiceImpl extends ServiceImpl<StoreDao, StoreEntity> impleme
                 String lat1 = store.getLat();
                 if(StringUtils.isNotEmpty(lon1) && StringUtils.isNotEmpty(lat1)){
                     //计算距离
-                    store.setDistance(Utils.getDistance(Double.valueOf(lat1),Double.valueOf(lon),lat,lon));
+                    store.setDistance(Double.valueOf(DistanceUtils.LantitudeLongitudeDist(Double.valueOf(lon1),Double.valueOf(lat1),lon,lat)));
                     stores.set(i,store);
                 }
             }
@@ -70,25 +72,62 @@ public class StoreServiceImpl extends ServiceImpl<StoreDao, StoreEntity> impleme
      * 权重冒泡排序
      * @param data
      */
-    public static void sortDistance(List<StoreEntity> data){
-        for(int i =0; i< data.size();i++){
-            for(int j = i+1;j<data.size();j++){
-                StoreEntity temp = data.get(i);
-                StoreEntity baseCheck = data.get(j);
-                if(temp.getDistance() > baseCheck.getDistance()){
-                    data.set(i,baseCheck);
-                    data.set(j,temp);
+    public static List<StoreEntity> sortDistance(List<StoreEntity> data){
+
+        for(int i=0;i<data.size()-1;i++){//外层循环控制排序趟数
+            for(int j=0;j<data.size()-1-i;j++){//内层循环控制每一趟排序多少次
+                StoreEntity d1 = data.get(j);
+                StoreEntity d2 = data.get(j+1);
+                if(d1.getDistance() > d2.getDistance()){
+                    data.set(j,d2);
+                    data.set(j+1,d1);
                 }
             }
         }
-        //return data;
+
+//        for(int i =0; i< data.size();i++){
+//            StoreEntity temp = data.get(i);
+//            for(int j = i+1;j<data.size();j++){
+//                StoreEntity baseCheck = data.get(j);
+//                if(temp.getDistance() > baseCheck.getDistance()){
+//                    data.set(i,baseCheck);
+//                    data.set(j,temp);
+//                }
+//            }
+//        }
+        return data;
     }
 
     @Override
-    public List<StoreEntity> queryByLocation(String lat, String lon, Integer page, Integer limit) {
+    public List<StoreEntity> queryByLocation(String latStr, String lonStr, Integer page, Integer limit) {
         //查询附近商铺
-        List<StoreEntity> res = this.selectList(new EntityWrapper<>());
-        return res;
+        Map params = new HashMap();
+        params.put("page",String.valueOf(page));
+        params.put("limit",String.valueOf(limit));
+        Page queryPage = new Query<StoreEntity>(params).getPage();
+        EntityWrapper wrapper = new EntityWrapper<>();
+        Page pageRes = this.selectPage(queryPage,wrapper);
+        double lon = Double.valueOf(lonStr);
+        double lat = Double.valueOf(latStr);
+        List<StoreEntity> stores = pageRes.getRecords();
+        for(int i =0;i<stores.size();i++){
+            StoreEntity store = stores.get(i);
+            String lon1 = store.getLon();
+            String lat1 = store.getLat();
+            if(StringUtils.isNotEmpty(lon1) && StringUtils.isNotEmpty(lat1)){
+                //计算距离
+                double distance = Double.valueOf(
+                        DistanceUtils.LantitudeLongitudeDist(
+                            Double.valueOf(lon1),
+                            Double.valueOf(lat1),
+                            lon,
+                            lat));
+                store.setDistance(distance);
+                stores.set(i,store);
+            }
+        }
+        stores = sortDistance(stores);//排序
+        return stores;
     }
 
     @Override

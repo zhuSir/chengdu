@@ -29,7 +29,7 @@ public class ValidatorImgUtils {
     public static final Logger logger = LoggerFactory.getLogger(ValidatorImgUtils.class);
 
     public static boolean validateImg(String accessKeyId, String accessKeySecret, MultipartFile[] files){
-        if(files != null){
+        if(files == null){
             return false;
         }
         IClientProfile profile = DefaultProfile

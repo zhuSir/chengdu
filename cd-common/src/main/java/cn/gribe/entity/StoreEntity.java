@@ -67,7 +67,7 @@ public class StoreEntity {
     private String shortImg;
 
     //销量 --new
-    @NotNull(message="店铺销量不能为空")
+    //@NotNull(message="店铺销量不能为空")
     private Integer sales;
 
     //价格 --new

@@ -314,6 +314,7 @@ public class ApiOrderController {
         //图片内容
         CommonUtils.validateTxt(comment.getContent());
         comment.setProductId(orderEntity.getProductId());//商品id
+        comment.setStoreId(orderEntity.getStoreId());
         commentService.save(files,comment,userEntity);//保存评论
         orderEntity.setState(OrderEntity.STATE_FINISHED);
         orderService.updateById(orderEntity);
