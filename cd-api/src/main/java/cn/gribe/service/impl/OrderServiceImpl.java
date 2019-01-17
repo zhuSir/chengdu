@@ -62,10 +62,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
             Assert.state(!this.insert(order),"保存订单错误，请联系管理员","==>:保存订单错误 orderInfo:"+order.toString());
             return "success";
         }else if(OrderEntity.PAY_TYPE_WECHATPAY.equals(order.getPayType())){
-            Map signString = wxpayUtils.unifiedOrder(product.getName(),order.getCode(),String.valueOf((int)(order.getSum()*100)));
-            Assert.isNull(signString,"下单错误，请联系管理员");
+            Map resMap = wxpayUtils.unifiedOrder(product.getName(),order.getCode(),String.valueOf((int)(order.getSum()*100)));
+            Assert.isNull(resMap,"下单错误，请联系管理员");
+            Object prepayId = resMap.get("prepayid");
+            if(prepayId != null){
+                order.setPrepayId(String.valueOf(prepayId));
+            }
             Assert.state(!this.insert(order),"保存订单错误，请联系管理员","==>:保存订单错误 orderInfo:"+order.toString());
-            return signString;
+            return resMap;
             //微信支付
         }
         Assert.isNull(null,"支付类型错误");
@@ -85,6 +89,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         orderWrapper.eq("product_id",productId);
         int count = this.baseMapper.selectCount(orderWrapper);
         return count;
+    }
+
+    @Override
+    public Map wechatPaySign(OrderEntity orderEntity) throws Exception {
+        Assert.isNull(orderEntity,"订单错误");
+        return wxpayUtils.orderSign(orderEntity.getPrepayId());
     }
 
     /**

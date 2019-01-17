@@ -321,4 +321,29 @@ public class ApiOrderController {
         return R.ok();
     }
 
+    /**
+     * 订单签名（微信）
+     * @param orderId
+     * @return
+     */
+    @Login
+    @RequestMapping("/sign")
+    public R sign(String orderId,@LoginUser UserEntity userEntity){
+        Assert.isNull(orderId,"订单错误，请刷新重试");
+        OrderEntity orderEntity = orderService.selectById(orderId);
+        Assert.isNull(orderEntity,"订单参数错误，请联系管理员");
+        Assert.state(orderEntity.getUserId() != userEntity.getId(),"订单错误，请联系管理员");
+        Assert.state(!OrderEntity.PAY_TYPE_WECHATPAY.equals(orderEntity.getPayType()),"订单错误，该订单支付方式不是微信支付");
+        Assert.state(!OrderEntity.STATE_AWAIT_PAY.equals(orderEntity.getState()),"订单错误，该订单状态不允许支付");
+        try {
+            Map res = orderService.wechatPaySign(orderEntity);
+            return R.ok().put("results",res);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error(e.getMessage());
+        }
+    }
+
+
+
 }

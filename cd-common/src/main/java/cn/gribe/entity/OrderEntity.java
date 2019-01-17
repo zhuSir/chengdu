@@ -121,6 +121,11 @@ public class OrderEntity {
      */
     private String endTime;
 
+    /**
+     * 微信支付统一下单返回值
+     */
+    private String prepayId;
+
     //商店名称
     @TableField(exist = false)
     private String storeName;
@@ -359,6 +364,14 @@ public class OrderEntity {
         this.userPhone = userPhone;
     }
 
+    public String getPrepayId() {
+        return prepayId;
+    }
+
+    public void setPrepayId(String prepayId) {
+        this.prepayId = prepayId;
+    }
+
     @Override
     public String toString() {
         return "OrderEntity{" +
@@ -379,10 +392,17 @@ public class OrderEntity {
                 ", userId=" + userId +
                 ", payStatus=" + payStatus +
                 ", payDescription='" + payDescription + '\'' +
+                ", expressCompany='" + expressCompany + '\'' +
+                ", expressCode='" + expressCode + '\'' +
+                ", tradeNo='" + tradeNo + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", prepayId='" + prepayId + '\'' +
                 ", storeName='" + storeName + '\'' +
                 ", productShortImg='" + productShortImg + '\'' +
                 ", productName='" + productName + '\'' +
                 ", productAbout='" + productAbout + '\'' +
+                ", userPhone='" + userPhone + '\'' +
                 '}';
     }
 }

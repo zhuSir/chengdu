@@ -24,5 +24,7 @@ public interface OrderService extends IService<OrderEntity> {
     OrderEntity queryByCode(String orderCode);
 
     int selectSales(Integer productId);
+
+    Map wechatPaySign(OrderEntity orderEntity) throws Exception;
 }
 
