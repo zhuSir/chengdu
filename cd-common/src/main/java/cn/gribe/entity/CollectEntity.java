@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 收藏类
@@ -36,6 +37,11 @@ public class CollectEntity implements Serializable {
 	 * 帖id
 	 */
 	private int postId;
+
+	/**
+	 * 创建时间
+	 */
+	private Date createTime;
 
 	/**
 	 * 设置：
@@ -102,6 +108,14 @@ public class CollectEntity implements Serializable {
 		this.postId = postId;
 	}
 
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
 	@Override
 	public String toString() {
 		return "CollectEntity{" +
@@ -111,6 +125,7 @@ public class CollectEntity implements Serializable {
 				", userId=" + userId +
 				", groupId=" + groupId +
 				", postId=" + postId +
+				", createTime=" + createTime +
 				'}';
 	}
 }

@@ -20,6 +20,7 @@
         from cd_collect col
         INNER JOIN cd_group gro ON col.group_id = gro.id
         WHERE col.user_id = #{userId}
+        order by col.create_time desc
     </select>
 
 

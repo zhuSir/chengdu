@@ -25,6 +25,7 @@
         from cd_collect col
         INNER JOIN cd_store sto ON col.store_id = sto.id
         WHERE col.user_id = #{userId}
+        order by col.create_time desc
     </select>
 
 

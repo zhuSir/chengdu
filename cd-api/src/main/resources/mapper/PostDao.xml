@@ -22,6 +22,7 @@
         ON col.post_id = pos.id
         inner join cd_user cu on cu.id = col.user_id
         WHERE col.user_id = #{userId}
+        order by col.create_time desc
     </select>
 
     <select id="selectPageByGroupId" parameterType="map" resultMap="postMap">

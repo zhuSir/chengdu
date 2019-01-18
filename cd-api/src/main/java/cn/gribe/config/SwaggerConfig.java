@@ -52,7 +52,7 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title("成都管理后台系统")
+            .title("Gribe管理后台系统")
             .description("renren-api文档")
             //.termsOfServiceUrl("http://www.renren.io")
             .version("3.2.0")

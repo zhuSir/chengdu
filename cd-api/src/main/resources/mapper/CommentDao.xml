@@ -39,6 +39,7 @@
         INNER JOIN cd_comment com ON col.comment_id = com.id
          INNER JOIN cd_user u on u.id = com.user_id
         WHERE col.user_id = #{userId}
+        order by col.create_time desc
     </select>
 
     <select id="selectPageByCommentId" parameterType="map"  resultMap="commentMap">

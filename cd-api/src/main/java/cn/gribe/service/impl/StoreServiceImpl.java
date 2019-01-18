@@ -73,7 +73,6 @@ public class StoreServiceImpl extends ServiceImpl<StoreDao, StoreEntity> impleme
      * @param data
      */
     public static List<StoreEntity> sortDistance(List<StoreEntity> data){
-
         for(int i=0;i<data.size()-1;i++){//外层循环控制排序趟数
             for(int j=0;j<data.size()-1-i;j++){//内层循环控制每一趟排序多少次
                 StoreEntity d1 = data.get(j);
@@ -84,17 +83,6 @@ public class StoreServiceImpl extends ServiceImpl<StoreDao, StoreEntity> impleme
                 }
             }
         }
-
-//        for(int i =0; i< data.size();i++){
-//            StoreEntity temp = data.get(i);
-//            for(int j = i+1;j<data.size();j++){
-//                StoreEntity baseCheck = data.get(j);
-//                if(temp.getDistance() > baseCheck.getDistance()){
-//                    data.set(i,baseCheck);
-//                    data.set(j,temp);
-//                }
-//            }
-//        }
         return data;
     }
 

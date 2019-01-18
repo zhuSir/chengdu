@@ -4,8 +4,10 @@ import cn.gribe.common.utils.CommonUtils;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.Query;
 import cn.gribe.common.utils.oss.OSSFactory;
+import cn.gribe.entity.PostEntity;
 import cn.gribe.entity.UserEntity;
 import cn.gribe.service.CommentService;
+import cn.gribe.service.PostService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -13,6 +15,7 @@ import cn.gribe.dao.CommentDao;
 import cn.gribe.entity.CommentEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +29,9 @@ import java.util.Map;
 public class CommentServiceImpl extends ServiceImpl<CommentDao, CommentEntity> implements CommentService {
 
     private static Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
+
+    @Autowired
+    private PostService postService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -119,6 +125,14 @@ public class CommentServiceImpl extends ServiceImpl<CommentDao, CommentEntity> i
         comment.setUpdateTime(new Date());
         comment.setStatus(CommentEntity.STATUS_DISABLE);//默认未生效
         this.baseMapper.insert(comment);
+        //评论帖子，更新帖子时间
+        if(comment.getPostId() != null && comment.getPostId() > 0){
+            PostEntity postEntity = postService.selectById(comment.getPostId());
+            if(postEntity != null){
+                postEntity.setUpdateTime(new Date());
+                postService.updateById(postEntity);
+            }
+        }
     }
 
 

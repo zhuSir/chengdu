@@ -33,7 +33,7 @@ public class GroupServiceImpl extends ServiceImpl<GroupDao, GroupEntity> impleme
         if(name != null){
             wrapper.like("name","%"+name+"%");
         }
-        wrapper.orderBy("create_time",false);
+        wrapper.orderBy("rand()",false);
         Page<GroupEntity> page = this.selectPage(
                 new Query<GroupEntity>(params).getPage(),
                 wrapper
