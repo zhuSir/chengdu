@@ -88,8 +88,11 @@ public class ApiCommentController {
      */
     @Login
     @RequestMapping("/delete")
-    public R delete(@RequestBody Integer id){
-        Assert.isNull(id,"数据错误，请刷新重试s");
+    public R delete(Integer id,@LoginUser UserEntity user){
+        Assert.isNull(id,"数据错误，请刷新重试");
+        CommentEntity commentEntity = commentService.selectById(id);
+        Assert.isNull(commentEntity,"数据错误，请刷新重试");
+        Assert.state(commentEntity.getUserId() != user.getId(),"数据错误，请刷新重试");
         commentService.deleteById(id);
         return R.ok();
     }

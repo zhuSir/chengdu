@@ -1,0 +1,167 @@
+*{
+	padding: 0;
+	margin: 0;
+}
+body{
+	background-color: #f9f9f9;
+	font-size: 0.24rem;
+	height: 100%;
+	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+	font-family: PingFang-SC-Medium, 微软雅黑, "Microsoft YaHei", Helvetica, "Helvetica Neue", Tahoma, Arial, sans-serif;
+}
+/*html,body{
+	height: 100%;
+}
+.container{
+	height: 100%;
+	background: #f0f0f0;
+}*/
+ul li{
+	list-style: none;
+}
+a,input,button,textarea{
+	outline: 0;
+	text-decoration: none;
+}
+em,i,samp{
+	font-style: normal;
+	font-family: PingFang-SC-Medium;
+}
+h4,h5,h6{
+	font-weight: normal;
+}
+
+@font-face{
+	font-family: PingFang-SC-Bold;
+	src:url('../fonts/PingFang Bold.ttf');
+}
+@font-face{
+	font-family: PingFang-SC-Medium;
+	src:url('../fonts/PingFang Medium.ttf');
+}
+@font-face{
+	font-family: PingFang-SC-Regular;
+	src:url('../fonts/PingFang Regular.ttf');
+}
+
+
+.hide{
+	display: none !important;
+}
+
+/*头部*/
+.head{
+	width: 100%;
+	height: 0.88rem;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 33;
+	background-color: #fff;
+}
+
+.head .title{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 0.88rem;
+
+}
+.title img{
+	width: 0.16rem;
+	height: 0.29rem;
+	padding: 0 0.40rem;
+	position: absolute;
+	top: 50%;
+	left: 0;
+	margin-top: -.15rem;
+
+}
+.title h4{
+	font-size: .32rem;
+	font-family: PingFang-SC-Bold;
+	color: #010101;
+}
+
+.container{
+	margin-top: .91rem;
+}
+
+
+
+.menu img{
+	width: 0.33rem;
+	height: 0.32rem;
+}
+.content{
+	margin-top: 0.8rem;
+}
+
+
+
+/*.nav{
+	margin-bottom: 0.06rem;
+}
+.nav ul{
+	height: 0.87rem;
+	padding: 0 0.33rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background: #fff;
+
+}
+.nav ul li{
+	height: 0.87rem;
+	line-height: 0.87rem;
+	position: relative;
+}
+.nav ul li a{
+	font-size: 0.3rem;
+	color: #3a3a3a;
+}
+
+.nav ul .active a{
+	color: #f12825;
+}
+.nav ul .active i{
+	display: block;
+	width: 0.5rem;
+	height: 0.07rem;
+	background-color: #e8374a;
+	border-radius: 3px;
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	margin-left: -0.25rem;
+}
+
+.gradient{
+	background:  #f12825;
+	color: #fff;
+	margin-bottom: 0;
+	padding-bottom: 1.5rem;
+	background-image: linear-gradient(156deg, #ff9fbc 0%, #ff739b 0%, #fe467a 0%, #e3241a 100%), 
+					  linear-gradient(#e52826, #e52826);
+}*/
+
+
+/*遮罩*/
+.mask{
+	width: 100%;
+	height: 100%;
+	background: #000;
+	opacity: 0.6;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 8;
+}
+
+
+input{
+	background-color:transparent;
+	border-color:transparent;
+	-webkit-appearance: none;
+	font-size: .26rem;
+}

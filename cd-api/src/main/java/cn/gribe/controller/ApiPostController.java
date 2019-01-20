@@ -160,4 +160,22 @@ public class ApiPostController {
         return R.ok().put("post",post);
     }
 
+    /**
+     * 信息
+     * @param id
+     * @return
+     */
+    @Login
+    @RequestMapping("/delete")
+    public R delete(Integer id, @LoginUser UserEntity user){
+        Assert.isNull(id,"删除帖子错误，请刷新重试");
+        PostEntity post = postService.selectById(id);
+        Assert.isNull(post,"删除帖子错误，请刷新重试");
+        Assert.state(post.getUserId() != user.getId(),"该帖子不是您的，请刷新重试");
+        //删除帖子
+        postService.deleteById(post.getId());
+        R res = R.ok();
+        return res;
+    }
+
 }

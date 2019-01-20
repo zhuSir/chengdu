@@ -29,7 +29,7 @@ public class ValidatorImgUtils {
     public static final Logger logger = LoggerFactory.getLogger(ValidatorImgUtils.class);
 
     public static boolean validateImg(String accessKeyId, String accessKeySecret, MultipartFile[] files){
-        if(files == null){
+        if(files == null || files.length == 0){
             return false;
         }
         IClientProfile profile = DefaultProfile
@@ -72,15 +72,17 @@ public class ValidatorImgUtils {
 //            //这里读取本地文件作为二进制数据，当做输入做为示例, 实际使用中请直接替换成您的图片二进制数据
 //            imageBytes = FileUtils.readFileToByteArray(new File("/Users/01fb4ab6420b5f34623e13b82b51ef87.jpg"));
             for(MultipartFile file : files){
-                imageBytes = file.getBytes();
-                //上传到服务端
-                url = uploader.uploadBytes(imageBytes);
-                JSONObject task = new JSONObject();
-                task.put("dataId", UUID.randomUUID().toString());
-                //设置图片链接为上传后的url
-                task.put("url", url);
-                task.put("time", new Date());
-                tasks.add(task);
+                if(file != null){
+                    imageBytes = file.getBytes();
+                    //上传到服务端
+                    url = uploader.uploadBytes(imageBytes);
+                    JSONObject task = new JSONObject();
+                    task.put("dataId", UUID.randomUUID().toString());
+                    //设置图片链接为上传后的url
+                    task.put("url", url);
+                    task.put("time", new Date());
+                    tasks.add(task);
+                }
             }
         }catch (Exception e){
             e.printStackTrace();

@@ -1,0 +1,109 @@
+html,body{
+	width: 100%;
+	height: 100%;
+}
+.container{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	/*justify-content: space-around;*/
+	height: 100%;
+	margin-top: 0;
+	background-color: #fff;
+	background: url('../img/gribe_bg.png');
+	background-size: contain;
+}
+.logo{
+	width: 2.29rem;
+	height: .88rem;
+	margin-top: 1.31rem;
+}
+.publicity{
+	width: 5.12rem;
+	height: 4.69rem;
+	margin-top: 1.04rem;
+	margin-bottom: .83rem;
+}
+.download div{
+	width: 4.56rem;
+	height: .92rem;
+	border-radius: 1rem;
+	font-size: .42rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: .56rem;
+
+}
+
+.download div span{
+	line-height: .58rem;
+}
+.download .phone{
+	background-color: #fc6183;
+	color: #fff
+}
+.download .phone img{
+	width: .46rem;
+	height: .58rem;
+	margin-right: .28rem;
+}
+.download .android{
+	background-color: #fff;
+	color: #fc6183;
+	border:1px solid #fc6183;
+}
+.download .android img{
+	width: .5rem;
+	height: .6rem;
+	margin-right: .28rem;
+}
+
+.share{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+.share .mask{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #000;
+	opacity: .56;
+	z-index: -1;
+}
+.share .content{
+	padding-top: 2.9rem;
+	margin-left: 1.43rem;
+	margin-top: 0;
+}
+.share .content div{
+	margin-bottom: .66rem;
+	display: flex;
+	align-items: center;
+	font-size: .48rem;
+	color: #fff;
+}
+.share .content div img{
+	position: absolute;
+	top: 1.2rem;
+	right: .79rem;
+	width: 1.96rem;
+	height: 2.18rem;
+}
+.share .content div em{
+	width: .54rem;
+	height: .54rem;
+	border-radius: 50%;
+	background-color: #fff;
+	text-align: center;
+	line-height: .54rem;
+	font-size: .52rem;
+	color: #000;
+	background-color: #fff;
+	margin-right: .12rem;
+}

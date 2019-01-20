@@ -16,6 +16,9 @@ public class CommonUtils {
      * @return
      */
     public static void validateImg(MultipartFile[] file){
+        if(file == null || file.length == 0){
+            return ;
+        }
         CloudStorageConfig config = OSSFactory.getSysConfig();
         boolean isTrue = ValidatorImgUtils.validateImg(config.getAliyunAccessKeyId(),config.getAliyunAccessKeySecret(),file);
         if(isTrue){

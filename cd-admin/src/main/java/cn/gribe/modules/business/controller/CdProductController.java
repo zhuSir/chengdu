@@ -23,8 +23,10 @@ import cn.gribe.modules.sys.service.SysDictService;
 import cn.gribe.common.validator.ValidatorUtils;
 import cn.gribe.modules.sys.service.SysUserService;
 import cn.gribe.modules.sys.shiro.ShiroUtils;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -201,6 +203,14 @@ public class CdProductController {
             for(ProductSpecialPrice specialPrice : prices){
                 specialPrice.transDate();
                 specialPrice.setProductId(productId);
+                EntityWrapper wrapper = new EntityWrapper();
+                wrapper.eq("date",specialPrice.getDate());
+                wrapper.eq("product_id",specialPrice.getProductId());
+                ProductSpecialPrice oldSpecialPrice = productSpecialPriceService.selectOne(wrapper);
+                if(oldSpecialPrice != null){
+                    oldSpecialPrice.setInventory(specialPrice.getInventory());
+                    BeanUtils.copyProperties(oldSpecialPrice,specialPrice,"inventory","price");
+                }
             }
             productSpecialPriceService.insertOrUpdateBatch(Arrays.asList(prices));
         }

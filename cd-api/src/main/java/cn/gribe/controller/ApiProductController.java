@@ -55,7 +55,8 @@ public class ApiProductController {
         product.setTags(productTags);
         int Sales = orderService.selectSales(id);
         product.setSales(Sales);
-        List<ProductSpecialPrice> productSpecialPriceList = cdProductService.selectSpecialPriceList(new Date(),id);
+        Date time = DateUtils.stringToDate(DateUtils.format(new Date()),DateUtils.DATE_PATTERN);
+        List<ProductSpecialPrice> productSpecialPriceList = cdProductService.selectSpecialPriceList(time,id);
         product.setSpecialPriceList(productSpecialPriceList);
         return R.ok().put("info", product);
     }
