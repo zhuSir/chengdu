@@ -13,7 +13,9 @@ import cn.gribe.common.utils.ExcelUtil;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.validator.Assert;
 import cn.gribe.common.validator.ValidatorUtils;
+import cn.gribe.entity.ProductEntity;
 import cn.gribe.entity.StoreEntity;
+import cn.gribe.modules.business.service.CdProductService;
 import cn.gribe.modules.business.service.CdStoreService;
 import cn.gribe.modules.sys.entity.SysDictEntity;
 import cn.gribe.modules.sys.entity.SysUserEntity;
@@ -56,6 +58,9 @@ public class CdOrderController {
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private CdProductService productService;
 
     /**
      * 信息
@@ -197,6 +202,15 @@ public class CdOrderController {
         Assert.isNull(orderEntity, "订单错误，请刷新重试");
         Assert.state(orderEntity.getState().intValue() != OrderEntity.STATE_AWAIT_USE.intValue(),
                 "该订单不是待使用状态，不能进行完成操作");
+        Assert.state(orderEntity.getState().intValue() != OrderEntity.STATE_AWAIT_USE.intValue(),
+                "该订单不是待使用状态，不能进行完成操作");
+        ProductEntity productEntity = productService.selectById(orderEntity.getProductId());
+        Assert.isNull(productEntity,"该订单关联产品已不再，不能进行操作");
+        //属性类型（ 1 一个预约时间类型,2 两个预约时间类型,3 运费类型）
+        if((productEntity.getAttributeType() == 2 || productEntity.getAttributeType() == 3)
+                && StringUtils.isEmpty(orderEntity.getStartTime())){
+            Assert.isNull(null,"该订单无预约时间不能完成");
+        }
         orderEntity.setState(OrderEntity.STATE_FINISHED);
         cdOrderService.updateById(orderEntity);
         return R.ok();

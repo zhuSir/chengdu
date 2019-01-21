@@ -26,9 +26,9 @@
 
     <select id="queryList" parameterType="map"  resultMap="cdStoreMap">
         select
-        cs.*,su.username
-        from cd_store cs,sys_user su
-        WHERE cs.user_id = su.user_id
+        cs.*
+        from cd_store cs
+        WHERE cs.id is not null
         <if test="storeId != null and storeId != ''">
             AND cs.id = #{storeId}
         </if>
