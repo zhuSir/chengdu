@@ -29,6 +29,7 @@
         <if test="state != null and state != '' ">
             AND co.state = #{state}
         </if>
+        AND co.is_delete != 1
         ORDER BY co.create_time DESC
     </select>
 

@@ -80,6 +80,25 @@ $(function () {
         }
     }
 
+    //时间控件初始化
+    laydate.render({
+        elem: '#specialPrice',
+        mark: vm.priceMark,
+        position: 'static',
+        showBottom: false,
+        done: function(value, date){
+            vm.current = value;
+            var val = vm.getSpecialPrice(vm.specialPriceList,value);
+            if(val != null){
+                $('#specialPriceValue').val(val.price);
+                $('#specialInventoryValue').val(val.inventory);
+            }else{
+                $('#specialPriceValue').val(0);
+                $('#specialInventoryValue').val(0);
+            }
+        }
+    });
+
 });
 
 var vm = new Vue({
@@ -101,14 +120,7 @@ var vm = new Vue({
             sortName: "tags[0].sort"
 		}],
         attributeTypeList:[],
-        priceMark:{
-            // '0-10-14': '生日'
-            // ,'0-12-31': '跨年' //每年的日期
-            // ,'0-0-10': '工资' //每月某天
-            // ,'0-0-15': '月中'
-            // ,'2017-8-15': '' //如果为空字符，则默认显示数字+徽章
-            // ,'2099-10-14': '呵呵'
-        },
+        priceMark:{},
         specialPriceList:[],
         current:''
 	},
@@ -176,6 +188,16 @@ var vm = new Vue({
                 vm.cdProduct = r.cdProduct;
                 if(r.tags != null && r.tags != ''){
                     vm.tags = r.tags;
+                    for(var i =0;i<vm.tags.length;i++){
+                        vm.tags[i].tagIdName = "tags["+i+"].id";
+                        vm.tags[i].idName = "tags["+i+"].productId";
+                        vm.tags[i].nameName = "tags["+i+"].name";
+                        vm.tags[i].valueName = "tags["+i+"].value";
+                        vm.tags[i].sortName = "tags["+i+"].sort";
+                    }
+                }
+                console.log(vm.tags);
+                if(r.specialPriceList != null && r.specialPriceList != ''){
                     vm.specialPriceList = r.specialPriceList;
                     //拼接json
                     var specialMark = "{";
@@ -197,6 +219,8 @@ var vm = new Vue({
             });
 		},
 		reload: function (event) {
+            // var sortVal = $(".sortClass");
+            // console.log("sortVal",sortVal);
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			var storeId = $('#storeId').val();
@@ -217,7 +241,6 @@ var vm = new Vue({
             });
         },
         addTag:function(){
-            debugger;
             var length = vm.tags.length;
 			var sortIndex = length;
             sortIndex = sortIndex+1;

@@ -22,4 +22,6 @@ public interface CommentDao extends BaseMapper<CommentEntity> {
     List<CommentEntity> selectPageByUserId(RowBounds rowBounds, @Param("userId") Integer userId);
 
     List<CommentEntity> selectPageByPostComment(Page<CommentEntity> page,@Param("userId")  Object userId);
+
+    CommentEntity selectByStoreId(@Param("storeId") Integer storeId);
 }

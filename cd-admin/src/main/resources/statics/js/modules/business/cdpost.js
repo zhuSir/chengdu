@@ -6,7 +6,7 @@ $(function () {
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true ,hidden:true},
             { label: '圈子名称', name: 'groupName', index: 'group_name', width: 80 },
             { label: '标题', name: 'title', index: 'title', width: 80 },
-            { label: '内容', name: 'conetnt', index: 'conetnt'},
+            { label: '内容', name: 'content', index: 'content'},
 			{ label: '图片', name: 'imgs', index: 'imgs', width: 80,formatter:function(cellvalue, options, rowObject){
                 return jointImgUrl(cellvalue);
             } },

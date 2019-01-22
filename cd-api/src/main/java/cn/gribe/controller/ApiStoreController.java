@@ -80,10 +80,7 @@ public class ApiStoreController {
         PageUtils productList = productService.queryPage(params);
         r.put("productList",productList);
         //获取评论列表
-        EntityWrapper wrapper = new EntityWrapper();
-        wrapper.eq("store_id",store.getId());
-        wrapper.orderBy("create_time",false);
-        CommentEntity comment = commentService.selectOne(wrapper);
+        CommentEntity comment = commentService.selectByStoreId(store.getId());
         r.put("comment",comment);
         return r;
     }

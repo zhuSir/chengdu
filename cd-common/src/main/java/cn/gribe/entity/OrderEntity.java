@@ -36,11 +36,23 @@ public class OrderEntity {
     //完成
     public static Integer STATE_FINISHED = 5;
 
+    //退款中
+    public static Integer STATE_CHARGE_BACK_ING= 6;
+
+    //取消
+    public static Integer STATE_CANCEL= 7;
+
     //支付宝支付
     public static Integer PAY_TYPE_ALIPAY = 1;
 
     //微信支付
     public static Integer PAY_TYPE_WECHATPAY= 2;
+
+    //删除标志 true
+    public static Integer DELETE_TRUE = 1;
+
+    //删除标志 false
+    public static Integer DELETE_FALSE = 0;
 
     @TableId
     private Integer id;
@@ -147,6 +159,11 @@ public class OrderEntity {
      */
     @TableField(exist = false)
     private String userPhone;
+
+    /**
+     * 删除标识
+     */
+    private int isDelete;
 
     public Integer getId() {
         return id;
@@ -370,6 +387,14 @@ public class OrderEntity {
 
     public void setPrepayId(String prepayId) {
         this.prepayId = prepayId;
+    }
+
+    public int getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(int isDelete) {
+        this.isDelete = isDelete;
     }
 
     @Override

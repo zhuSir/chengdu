@@ -40,7 +40,7 @@ public class OrderTask {
 			order.setState(OrderEntity.STATE_AWAIT_EVALUATE);
 			orderService.updateById(order);
 		}
-		//5天自动转完成订单
+		//15天自动转完成订单
 		EntityWrapper wrapper15 = new EntityWrapper();
 		wrapper15.like("create_time",DateUtils.format(DateUtils.addDateDays(new Date(),-15),""));
 		wrapper15.eq("state", OrderEntity.STATE_AWAIT_EVALUATE);

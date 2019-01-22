@@ -135,5 +135,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentDao, CommentEntity> i
         }
     }
 
+    @Override
+    public CommentEntity selectByStoreId(Integer storeId) {
+        return this.baseMapper.selectByStoreId(storeId);
+    }
+
 
 }

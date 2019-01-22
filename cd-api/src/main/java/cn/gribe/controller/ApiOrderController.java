@@ -1,6 +1,7 @@
 package cn.gribe.controller;
 
 import cn.gribe.common.utils.CommonUtils;
+import cn.gribe.common.utils.Constant;
 import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.R;
 import cn.gribe.common.utils.alipay.AlipayUtils;
@@ -52,7 +53,6 @@ public class ApiOrderController {
     @Autowired
     private CommentService commentService;
 
-
     /**
      * 列表
      */
@@ -77,6 +77,7 @@ public class ApiOrderController {
         Assert.isNull(id, "参数错误;获取订单详情失败");
         OrderEntity order= orderService.selectById(id);
         Assert.isNull(order,"订单获取失败；请联系管理员");
+        Assert.state(OrderEntity.DELETE_TRUE.intValue() == order.getIsDelete(),"订单获取错误；请联系管理员");
         StoreEntity storeEntity = storeService.selectById(order.getStoreId());
         ProductEntity productEntity= productService.selectById(order.getProductId());
         Assert.isNull(productEntity,"订单错误，请联系管理员");
@@ -118,6 +119,23 @@ public class ApiOrderController {
         r.put("results",results);
         r.put("callback",alipayUtils.NOTIFY_URL);
         return r;
+    }
+
+    /**
+     * 刪除
+     * @param id
+     * @return
+             */
+    @Login
+    @RequestMapping("/delete/{id}")
+    public R delete(@PathVariable("id") Integer id,@LoginUser UserEntity userEntity){
+        Assert.isNull(id, "参数错误;获取订单详情失败");
+        OrderEntity order= orderService.selectById(id);
+        Assert.isNull(order,"订单获取失败；请联系管理员");
+        Assert.state(order.getUserId() != userEntity.getId(),"该订单不属于您的，不允许删除");
+        order.setIsDelete(OrderEntity.DELETE_TRUE);
+        orderService.updateById(order);
+        return R.ok("success");
     }
 
     /**
@@ -270,9 +288,27 @@ public class ApiOrderController {
         Assert.isNull(orderEntity,"订单参数错误，请联系管理员");
         Assert.state(!OrderEntity.STATE_AWAIT_PAY.equals(orderEntity.getState()),"该订单不允许取消");
         Assert.state(orderEntity.getUserId().intValue() != userEntity.getId().intValue(),"您当前无权限修改该记录");
-        orderEntity.setState(OrderEntity.STATE_FINISHED);
+        orderEntity.setState(OrderEntity.STATE_CANCEL);
         orderEntity.setPayStatus(OrderEntity.PAY_STATUS_FAIL);
         orderEntity.setPayDescription("支付失败");
+        orderService.updateById(orderEntity);
+        return R.ok();
+    }
+
+    /**
+     * 申请退款接口
+     * @param orderId
+     * @return
+     */
+    @Login
+    @RequestMapping("/applyRefund")
+    public R refundIng(String orderId,@LoginUser UserEntity userEntity){
+        Assert.isNull(orderId,"订单错误，请刷新重试");
+        OrderEntity orderEntity = orderService.selectById(orderId);
+        Assert.isNull(orderEntity,"订单参数错误，请联系管理员");
+        Assert.state(!OrderEntity.STATE_AWAIT_USE.equals(orderEntity.getState()),"该订单不允许申请退款");
+        Assert.state(orderEntity.getUserId().intValue() != userEntity.getId().intValue(),"您当前无权限修改该记录");
+        orderEntity.setState(OrderEntity.STATE_CHARGE_BACK_ING);
         orderService.updateById(orderEntity);
         return R.ok();
     }

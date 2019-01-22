@@ -125,7 +125,6 @@ public class CdCommentController {
     @RequiresPermissions("business:cdcomment:delete")
     public R delete(@RequestBody Integer[] ids){
         commentService.deleteBatchIds(Arrays.asList(ids));
-
         return R.ok();
     }
 

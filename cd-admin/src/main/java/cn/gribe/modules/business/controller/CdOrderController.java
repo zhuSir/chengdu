@@ -176,7 +176,6 @@ public class CdOrderController {
 
     /**
      * 退单
-     *
      * @param orderId
      * @return
      */
@@ -200,18 +199,17 @@ public class CdOrderController {
         Assert.isNull(orderId, "参数错误，请刷新重试");
         OrderEntity orderEntity = cdOrderService.selectById(orderId);
         Assert.isNull(orderEntity, "订单错误，请刷新重试");
-        Assert.state(orderEntity.getState().intValue() != OrderEntity.STATE_AWAIT_USE.intValue(),
-                "该订单不是待使用状态，不能进行完成操作");
-        Assert.state(orderEntity.getState().intValue() != OrderEntity.STATE_AWAIT_USE.intValue(),
-                "该订单不是待使用状态，不能进行完成操作");
+        Assert.state(orderEntity.getState().intValue() != OrderEntity.STATE_AWAIT_USE.intValue()
+                && orderEntity.getState().intValue() != OrderEntity.STATE_CHARGE_BACK_ING,
+                "该订单状态，不能进行完成操作");
         ProductEntity productEntity = productService.selectById(orderEntity.getProductId());
-        Assert.isNull(productEntity,"该订单关联产品已不再，不能进行操作");
+        Assert.isNull(productEntity,"该订单关联产品已不在，不能进行操作");
         //属性类型（ 1 一个预约时间类型,2 两个预约时间类型,3 运费类型）
         if((productEntity.getAttributeType() == 2 || productEntity.getAttributeType() == 3)
                 && StringUtils.isEmpty(orderEntity.getStartTime())){
             Assert.isNull(null,"该订单无预约时间不能完成");
         }
-        orderEntity.setState(OrderEntity.STATE_FINISHED);
+        orderEntity.setState(OrderEntity.STATE_AWAIT_EVALUATE);
         cdOrderService.updateById(orderEntity);
         return R.ok();
     }

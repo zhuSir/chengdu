@@ -57,6 +57,15 @@
         </if>
     </select>
 
-
+    <select id="selectByStoreId" parameterType="map"  resultMap="commentMap">
+        select com.*,u.user_name,u.head_img as user_head_url
+        from cd_comment com,cd_user u
+        WHERE com.user_id = u.id
+        <if test="storeId != null and storeId != 0 ">
+            AND com.store_id = ${storeId}
+        </if>
+        order by com.create_time desc
+        limit 1
+    </select>
 
 </mapper>

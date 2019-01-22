@@ -45,7 +45,7 @@ public class CdStoreServiceImpl extends ServiceImpl<CdStoreDao, StoreEntity> imp
         Object name = params.get("name");
         List<StoreEntity> storeEntityList = this.baseMapper.queryList(page,storeId,name);
         page.setRecords(storeEntityList);
-        page.setTotal(storeEntityList.size());
+        //page.setTotal(storeEntityList.size());
         return new PageUtils(page);
     }
 

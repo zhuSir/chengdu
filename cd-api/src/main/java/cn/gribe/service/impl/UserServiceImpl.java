@@ -34,18 +34,16 @@ public class UserServiceImpl extends ServiceImpl<CdUserDao, UserEntity> implemen
                 new Query<UserEntity>(params).getPage(),
                 new EntityWrapper<UserEntity>()
         );
-
         return new PageUtils(page);
     }
 
     @Override
     public UserEntity queryByMobile(String mobile) {
         Assert.state(StringUtils.isEmpty(mobile),"手机号错误");
-        UserEntity userEntity = new UserEntity();
-        userEntity.setPhone(mobile);
-        return baseMapper.selectOne(userEntity);
+        EntityWrapper wrapper = new EntityWrapper();
+        wrapper.eq("mobile",mobile);
+        return selectOne(wrapper);
     }
-
 
     @Override
     public TokenEntity login(String phone, String password) {
@@ -59,7 +57,7 @@ public class UserServiceImpl extends ServiceImpl<CdUserDao, UserEntity> implemen
         //更新用户登录ip和登陆时间
         user.setLastLoginIp(Utils.getRemoteHost());
         user.setLastLoginTime(new Date());
-        baseMapper.updateById(user);
+        updateById(user);
         //获取登录token
         TokenEntity tokenEntity = tokenService.createToken(user.getId());
         return tokenEntity;
