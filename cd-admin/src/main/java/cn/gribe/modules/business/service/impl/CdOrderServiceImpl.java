@@ -51,8 +51,9 @@ public class CdOrderServiceImpl extends ServiceImpl<CdOrderDao, OrderEntity> imp
         Assert.isNull(orderId,"参数错误，请刷新重试");
         OrderEntity orderEntity = this.baseMapper.selectById(orderId);
         Assert.isNull(orderEntity,"订单错误，请刷新重试");
-        Assert.state(orderEntity.getState().intValue() != OrderEntity.STATE_AWAIT_USE.intValue(),
-                "该订单不是待使用状态，不能进行退单操作");
+        Assert.state(orderEntity.getState().intValue() != OrderEntity.STATE_AWAIT_USE.intValue()
+                        && orderEntity.getState().intValue() != OrderEntity.STATE_CHARGE_BACK_ING,
+                "该订单状态不能退款，不能进行退单操作");
         //退款
         if(OrderEntity.PAY_TYPE_ALIPAY.equals(orderEntity.getPayType())){
             alipayUtils.orderRefund(orderEntity.getCode(),orderEntity.getTradeNo(),orderEntity.getSum());

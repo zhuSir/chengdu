@@ -41,7 +41,7 @@ public class UserServiceImpl extends ServiceImpl<CdUserDao, UserEntity> implemen
     public UserEntity queryByMobile(String mobile) {
         Assert.state(StringUtils.isEmpty(mobile),"手机号错误");
         EntityWrapper wrapper = new EntityWrapper();
-        wrapper.eq("mobile",mobile);
+        wrapper.eq("phone",mobile);
         return selectOne(wrapper);
     }
 
