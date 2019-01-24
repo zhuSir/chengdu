@@ -7,6 +7,7 @@ import cn.gribe.modules.business.service.CdCommentService;
 import cn.gribe.modules.business.service.CdOrderService;
 import cn.gribe.modules.business.service.CdStoreService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +43,17 @@ public class StoreTask {
 			EntityWrapper wrapper = new EntityWrapper();
 			wrapper.eq("store_id",store.getId());
 			List<CommentEntity> commentList = commentService.selectList(wrapper);
-			Integer sumScore = 0;
+			double sumScore = 0;
 			//分数
 			for(CommentEntity comment : commentList){
-				sumScore+=Integer.valueOf(comment.getScore());
+				if(StringUtils.isNotEmpty(comment.getScore())){
+					double score = Double.valueOf(comment.getScore());
+					sumScore+=score;
+				}
 			}
 			if(sumScore > 0){
-				store.setScore(sumScore/commentList.size());
+				Double score = sumScore/commentList.size();
+				store.setScore(score.intValue());
 			}
 			//销量
 			wrapper.eq("state", OrderEntity.STATE_FINISHED);//完成状态

@@ -159,15 +159,18 @@ public class CdProductController {
             imgsUrl.replace(imgsUrl.lastIndexOf(","),imgsUrl.length(),"");
             product.setImgs(imgsUrl.toString());
         }
-        List<ProductTagEntity> tags = product.getTags();
-        if(tags != null && tags.size() > 0){
-            productTagService.insertOrUpdateBatch(tags);
-        }
         if(product.getId() == null){
             product.setCreateTime(new Date());
         }
         product.setUpdateTime(new Date());
         cdProductService.insertOrUpdate(product);
+        List<ProductTagEntity> tags = product.getTags();
+        if(tags != null && tags.size() > 0){
+            for(ProductTagEntity tag : tags){
+                tag.setProductId(product.getId());
+            }
+            productTagService.insertOrUpdateBatch(tags);
+        }
         return R.ok();
     }
 
