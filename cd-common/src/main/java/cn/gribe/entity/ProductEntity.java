@@ -88,6 +88,12 @@ public class ProductEntity implements Serializable {
     @TableField(exist = false)
     private List<ProductTagEntity> tags;
 
+    /**
+     * 店铺名称
+     */
+    @TableField(exist = false)
+    private String storeName;
+
     public Integer getId() {
         return id;
     }
@@ -238,5 +244,13 @@ public class ProductEntity implements Serializable {
 
     public void setSpecialPriceList(List<ProductSpecialPrice> specialPriceList) {
         this.specialPriceList = specialPriceList;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 }

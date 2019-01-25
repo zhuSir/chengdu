@@ -4,6 +4,7 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true,hidden:true },
+            { label: '商铺名称', name: 'storeName', index: 'store_name', width: 80 },
 			{ label: '商品名称', name: 'name', index: 'name', width: 80 },
 			{ label: '商铺类别', name: 'type', index: 'type', width: 80 }, 			
 			{ label: '简介', name: 'about', index: 'about', width: 80 }, 			
@@ -35,8 +36,7 @@ $(function () {
             } },
 			{ label: ' 今日库存', name: 'todayInventory', index: 'today_inventory', width: 80 }, 			
 			{ label: '总库存', name: 'sumInventory', index: 'sum_inventory', width: 80 }, 			
-			{ label: '价格', name: 'price', index: 'price', width: 80 }, 			
-			{ label: '商铺名称', name: 'storeName', index: 'store_id', width: 80 },
+			{ label: '价格', name: 'price', index: 'price', width: 80 },
             { label: '属性类型', name: 'attributeType', index: 'attribute_type', width: 80 ,formatter:function(cellvalue, options, rowObject){
                 return showValue(cellvalue, options, rowObject,vm.attributeTypeList);
             } },

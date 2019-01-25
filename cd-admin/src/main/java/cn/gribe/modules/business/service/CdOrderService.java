@@ -8,11 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
- *
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2018-11-24 15:34:15
+ * 订单
  */
 public interface CdOrderService extends IService<OrderEntity> {
 

@@ -32,7 +32,7 @@
         WHERE o.store_id = s.id AND o.product_id = p.id
         AND o.user_id = u.id
         <if test="phone != null and phone != '' ">
-            AND o.phone LIKE CONCAT('%',#{phone},'%')
+            AND u.phone LIKE CONCAT('%',#{phone},'%')
         </if>
         <if test="storeName != null and storeName != '' ">
             AND s.`name` LIKE CONCAT('%',#{storeName},'%')

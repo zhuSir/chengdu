@@ -4,13 +4,18 @@ import cn.gribe.common.utils.PageUtils;
 import cn.gribe.common.utils.Query;
 import cn.gribe.entity.ProductSpecialPrice;
 import cn.gribe.entity.ProductTagEntity;
+import cn.gribe.entity.StoreEntity;
 import cn.gribe.modules.business.dao.CdProductDao;
 import cn.gribe.entity.ProductEntity;
+import cn.gribe.modules.business.dao.CdStoreDao;
 import cn.gribe.modules.business.dao.ProductSpecialPriceDao;
 import cn.gribe.modules.business.dao.ProductTagDao;
 import cn.gribe.modules.business.service.CdProductService;
+import cn.gribe.modules.business.service.CdStoreService;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +34,9 @@ public class CdProductServiceImpl extends ServiceImpl<CdProductDao, ProductEntit
     private ProductTagDao tagDao;
 
     @Autowired
-    private ProductSpecialPriceDao productSpecialPriceDao;
+    private CdStoreDao storeDao;
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -53,10 +60,14 @@ public class CdProductServiceImpl extends ServiceImpl<CdProductDao, ProductEntit
             if(tags != null && tags.size() > 0){
                 entity.setTag(tags.get(0).getTag());
             }
+            StoreEntity storeEntity = storeDao.selectById(entity.getStoreId());
+            if(storeEntity != null){
+                entity.setStoreName(storeEntity.getName());
+            }
             result.add(entity);
         }
         page.setRecords(result);
-        System.out.println("==>: page: "+JSONObject.toJSONString(page));
+        logger.info("==>: page: "+JSONObject.toJSONString(page));
         return new PageUtils(page);
     }
 

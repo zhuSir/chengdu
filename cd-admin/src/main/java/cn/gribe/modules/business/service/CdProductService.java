@@ -10,11 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
- *
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2018-11-24 15:34:15
+ * 商品服务
  */
 public interface CdProductService extends IService<ProductEntity> {
 

@@ -15,9 +15,12 @@ import cn.gribe.service.StoreService;
 import cn.gribe.annotation.Login;
 import cn.gribe.annotation.LoginUser;
 import cn.gribe.common.validator.Assert;
+import com.alibaba.fastjson.JSONObject;
 import com.github.wxpay.sdk.WXPayUtil;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,6 +55,8 @@ public class ApiOrderController {
 
     @Autowired
     private CommentService commentService;
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * 列表
@@ -229,7 +234,7 @@ public class ApiOrderController {
     @RequestMapping("/callback/wx")
     @ResponseBody
     public String wxCallback(HttpServletRequest request) throws Exception {
-        System.out.println("微信支付回调");
+        logger.info("==>>:微信支付回调:"+ JSONObject.toJSONString(request.getParameterMap()));
         InputStream inStream = request.getInputStream();
         ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
@@ -238,10 +243,12 @@ public class ApiOrderController {
             outSteam.write(buffer, 0, len);
         }
         String resultxml = new String(outSteam.toByteArray(), "utf-8");
+        logger.info("==>>:微信支付回调:" + resultxml);
         Map<String, String> params = WXPayUtil.xmlToMap(resultxml);
         outSteam.close();
         inStream.close();
         //验证微信签名
+        logger.info("==>>:微信支付回调:" + params);
         if (wxPayUtil.wxpay.isPayResultNotifySignatureValid(params)) {
             String orderNo = params.get("out_trade_no");
             if(StringUtils.isNotEmpty(orderNo)){
@@ -254,11 +261,11 @@ public class ApiOrderController {
                 if(orderEntity != null
                         && !OrderEntity.PAY_STATUS_SUCCESS.equals(orderEntity.getPayStatus())
                         && OrderEntity.STATE_AWAIT_PAY.equals(orderEntity.getState())){
-                    String resultCode = params.get("result_code");
-                    //验证支付宝
-                    if("SUCCESS".equals(resultCode)){
-                        String tradeStatus = request.getParameter("trade_status");
-                        Map<String,Object> status = wxPayUtil.transferStatus(tradeStatus);
+                    String returnCode = params.get("return_code");
+                    //验证支付结果
+                    if("SUCCESS".equals(returnCode)){
+                        String resultCode = params.get("result_code");
+                        Map<String,Object> status = wxPayUtil.transferStatus(resultCode);
                         orderEntity.setPayStatus((Integer)status.get("status"));
                         orderEntity.setPayDescription((String) status.get("description"));
                         orderEntity.setTradeNo(params.get("transaction_id"));//支付宝订单号

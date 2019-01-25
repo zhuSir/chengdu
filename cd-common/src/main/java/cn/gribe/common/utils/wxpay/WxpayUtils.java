@@ -3,6 +3,7 @@ package cn.gribe.common.utils.wxpay;
 import com.alibaba.fastjson.JSONObject;
 import com.github.wxpay.sdk.WXPay;
 import com.github.wxpay.sdk.WXPayUtil;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,19 +66,6 @@ public class WxpayUtils {
              * 参与签名的字段名为appid，partnerid，prepayid，noncestr，timestamp，package。注意：package的值格式为Sign=WXPay
              */
             if ("SUCCESS".equals(resultsCode)) {
-//                Map<String, String> reqData = new HashMap<>();
-//                reqData.put("appid", config.getAppID());
-//                reqData.put("partnerid", config.getMchID());//resp.get("mch_id")
-//                reqData.put("prepayid", resp.get("prepay_id"));
-//                reqData.put("noncestr", WXPayUtil.generateNonceStr());//WXPayUtil.generateNonceStr()
-//                reqData.put("timestamp", String.valueOf(System.currentTimeMillis()/1000));//
-//                reqData.put("package", "Sign=WXPay");
-//                String signString = WXPayUtil.generateSignature(reqData,config.getKey());
-//                logger.info("簽名參數:"+JSONObject.toJSONString(reqData));
-//                logger.info("===>>>:微信支付统一下单后签名:"+signString);
-//                reqData.put("sign",signString);
-//                logger.info("===>>>:微信支付返回前端:"+JSONObject.toJSONString(reqData));
-//                return reqData;
                 //签名并返回
                 return orderSign(resp.get("prepay_id"));
             }
@@ -171,7 +159,7 @@ public class WxpayUtils {
      */
     public Map<String,Object> transferStatus(String status){
         Map results = new HashMap();
-        if(status != null){
+        if(StringUtils.isNotEmpty(status)){
             if(status.equals("SUCCESS")){
                 results.put("status",1);
                 results.put("description","支付成功");
