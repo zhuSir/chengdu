@@ -151,6 +151,7 @@ var vm = new Vue({
             var phone = $('#phone').val();
             var storeName = $('#storeName').val();
             var status = $('#status').val();
+            var statusTwo = $('#statusTwo').val();
             var payResults = $('#payResults').val();
 			$("#jqGrid").jqGrid('setGridParam',{ 
                 page:page,
@@ -160,6 +161,7 @@ var vm = new Vue({
 					'phone':phone,
 					'storeName':storeName,
 					'status':status,
+                    'statusTwo':statusTwo,
                     "payResults":payResults
                 }
 

@@ -31,6 +31,7 @@
         <if test="userId != null and userId != '' ">
             and c.user_id = #{userId}
         </if>
+        order by c.create_time desc
     </select>
 
     <select id="selectPageByUserId" parameterType="map"  resultMap="commentMap">

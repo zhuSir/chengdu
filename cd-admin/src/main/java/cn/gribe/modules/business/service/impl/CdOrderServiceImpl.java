@@ -40,7 +40,8 @@ public class CdOrderServiceImpl extends ServiceImpl<CdOrderDao, OrderEntity> imp
         Object storeId = params.get("storeId");
         Object status = params.get("status");
         Object payResults = params.get("payResults");
-        List<OrderEntity> records = this.baseMapper.selectPage(resPage,phone,storeName,storeId,status,startTime,endTime,payResults);
+        Object statusTwo = params.get("statusTwo");
+        List<OrderEntity> records = this.baseMapper.selectPage(resPage,phone,storeName,storeId,status,statusTwo,startTime,endTime,payResults);
         resPage.setRecords(records);
         System.out.println("==>:json : "+ JSONObject.toJSONString(resPage));
         return new PageUtils(resPage);

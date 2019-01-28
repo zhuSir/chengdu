@@ -29,6 +29,7 @@
         <if test="groupId != null and groupId != '' ">
             AND cp.group_id = #{groupId}
         </if>
+        order by cp.update_time asc
     </select>
 
 </mapper>

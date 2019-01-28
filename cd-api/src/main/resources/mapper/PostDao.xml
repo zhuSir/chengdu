@@ -39,7 +39,7 @@
         <if test="userId != null and userId != 0 ">
             AND cp.user_id = #{userId}
         </if>
-        ORDER BY cp.create_time DESC
+        ORDER BY cp.update_time DESC
     </select>
 
 

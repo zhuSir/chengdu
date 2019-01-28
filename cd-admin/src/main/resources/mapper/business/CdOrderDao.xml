@@ -40,9 +40,6 @@
         <if test="storeId != null and storeId != '' ">
             AND s.id = #{storeId}
         </if>
-        <if test="status != null and status != '' ">
-            AND o.state = #{status}
-        </if>
         <if test="startTime != null and startTime != '' ">
             AND o.create_time &gt;= #{startTime}
         </if>
@@ -52,6 +49,28 @@
         <if test="payResults != null and payResults != '' ">
             AND o.pay_status = #{payResults}
         </if>
+
+        <!--<if test="status != null and status != 0 and statusTwo != null and statusTwo != 0 ">-->
+            <!--AND o.state = #{statusTwo} or o.state = #{status}-->
+        <!--</if>-->
+        <!--<if test="status != null and status != '' ">-->
+            <!--AND o.state = #{status}-->
+        <!--</if>-->
+        <!--<if test="statusTwo != null and statusTwo != 0 ">-->
+            <!--AND o.state = #{statusTwo}-->
+        <!--</if>-->
+
+        <choose>
+            <when test="status != null and status != 0 and statusTwo != null and statusTwo != 0 ">
+                AND (o.state = #{statusTwo} or o.state = #{status})
+            </when>
+            <when test="status != null and status != 0">
+                AND o.state = #{status}
+            </when>
+            <when test="statusTwo != null and statusTwo != 0 ">
+                AND o.state = #{statusTwo}
+            </when>
+        </choose>
         ORDER BY o.create_time DESC
     </select>
 

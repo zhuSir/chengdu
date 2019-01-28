@@ -34,6 +34,10 @@
                                 <option value="" selected>请选择状态</option>
                                 <option v-bind:value="t.code" v-for="t in status" style="padding: 10px 0px;">{{ t.value }}</option>
                             </select>
+                            <select id="statusTwo" class="form-control" >
+                                <option value="" selected>请选择状态</option>
+                                <option v-bind:value="t.code" v-for="t in status" style="padding: 10px 0px;">{{ t.value }}</option>
+                            </select>
                             <select id="payResults" class="form-control" >
                                 <option value="" selected>请选择支付结果</option>
                                 <option v-bind:value="t.code" v-for="t in payResults" style="padding: 10px 0px;">{{ t.value }}</option>
