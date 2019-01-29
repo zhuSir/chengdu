@@ -62,7 +62,15 @@ public class ApiUserController {
         List<ActivityEntity> slideshowList = activityService.queryActivityByLocationType(params);
         params = new String[]{"2","3","4","5"};
         List<ActivityEntity> activityList = activityService.queryActivityByLocationType(params);
-        List<StoreEntity> storeList = storeService.queryByLocation(lat, lon, 1, 10);
+        Map<String, Object> storeParams = new HashMap<>();
+        storeParams.put("page","1");
+        storeParams.put("limit","10");
+        storeParams.put("type","1");
+        storeParams.put("lat",lat);
+        storeParams.put("lon",lon);
+        PageUtils storeRes = storeService.queryPage(storeParams);
+        List storeList = storeRes.getList();
+//        List<StoreEntity> storeList = storeService.queryByLocation(lat, lon, 1, 10);
         R res = R.ok().put("slideshowList", slideshowList);
         res.put("activityList",activityList);
         res.put("store", storeList);

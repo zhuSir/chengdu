@@ -28,6 +28,14 @@
         order by col.create_time desc
     </select>
 
+    <select id="selectPageOrderByDistance" parameterType="map"  resultMap="cdStoreMap">
+        select res.*
+        from (
+        select sto.*,
+        6378137.0*ACOS(SIN(#{lat}/180*PI())*SIN(sto.lat/180*PI())+COS(#{lat}/180*PI())*COS(sto.lat/180*PI())*COS((#{lng}-sto.lon)/180*PI())) AS distance
+        from cd_store sto
+        ) res order by distance asc
+    </select>
 
 
 </mapper>

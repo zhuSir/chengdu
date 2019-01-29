@@ -24,27 +24,32 @@ public class StoreServiceImpl extends ServiceImpl<StoreDao, StoreEntity> impleme
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<StoreEntity> wrapper = new EntityWrapper<StoreEntity>();
+        Page<StoreEntity> page;
         if("1".equals(params.get("type"))){
             String lon = (String) params.get("lon");
             String lat = (String) params.get("lat");
-            wrapper.orderBy("("+lon+" - lon)+("+lat+" - lat)",true);
-        }else if("2".equals(params.get("type"))){
-            wrapper.orderBy("score",false);
-        }else if("3".equals(params.get("type"))){
-            wrapper.orderBy("sales",false);
+            //wrapper.orderBy("("+lon+" - lon)+("+lat+" - lat)",false);
+            page = new Query<StoreEntity>(params).getPage();
+            page.setRecords(this.baseMapper.selectPageOrderByDistance(page,lat,lon));
+        }else{
+            if("2".equals(params.get("type"))){
+                wrapper.orderBy("score",false);
+            }else if("3".equals(params.get("type"))){
+                wrapper.orderBy("sales",false);
+            }
+            Object storeType = params.get("storeType");
+            if(storeType != null){
+                wrapper.eq("type",storeType);
+            }
+            Object name = params.get("name");
+            if(name != null){
+                wrapper.like("name",String.valueOf(name));
+            }
+            page = this.selectPage(
+                    new Query<StoreEntity>(params).getPage(),
+                    wrapper
+            );
         }
-        Object storeType = params.get("storeType");
-        if(storeType != null){
-            wrapper.eq("type",storeType);
-        }
-        Object name = params.get("name");
-        if(name != null){
-            wrapper.like("name",String.valueOf(name));
-        }
-        Page<StoreEntity> page = this.selectPage(
-                new Query<StoreEntity>(params).getPage(),
-                wrapper
-        );
         //计算商家距离
         if("1".equals(params.get("type"))
                 && params.get("lon") != null
@@ -104,13 +109,7 @@ public class StoreServiceImpl extends ServiceImpl<StoreDao, StoreEntity> impleme
             String lat1 = store.getLat();
             if(StringUtils.isNotEmpty(lon1) && StringUtils.isNotEmpty(lat1)){
                 //计算距离
-                double distance = Double.valueOf(
-                        DistanceUtils.LantitudeLongitudeDist(
-                            Double.valueOf(lon1),
-                            Double.valueOf(lat1),
-                            lon,
-                            lat));
-                store.setDistance(distance);
+                store.setDistance(Double.valueOf(DistanceUtils.LantitudeLongitudeDist(Double.valueOf(lon1),Double.valueOf(lat1),lon,lat)));
                 stores.set(i,store);
             }
         }

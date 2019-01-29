@@ -59,7 +59,7 @@ public class CdOrderServiceImpl extends ServiceImpl<CdOrderDao, OrderEntity> imp
         if(OrderEntity.PAY_TYPE_ALIPAY.equals(orderEntity.getPayType())){
             alipayUtils.orderRefund(orderEntity.getCode(),orderEntity.getTradeNo(),orderEntity.getSum());
         }else {
-            wxpayUtils.doRefund(orderEntity.getCode(),String.valueOf((int)orderEntity.getSum() * 100));
+            wxpayUtils.doRefund(orderEntity.getCode(),String.valueOf((int)(orderEntity.getSum() * 100)));
         }
         orderEntity.setState(OrderEntity.STATE_CHARGE_BACK);
         this.baseMapper.updateById(orderEntity);

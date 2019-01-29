@@ -136,10 +136,12 @@ public class WxpayUtils {
         data.put("refund_fee", amt);
         data.put("refund_fee_type", "CNY");
         data.put("op_user_id", config.getMchID());
+        logger.info("==>>:微信退款请求参数:"+data);
         try {
             Map<String, String> r = wxpay.refund(data);
-            String resultCode = r.get("result_code");
-            if("SUCCESS".equals(resultCode)){
+            logger.info("==>>:微信退款请求结果:"+r);
+            String returnCode = r.get("return_code");
+            if("SUCCESS".equals(returnCode)){
                 return true;
             }
         } catch (Exception e) {
