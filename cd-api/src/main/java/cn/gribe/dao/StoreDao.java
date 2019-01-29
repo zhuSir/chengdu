@@ -14,5 +14,5 @@ public interface StoreDao extends BaseMapper<StoreEntity> {
 
     List<StoreEntity> selectPageByUserId(RowBounds rowBounds, @Param("userId") Integer userId);
 
-    List<StoreEntity> selectPageOrderByDistance(RowBounds rowBounds, @Param("lat") String lat, @Param("lng") String lng);
+    List<StoreEntity> selectPageOrderByDistance(RowBounds rowBounds, @Param("lat") String lat, @Param("lng") String lng,@Param("storeType") Object storeType,@Param("name") Object name);
 }

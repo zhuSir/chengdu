@@ -34,7 +34,15 @@
         select sto.*,
         6378137.0*ACOS(SIN(#{lat}/180*PI())*SIN(sto.lat/180*PI())+COS(#{lat}/180*PI())*COS(sto.lat/180*PI())*COS((#{lng}-sto.lon)/180*PI())) AS distance
         from cd_store sto
-        ) res order by distance asc
+        where 1=1
+        <if test="name != null and name != '' ">
+            and sto.name like concat('%',#{name},'%')
+        </if>
+        <if test="storeType != null ">
+            and sto.type = #{storeType}
+        </if>
+        ) res
+        order by distance asc
     </select>
 
 

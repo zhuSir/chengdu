@@ -25,23 +25,23 @@ public class StoreServiceImpl extends ServiceImpl<StoreDao, StoreEntity> impleme
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<StoreEntity> wrapper = new EntityWrapper<StoreEntity>();
         Page<StoreEntity> page;
+        Object storeType = params.get("storeType");
+        Object name = params.get("name");
         if("1".equals(params.get("type"))){
             String lon = (String) params.get("lon");
             String lat = (String) params.get("lat");
             //wrapper.orderBy("("+lon+" - lon)+("+lat+" - lat)",false);
             page = new Query<StoreEntity>(params).getPage();
-            page.setRecords(this.baseMapper.selectPageOrderByDistance(page,lat,lon));
+            page.setRecords(this.baseMapper.selectPageOrderByDistance(page,lat,lon,storeType,name));
         }else{
             if("2".equals(params.get("type"))){
                 wrapper.orderBy("score",false);
             }else if("3".equals(params.get("type"))){
                 wrapper.orderBy("sales",false);
             }
-            Object storeType = params.get("storeType");
             if(storeType != null){
                 wrapper.eq("type",storeType);
             }
-            Object name = params.get("name");
             if(name != null){
                 wrapper.like("name",String.valueOf(name));
             }
